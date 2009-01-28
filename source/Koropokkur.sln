@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VSArrange", "VSArrange\VSAr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AddInCommon", "AddInCommon\AddInCommon.csproj", "{4E1C075D-9803-4DA8-884E-3033D9AB9B58}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KoropokkurInstaller", "KoropokkurInstaller\KoropokkurInstaller.csproj", "{CBF447C0-96E7-4B95-AC4E-B6FF32418533}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,6 +21,10 @@ Global
 		{4E1C075D-9803-4DA8-884E-3033D9AB9B58}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4E1C075D-9803-4DA8-884E-3033D9AB9B58}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4E1C075D-9803-4DA8-884E-3033D9AB9B58}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CBF447C0-96E7-4B95-AC4E-B6FF32418533}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CBF447C0-96E7-4B95-AC4E-B6FF32418533}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CBF447C0-96E7-4B95-AC4E-B6FF32418533}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CBF447C0-96E7-4B95-AC4E-B6FF32418533}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
