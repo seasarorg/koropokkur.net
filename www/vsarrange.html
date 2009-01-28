@@ -1,0 +1,126 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<meta http-equiv="Content-Language" content="ja" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta name="keywords" content="koropokkur.net, Seasar, The Seasar Project, The Seasar Foundation, OSS, Open Source Software, Java, Framework" />
+<meta name="description" content="koropokkur.net" />
+<title>koropokkur.net</title>
+<link rel="stylesheet" type="text/css" href="http://www.seasar.org/theme/main.css" media="screen,projection" />
+<link rel="stylesheet" type="text/css" href="http://www.seasar.org/theme/print.css" media="print" />
+</head>
+
+<body>
+
+<div id="wrapper">
+
+<div id="header">
+
+<div class="line"><span class="hide">spacer</span></div>
+
+<div id="logo"><h2 id="h01" class="hide">The Seasar Foundation Project Site</h2><img src="http://www.seasar.org/images/seasar_logo_blue.gif" alt="The Seasar Project" width="390" height="180" /></div>
+
+<div id="tool">
+
+<h2><a href="http://search.seasar.org/">Site Search</a></h2>
+
+<form id="search" name="search" action="http://search.seasar.org/">
+<div>
+	<input id="search_phrase" type="text" name="phrase" size="20" />
+	<input type="hidden" name="perpage" value="30" />
+	<input type="hidden" name="enc" value="UTF-8" />
+	<input id="search_go" type="submit" value="Search" />
+</div>
+</form>
+
+<h2>Seasar Banner</h2>
+
+<p><a href="http://www.seasar.org/images/seasar_banner.gif"><img src="http://www.seasar.org/images/seasar_banner.gif" alt="Seasar Banner" title="Seasar Banner" width="146" height="33" /></a></p>
+
+</div>
+
+</div><!-- header -->
+
+
+<div id="contents_left">
+
+<h2>Menu</h2>
+
+<ul> 
+	<li><a href="index.html">Koropokkur.NET</a></li>
+	<li><a href="#Abstract">概要</a></li>
+	<li><a href="#News">お知らせ</a></li>
+	<li><a href="#Register">アドイン登録方法</a></li>
+	<li><a href="#Usage">使い方</a></li>
+</ul> 
+
+</div><!-- contents_left -->
+
+<div id="contents_center">
+
+<div id="article">
+
+<div class="section">
+
+<h2>Welcome to the 「VSArrange」AddIn</h2>
+<!-- =============================================================================== -->
+<!--                                                                           概要  -->
+<!--                                                                          ====== -->
+<h3><a name="Abstract">概要</a></h3>
+<p>
+VisualStudioプロジェクトフォルダ下にある要素を整理します。<br>
+具体的には以下の処理を行います。
+<ul>
+	<li>プロジェクト未登録のファイル、フォルダをプロジェクトに追加</li>
+	<li>（ただし、.csprojや.slnファイルなど追加する必要のないものは除外）</li>
+	<li>プロジェクトに登録されているが、削除されるなどして存在していないファイル、フォルダを<br>プロジェクトからアンロード</li>
+</ul>
+</p>
+
+<!-- =============================================================================== -->
+<!--                                                                       お知らせ  -->
+<!--                                                                       ========= -->
+<h3><a name="News">お知らせ</a></h3>
+<ul>
+	<li>ただ今公開準備中です。</li>
+</ul>
+
+<!-- =============================================================================== -->
+<!--                                                               アドイン登録方法  -->
+<!--                                                              ================== -->
+<h3><a name="Register">アドイン登録方法</a></h3>
+アドインの登録方法は<a href="index.html#Setup">こちら</a>をご覧下さい。
+
+<!-- =============================================================================== -->
+<!--                                                                         使い方  -->
+<!--                                                                        ======== -->
+<h3><a name="Usage">使い方</a></h3>
+<p><b>１．プロジェクト、またはソリューションのアイコン上で右クリックメニューを表示させます。</b></p><br>
+<img src="images/project_tree_before.JPG"/><br><br>
+<p><b>２．メニューの下の方にある「プロジェクト要素の整理」を選択します。</b></p><br>
+<img src="images/project_tree_menu.JPG"/><br><br>
+<p><b>３．削除ファイルはプロジェクトから除外、未登録ファイルは追加されます。</b></p><br>
+<img src="images/project_tree_after.JPG"/><br>
+<br>
+※以下のファイル、フォルダはプロジェクト追加対象外としています。<br>
+・拡張子csproj、sln、suo、user、exe、dllのファイル<br>
+・.svn、_ReSharper、bin、obj、Propertiesフォルダ<br>
+
+</div><!-- section -->
+
+</div><!-- article -->
+
+</div><!-- contents_center -->
+
+<div id="footer">
+<address>&copy; Copyright The Seasar Foundation and the others 2009, all rights reserved.</address>
+<div class="line"><span class="hide">spacer</span></div>
+</div><!-- footer -->
+
+</div><!-- wrapper -->
+
+</body>
+</html>
+
