@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VSArrange", "VSArrange\VSArrange.csproj", "{23022F2A-F97F-4570-8000-D2D9CB8EEFED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AddInCommon", "AddInCommon\AddInCommon.csproj", "{4E1C075D-9803-4DA8-884E-3033D9AB9B58}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{23022F2A-F97F-4570-8000-D2D9CB8EEFED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{23022F2A-F97F-4570-8000-D2D9CB8EEFED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{23022F2A-F97F-4570-8000-D2D9CB8EEFED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{23022F2A-F97F-4570-8000-D2D9CB8EEFED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4E1C075D-9803-4DA8-884E-3033D9AB9B58}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4E1C075D-9803-4DA8-884E-3033D9AB9B58}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4E1C075D-9803-4DA8-884E-3033D9AB9B58}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4E1C075D-9803-4DA8-884E-3033D9AB9B58}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
