@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{23022F2A-F97F-4570-8000-D2D9CB8EEFED}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -41,6 +41,7 @@
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Condition\RegexCollection.cs" />
     <Compile Include="Connect.cs">
       <SubType>Code</SubType>
     </Compile>
