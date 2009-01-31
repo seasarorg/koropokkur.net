@@ -25,6 +25,7 @@ using EnvDTE;
 using EnvDTE80;
 using Microsoft.VisualStudio.CommandBars;
 using StatusBar = EnvDTE.StatusBar;
+using VSArrange.Filter;
 
 namespace VSArrange
 {
@@ -36,20 +37,44 @@ namespace VSArrange
         private const string REFRESH_BUTTON_NAME_SOLUTION = "全プロジェクト要素の整理";
         private const string REFRESH_BUTTON_NAME_PROJECT = "プロジェクト要素の整理";
 
+        private readonly DTE2 _applicationObject;
+
         /// <summary>
         /// プロジェクト項目としないファイルを判別する正規表現
         /// </summary>
-        private readonly Regex _regIsNotProjectFileItem = 
-            new Regex(@"\.(csproj|sln|suo|user|exe|dll)$", RegexOptions.IgnoreCase);
+        private ItemAttachmentFilter _filterFile;
+        //private readonly Regex _regIsNotProjectFileItem = 
+        //    new Regex(@"\.(csproj|sln|suo|user|exe|dll)$", RegexOptions.IgnoreCase);
+
+        /// <summary>
+        /// ファイル登録除外フィルター
+        /// </summary>
+        public ItemAttachmentFilter FileterFile
+        {
+            set { _filterFile = value; }
+            get { return _filterFile; }
+        }
 
         /// <summary>
         /// プロジェクト項目としないフォルダを判別する正規表現
         /// </summary>
-        private readonly Regex _regIsNotProjectDirItem = 
-            new Regex(@"(^\.svn$|^_ReSharper|^bin$|^obj$|^Properties$)", RegexOptions.IgnoreCase);
+        private ItemAttachmentFilter _filterFolder;
+        //private readonly Regex _regIsNotProjectDirItem = 
+        //    new Regex(@"(^\.svn$|^_ReSharper|^bin$|^obj$|^Properties$)", RegexOptions.IgnoreCase);
 
-        private readonly DTE2 _applicationObject;
-
+        /// <summary>
+        /// フォルダー登録除外フィルター
+        /// </summary>
+        public ItemAttachmentFilter FilterFolder
+        {
+            set { _filterFolder = value; }
+            get { return _filterFolder; }
+        }
+        
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
+        /// <param name="applicationObject"></param>
         public ArrangeControl(DTE2 applicationObject)
         {
             _applicationObject = applicationObject;
@@ -98,7 +123,7 @@ namespace VSArrange
             {
                 foreach (Project project in solution.Projects)
                 {
-                    RefreshProject(project);
+                    ArrangeProject(project);
                 }
             }
             catch (System.Exception ex)
@@ -132,7 +157,7 @@ namespace VSArrange
                         continue;
                     }
 
-                    RefreshProject(currentProject);
+                    ArrangeProject(currentProject);
                     refreshedProjects[currentProject.FullName] = currentProject;
                 }
             }
@@ -155,7 +180,7 @@ namespace VSArrange
         /// プロジェクトのリフレッシュ
         /// </summary>
         /// <param name="project"></param>
-        protected virtual void RefreshProject(Project project)
+        protected virtual void ArrangeProject(Project project)
         {
             if (string.IsNullOrEmpty(project.FullName))
             {
@@ -167,7 +192,7 @@ namespace VSArrange
             ProjectItems projectItems = project.ProjectItems;
 
             string statusLabel = string.Format("プロジェクト[{0}]の要素を整理しています。", project.Name);
-            RefreshDirectories(projectDirPath, projectItems, statusLabel);
+            ArrangeDirectories(projectDirPath, projectItems, statusLabel);
         }
 
         /// <summary>
@@ -176,7 +201,7 @@ namespace VSArrange
         /// <param name="dirPath"></param>
         /// <param name="projectItems"></param>
         /// <param name="statusLabel"></param>
-        protected virtual void RefreshDirectories(string dirPath, ProjectItems projectItems, string statusLabel)
+        protected virtual void ArrangeDirectories(string dirPath, ProjectItems projectItems, string statusLabel)
         {
             StatusBar bar = _applicationObject.StatusBar;
 
@@ -189,7 +214,7 @@ namespace VSArrange
                 ProjectItem projectItem = projectItems.Item(i);
 
                 int beforeItemCount = projectItems.Count;
-                string existPath = RefreshItem(dirPath, projectItem, statusLabel);
+                string existPath = ArrangeItem(dirPath, projectItem, statusLabel);
                 int afterItemCount = projectItems.Count;
                 //  プロジェクト要素を削除するとコレクションの数が
                 //  変わるためその調整
@@ -222,7 +247,7 @@ namespace VSArrange
             foreach (string s in filePaths)
             {
                 if (!registeredItems.ContainsKey(s) &&
-                    !_regIsNotProjectFileItem.IsMatch(Path.GetExtension(s)))
+                    _filterFile.IsPassFilter((Path.GetExtension(s))))
                 {
                     projectItems.AddFromFile(s);
                 }
@@ -245,7 +270,7 @@ namespace VSArrange
                 string[] dirNamePathParts = s.Split('\\');
                 string dirName = dirNamePathParts[dirNamePathParts.Length - 1];
                 if (!registeredItems.ContainsKey(s) &&
-                    !_regIsNotProjectDirItem.IsMatch(dirName))
+                    _filterFolder.IsPassFilter(dirName))
                 {
                     ProjectItem addedProjectItem = projectItems.AddFromDirectory(s);
                     if (addedProjectItem != null)
@@ -265,8 +290,8 @@ namespace VSArrange
         {
             foreach (ProjectItem item in projectItem.ProjectItems)
             {
-                if(_regIsNotProjectFileItem.IsMatch(item.Name) ||
-                    _regIsNotProjectDirItem.IsMatch(item.Name))
+                if(_filterFile.IsPassFilter(item.Name) ||
+                    _filterFolder.IsPassFilter(item.Name))
                 {
                     item.Remove();
                     continue;
@@ -285,7 +310,7 @@ namespace VSArrange
         /// <param name="dirPath"></param>
         /// <param name="item"></param>
         /// <param name="statusLabel"></param>
-        protected virtual string RefreshItem(string dirPath, ProjectItem item, string statusLabel)
+        protected virtual string ArrangeItem(string dirPath, ProjectItem item, string statusLabel)
         {
             string targetPath = dirPath + item.Name;
             if (File.Exists(targetPath))
@@ -299,7 +324,7 @@ namespace VSArrange
             {
                 string childDirName = targetPath + Path.DirectorySeparatorChar;
                 //  再帰的に子アイテムも処理
-                RefreshDirectories(childDirName, item.ProjectItems, statusLabel);
+                ArrangeDirectories(childDirName, item.ProjectItems, statusLabel);
 
                 return targetPath;
             }
