@@ -18,16 +18,16 @@
 
 using System.Collections.Generic;
 using System.IO;
-using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using AddInCommon.Util;
 using EnvDTE;
 using EnvDTE80;
 using Microsoft.VisualStudio.CommandBars;
+using VSArrange.Config;
 using StatusBar = EnvDTE.StatusBar;
 using VSArrange.Filter;
 
-namespace VSArrange
+namespace VSArrange.Control
 {
     /// <summary>
     /// ソリューション、プロジェクト要素整理処理
@@ -88,7 +88,7 @@ namespace VSArrange
         public virtual CommandBarControl CreateSolutionContextMenuItem(CommandBar commandBar)
         {
             CommandBarButton refreshSolutuinButton =
-                CommandBarUtils.CreateButtonControl(commandBar);
+                CommandBarUtils.CreateCommandBarControl<CommandBarButton>(commandBar);
             refreshSolutuinButton.Caption = REFRESH_BUTTON_NAME_SOLUTION;
             refreshSolutuinButton.Click += refreshSolutuinButton_Click;
             return refreshSolutuinButton;
@@ -102,7 +102,7 @@ namespace VSArrange
         public virtual CommandBarControl CreateProjectContextMenuItem(CommandBar commandBar)
         {
             CommandBarButton refreshProjectButton =
-                CommandBarUtils.CreateButtonControl(commandBar);
+                CommandBarUtils.CreateCommandBarControl<CommandBarButton>(commandBar);
             refreshProjectButton.Caption = REFRESH_BUTTON_NAME_PROJECT;
             refreshProjectButton.Click += refreshProjectButton_Click;
             return refreshProjectButton;
@@ -119,6 +119,11 @@ namespace VSArrange
         {
             Solution solution = _applicationObject.Solution;
 
+            //  プロジェクト追加フィルタの更新
+            //  設定が変更された時点で予め非同期で読んでおく方がより良いが
+            //  パフォーマンス的に整理処理直前に読んでも問題がないと思われるため
+            //  実装を単純にする＋漏れをなくすためここで呼び出し
+            RefreshConfigInfo();
             try
             {
                 foreach (Project project in solution.Projects)
@@ -146,6 +151,11 @@ namespace VSArrange
             IDictionary<string, Project> refreshedProjects = new Dictionary<string, Project>();
             SelectedItems items = _applicationObject.SelectedItems;
 
+            //  プロジェクト追加フィルタの更新
+            //  設定が変更された時点で予め非同期で読んでおく方がより良いが
+            //  パフォーマンス的に整理処理直前に読んでも問題がないと思われるため
+            //  実装を単純にする＋漏れをなくすためここで呼び出し
+            RefreshConfigInfo();
             try
             {
                 foreach (SelectedItem selectedItem in items)
@@ -240,8 +250,8 @@ namespace VSArrange
         /// <param name="registeredItems"></param>
         /// <param name="projectItems"></param>
         protected virtual void LoadNotRegisterFile(string dirPath,
-            IDictionary<string, ProjectItem> registeredItems,
-            ProjectItems projectItems)
+                                                   IDictionary<string, ProjectItem> registeredItems,
+                                                   ProjectItems projectItems)
         {
             string[] filePaths = Directory.GetFiles(dirPath);
             foreach (string s in filePaths)
@@ -261,8 +271,8 @@ namespace VSArrange
         /// <param name="registeredItems"></param>
         /// <param name="projectItems"></param>
         protected virtual void LoadNotRegisterDirectory(string dirPath,
-            IDictionary<string, ProjectItem> registeredItems,
-            ProjectItems projectItems)
+                                                        IDictionary<string, ProjectItem> registeredItems,
+                                                        ProjectItems projectItems)
         {
             string[] dirPaths = Directory.GetDirectories(dirPath);
             foreach (string s in dirPaths)
@@ -276,6 +286,8 @@ namespace VSArrange
                     if (addedProjectItem != null)
                     {
                         //  冗長かもしれないが最後に追加対象外のファイル、フォルダがあれば削除
+                        //  (AddFromDirectoryで除外対象までプロジェクトに含まれている
+                        //  可能性があるため)
                         RemoveOutofTarget(addedProjectItem);
                     }
                 }
@@ -290,8 +302,9 @@ namespace VSArrange
         {
             foreach (ProjectItem item in projectItem.ProjectItems)
             {
-                if(_filterFile.IsPassFilter(item.Name) ||
-                    _filterFolder.IsPassFilter(item.Name))
+                //  除外フィルターに引っかかる場合はプロジェクトから削除
+                if(!_filterFile.IsPassFilter(item.Name) ||
+                   !_filterFolder.IsPassFilter(item.Name))
                 {
                     item.Remove();
                     continue;
@@ -313,14 +326,16 @@ namespace VSArrange
         protected virtual string ArrangeItem(string dirPath, ProjectItem item, string statusLabel)
         {
             string targetPath = dirPath + item.Name;
-            if (File.Exists(targetPath))
+            if (File.Exists(targetPath) &&
+                _filterFile.IsPassFilter(Path.GetFileName(targetPath)))
             {
                 //  存在するファイルパスの場合は削除対象としない
                 return targetPath;
             }
 
             //  ファイルでなければフォルダ？
-            if (Directory.Exists(targetPath))
+            if (Directory.Exists(targetPath) &&
+                _filterFolder.IsPassFilter(Path.GetFileName(targetPath)))
             {
                 string childDirName = targetPath + Path.DirectorySeparatorChar;
                 //  再帰的に子アイテムも処理
@@ -335,5 +350,29 @@ namespace VSArrange
         }
 
         #endregion
+
+        /// <summary>
+        /// 設定情報再読み込み
+        /// </summary>
+        private void RefreshConfigInfo()
+        {
+            //  設定読み込み
+            ConfigInfo configInfo = ConfigFileManager.ReadConfig(PathUtils.GetConfigPath());
+            if (configInfo != null)
+            {
+                //  プロジェクト要素追加除外フィルターを設定
+                if (configInfo.FilterFileStringList != null)
+                {
+                    _filterFile.Clear();
+                    _filterFile.AddFilters(configInfo.FilterFileStringList);
+                }
+
+                if (configInfo.FilterFolderStringList != null)
+                {
+                    _filterFolder.Clear();
+                    _filterFolder.AddFilters(configInfo.FilterFolderStringList);
+                }
+            }
+        }
     }
 }

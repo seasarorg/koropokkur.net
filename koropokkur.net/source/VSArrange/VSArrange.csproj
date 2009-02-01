@@ -34,6 +34,7 @@
     <Reference Include="Extensibility, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -44,10 +45,14 @@
     <Compile Include="Connect.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ArrangeControl.cs" />
+    <Compile Include="Control\ArrangeControl.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="CommandBar.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Control\Window\ConfigForm.resx">
+      <DependentUpon>ConfigForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
@@ -106,11 +111,20 @@
     <Compile Include="Config\ConfigFileManager.cs" />
     <Compile Include="Config\ConfigInfo.cs" />
     <Compile Include="Config\ConfigInfoFilter.cs" />
+    <Compile Include="Control\ConfigMenu.cs" />
+    <Compile Include="Control\Window\ConfigForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Control\Window\ConfigForm.Designer.cs">
+      <DependentUpon>ConfigForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Filter\ItemAttachmentFilter.cs" />
     <Compile Include="VSArrangeConst.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Config\VSArrange.config" />
+    <None Include="VSArrange.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
   <PropertyGroup>

@@ -57,7 +57,7 @@ namespace VSArrangeTest.Config
             filterList2.Add(fileFilter2_1);
             filterList2.Add(fileFilter2_2);
 
-            ConfigInfo configInfo = new ConfigInfo();
+            ConfigInfo configInfo = ConfigInfo.GetInstance();
             configInfo.FilterFileStringList = filterList1;
             configInfo.FilterFolderStringList = filterList2;
 

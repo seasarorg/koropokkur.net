@@ -17,7 +17,6 @@
 #endregion
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Xml;
 using System.IO;
 
@@ -49,12 +48,12 @@ namespace VSArrange.Config
             //  初回起動時
             if(!File.Exists(path))
             {
-                return new ConfigInfo();
+                return ConfigInfo.GetInstance();
             }
     
             XmlDocument configDocument = new XmlDocument();
             configDocument.Load(path);
-            ConfigInfo configInfo = new ConfigInfo();
+            ConfigInfo configInfo = ConfigInfo.GetInstance();
             
             //  フィルター情報
             XmlElement filtersElement = configDocument[SECTION_FILTERS];
