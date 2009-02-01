@@ -25,6 +25,27 @@ namespace VSArrange.Config
     /// </summary>
     public class ConfigInfo
     {
+        #region for Singleton
+        private static ConfigInfo _configInfo = null;
+
+        public static ConfigInfo GetInstance()
+        {
+            if(_configInfo == null)
+            {
+                _configInfo = new ConfigInfo();
+            }
+            return _configInfo;
+        }
+
+        /// <summary>
+        /// シングルトン用コンストラクタ
+        /// </summary>
+        private ConfigInfo()
+        {
+        }
+
+        #endregion
+
         private IList<ConfigInfoFilter> _filterFileStringList;
 
         /// <summary>
