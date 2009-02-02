@@ -43,7 +43,7 @@ namespace VSArrange.Config
         {
             if (string.IsNullOrEmpty(path))
             {
-                throw new ArgumentException("path");
+                throw new ArgumentNullException("path");
             }
             //  初回起動時
             if(!File.Exists(path))

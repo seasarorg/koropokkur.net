@@ -1,0 +1,7 @@
+Koropokkur.NET 0.1.1
+2009/02/03
+[Improvement]
+-[KOROPOKKURNET-2]プロジェクト追加除外条件をカスタマイズできるようにする
+
+Koropokkur.NET 0.1.0
+2009/01/29	新規リリース
