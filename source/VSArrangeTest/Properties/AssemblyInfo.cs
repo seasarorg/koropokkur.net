@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("VSArrangeTest")]
-[assembly: AssemblyCopyright("Copyright ©  2009")]
+[assembly: AssemblyCopyright("2005-2009 the Seasar Foundation and the Others.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

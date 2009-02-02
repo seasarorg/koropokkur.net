@@ -43,8 +43,6 @@ namespace VSArrange.Control
         /// プロジェクト項目としないファイルを判別する正規表現
         /// </summary>
         private ItemAttachmentFilter _filterFile;
-        //private readonly Regex _regIsNotProjectFileItem = 
-        //    new Regex(@"\.(csproj|sln|suo|user|exe|dll)$", RegexOptions.IgnoreCase);
 
         /// <summary>
         /// ファイル登録除外フィルター
@@ -59,8 +57,6 @@ namespace VSArrange.Control
         /// プロジェクト項目としないフォルダを判別する正規表現
         /// </summary>
         private ItemAttachmentFilter _filterFolder;
-        //private readonly Regex _regIsNotProjectDirItem = 
-        //    new Regex(@"(^\.svn$|^_ReSharper|^bin$|^obj$|^Properties$)", RegexOptions.IgnoreCase);
 
         /// <summary>
         /// フォルダー登録除外フィルター
@@ -256,8 +252,10 @@ namespace VSArrange.Control
             string[] filePaths = Directory.GetFiles(dirPath);
             foreach (string s in filePaths)
             {
+                string[] dirNamePathParts = s.Split('\\');
+                string fileName = dirNamePathParts[dirNamePathParts.Length - 1];
                 if (!registeredItems.ContainsKey(s) &&
-                    _filterFile.IsPassFilter((Path.GetExtension(s))))
+                    _filterFile.IsPassFilter(fileName))
                 {
                     projectItems.AddFromFile(s);
                 }
