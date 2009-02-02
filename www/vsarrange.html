@@ -54,6 +54,7 @@
 	<li><a href="#News">お知らせ</a></li>
 	<li><a href="#Register">アドイン登録方法</a></li>
 	<li><a href="#Usage">使い方</a></li>
+	<li><a href="#Config">設定方法</a></li>
 </ul> 
 
 </div><!-- contents_left -->
@@ -84,7 +85,7 @@ VisualStudioプロジェクトフォルダ下にある要素を整理します�
 <!--                                                                       ========= -->
 <h3><a name="News">お知らせ</a></h3>
 <ul>
-	<li>ただ今公開準備中です。</li>
+	<li>2009/02/03 Koropokkur.NET 0.1.1をリリースしました。<a href="index.html#Download">ダウンロード</a></li>
 </ul>
 
 <!-- =============================================================================== -->
@@ -103,10 +104,24 @@ VisualStudioプロジェクトフォルダ下にある要素を整理します�
 <img src="images/project_tree_menu.JPG"/><br><br>
 <p><b>３．削除ファイルはプロジェクトから除外、未登録ファイルは追加されます。</b></p><br>
 <img src="images/project_tree_after.JPG"/><br>
-<br>
-※以下のファイル、フォルダはプロジェクト追加対象外としています。<br>
-・拡張子csproj、sln、suo、user、exe、dllのファイル<br>
-・.svn、_ReSharper、bin、obj、Propertiesフォルダ<br>
+
+<!-- =============================================================================== -->
+<!--                                                                           設定  -->
+<!--                                                                        ======== -->
+<h3><a name="Config">プロジェクト除外条件の設定方法</a></h3>
+<p><b>１．VisualStudioの「ツール」メニューから「Koropokkurの設定」→「VSArrange」を選択します。</b></p>
+<img src="images/koropokkur_config.JPG"/><br><br>
+<p><b>２a．プロジェクトに追加したくないファイル名、フォルダ名を正規表現で設定します。</b></p>
+<img src="images/config_regex.JPG"/><br><br>
+<p><b>２b．除外条件は残しておきたいが適用はしたくない場合は「有効」チェックボックスをOFFにします。</b></p>
+<img src="images/config_enable.JPG"/><br><br>
+<p><b>２c．除外条件を削除したい場合は「×」ボタンを押します。</b></p>
+<img src="images/config_remove.JPG"/><br><br>
+<p><b>３a．「保存して終了」ボタンを押すと変更した設定で保存し、設定画面が閉じられます。</b></p>
+<p><b>３b．「保存せずに終了」ボタンを押すと変更した内容を破棄して設定画面が閉じられます。</b></p>
+<img src="images/config_save.JPG"/><br><br>
+<p><b>４．「<a href="#Usage">使い方</a>」に記載した手順で「（全）プロジェクト要素の整理」を選ぶと<br>
+設定した除外条件に従ってプロジェクト要素整理処理が行われます。</b></p>
 
 </div><!-- section -->
 
