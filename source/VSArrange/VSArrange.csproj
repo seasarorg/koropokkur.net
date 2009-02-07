@@ -55,6 +55,9 @@
       <DependentUpon>ConfigForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Control\Window\FilterList.resx">
+      <DependentUpon>FilterList.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="EnvDTE">
@@ -117,6 +120,12 @@
     </Compile>
     <Compile Include="Control\Window\ConfigForm.Designer.cs">
       <DependentUpon>ConfigForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Control\Window\FilterList.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Control\Window\FilterList.Designer.cs">
+      <DependentUpon>FilterList.cs</DependentUpon>
     </Compile>
     <Compile Include="Filter\ItemAttachmentFilter.cs" />
     <Compile Include="VSArrangeConst.cs" />
