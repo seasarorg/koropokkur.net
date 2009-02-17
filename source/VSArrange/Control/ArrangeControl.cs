@@ -26,6 +26,7 @@ using Microsoft.VisualStudio.CommandBars;
 using VSArrange.Config;
 using StatusBar = EnvDTE.StatusBar;
 using VSArrange.Filter;
+using System.Text;
 
 namespace VSArrange.Control
 {
@@ -194,13 +195,108 @@ namespace VSArrange.Control
                 return;    
             }
 
-            string projectDirPath = Path.GetDirectoryName(project.FullName) + Path.DirectorySeparatorChar;
+            string projectDirPath = Path.GetDirectoryName(project.FullName);
             ProjectItems projectItems = project.ProjectItems;
 
             string statusLabel = string.Format("プロジェクト[{0}]の要素を整理しています。", project.Name);
-            ArrangeDirectories(projectDirPath, projectItems, statusLabel);
+            //ArrangeDirectories(projectDirPath, projectItems, statusLabel);
+            ArrangeDirectories2(projectDirPath, projectItems, statusLabel);
         }
 
+        protected virtual void ArrangeDirectories2(string dirPath, ProjectItems projectItems, string statusLabel)
+        {
+            
+            IDictionary<string, ProjectItem> fileItems = new Dictionary<string, ProjectItem>();
+            IDictionary<string, ProjectItem> folderItems = new Dictionary<string, ProjectItem>();
+            //IList<string> projectDirPaths = new List<string>();
+            IList<ProjectItem> deleteTarget = new List<ProjectItem>();
+
+            string basePath = dirPath + Path.DirectorySeparatorChar;
+            //  ファイル、フォルダ、削除対象に振り分ける
+            foreach (ProjectItem projectItem in projectItems)
+            {
+                string currentPath = basePath + projectItem.Name;
+                if(Directory.Exists(currentPath))
+                {
+                    if(_filterFolder.IsPassFilter(projectItem.Name))
+                    {
+                        //  実際に存在していて且つプロジェクトにも登録済
+                        //projectDirPaths.Add(currentPath);
+                        if(!folderItems.ContainsKey(currentPath))
+                        {
+                            folderItems.Add(currentPath, projectItem);
+                        }
+                    }
+                    else
+                    {
+                        deleteTarget.Add(projectItem);
+                    }
+                }
+                else if(File.Exists(currentPath))
+                {
+                    if(_filterFile.IsPassFilter(projectItem.Name))
+                    {
+                        if(!fileItems.ContainsKey(currentPath))
+                        {
+                            fileItems.Add(currentPath, projectItem);
+                        }
+                    }
+                    else
+                    {
+                        deleteTarget.Add(projectItem);
+                    }
+                }
+                else
+                {
+                    deleteTarget.Add(projectItem);
+                }
+            }
+
+            //  ディレクトリ追加
+            string[] subDirPaths = Directory.GetDirectories(dirPath);
+            foreach (string subDirPath in subDirPaths)
+            {
+                string[] dirPathParts = subDirPath.Split('\\');
+                string dirName = dirPathParts[dirPathParts.Length - 1];
+                if (_filterFolder.IsPassFilter(dirName) &&
+                    !folderItems.ContainsKey(subDirPath))
+                {
+                    //  まだ追加していないもののみ追加
+                    ProjectItem newItem = projectItems.AddFromDirectory(subDirPath);
+                    //projectDirPaths.Add(subDirPath);
+                    folderItems.Add(subDirPath, newItem);
+                }
+            }
+
+            //  ファイル追加
+            string[] subFilePaths = Directory.GetFiles(dirPath);
+            foreach (string subFilePath in subFilePaths)
+            {
+                string[] filePathParts = subFilePath.Split('\\');
+                string fileName = filePathParts[filePathParts.Length - 1];
+                if (_filterFile.IsPassFilter(fileName) &&
+                    !fileItems.ContainsKey(subFilePath))
+                {
+                    //  まだ追加していないもののみ追加
+                    projectItems.AddFromFile(subFilePath);
+                }
+            }
+
+            //  不要な要素は削除
+            foreach (ProjectItem projectItem in deleteTarget)
+            {
+                projectItem.Remove();
+            }
+
+            //  残ったフォルダに対して同様の処理を再帰的に実行
+            //foreach (string projectDirPath in projectDirPaths)
+            foreach (string projectDirPath in folderItems.Keys)
+            {
+                ProjectItem dirItem = folderItems[projectDirPath];
+                ArrangeDirectories2(projectDirPath, dirItem.ProjectItems, statusLabel);
+            }
+
+        }
         /// <summary>
         /// ディレクトリ内のリフレッシュ
         /// </summary>
