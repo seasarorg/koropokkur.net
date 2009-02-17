@@ -18,6 +18,7 @@
 
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
 using System.Windows.Forms;
 using AddInCommon.Util;
 using EnvDTE;
@@ -27,6 +28,7 @@ using VSArrange.Config;
 using StatusBar = EnvDTE.StatusBar;
 using VSArrange.Filter;
 using System.Text;
+using Thread=System.Threading.Thread;
 
 namespace VSArrange.Control
 {
@@ -199,16 +201,16 @@ namespace VSArrange.Control
             ProjectItems projectItems = project.ProjectItems;
 
             string statusLabel = string.Format("プロジェクト[{0}]の要素を整理しています。", project.Name);
-            //ArrangeDirectories(projectDirPath, projectItems, statusLabel);
-            ArrangeDirectories2(projectDirPath, projectItems, statusLabel);
+            ArrangeDirectories(projectDirPath, projectItems, statusLabel);
+
+            _applicationObject.StatusBar.Text = string.Format("{0}の整理が終了しました。", project.Name);
         }
 
-        protected virtual void ArrangeDirectories2(string dirPath, ProjectItems projectItems, string statusLabel)
+        protected virtual void ArrangeDirectories(string dirPath, ProjectItems projectItems, string statusLabel)
         {
-            
+            _applicationObject.StatusBar.Text = string.Format("{0}を整理しています。", dirPath);
             IDictionary<string, ProjectItem> fileItems = new Dictionary<string, ProjectItem>();
             IDictionary<string, ProjectItem> folderItems = new Dictionary<string, ProjectItem>();
-            //IList<string> projectDirPaths = new List<string>();
             IList<ProjectItem> deleteTarget = new List<ProjectItem>();
 
             string basePath = dirPath + Path.DirectorySeparatorChar;
@@ -221,7 +223,6 @@ namespace VSArrange.Control
                     if(_filterFolder.IsPassFilter(projectItem.Name))
                     {
                         //  実際に存在していて且つプロジェクトにも登録済
-                        //projectDirPaths.Add(currentPath);
                         if(!folderItems.ContainsKey(currentPath))
                         {
                             folderItems.Add(currentPath, projectItem);
@@ -252,195 +253,182 @@ namespace VSArrange.Control
                 }
             }
 
-            //  ディレクトリ追加
-            string[] subDirPaths = Directory.GetDirectories(dirPath);
-            foreach (string subDirPath in subDirPaths)
-            {
-                string[] dirPathParts = subDirPath.Split('\\');
-                string dirName = dirPathParts[dirPathParts.Length - 1];
-                if (_filterFolder.IsPassFilter(dirName) &&
-                    !folderItems.ContainsKey(subDirPath))
-                {
-                    //  まだ追加していないもののみ追加
-                    ProjectItem newItem = projectItems.AddFromDirectory(subDirPath);
-                    //projectDirPaths.Add(subDirPath);
-                    folderItems.Add(subDirPath, newItem);
-                }
-            }
+            ////  ディレクトリ追加
+            //string[] subDirPaths = Directory.GetDirectories(dirPath);
+            //foreach (string subDirPath in subDirPaths)
+            //{
+            //    string[] dirPathParts = subDirPath.Split('\\');
+            //    string dirName = dirPathParts[dirPathParts.Length - 1];
+            //    if (_filterFolder.IsPassFilter(dirName) &&
+            //        !folderItems.ContainsKey(subDirPath))
+            //    {
+            //        //  まだ追加していないもののみ追加
+            //        ProjectItem newItem = projectItems.AddFromDirectory(subDirPath);
+            //        folderItems.Add(subDirPath, newItem);
+            //    }
+            //}
+            DirectoryAppender directoryAppender = new DirectoryAppender(
+                dirPath, _filterFolder, projectItems, folderItems);
+            directoryAppender.Execute();
+            //System.Threading.Thread dirThread = new Thread(
+            //    new ThreadStart(directoryAppender.Execute));
+            //dirThread.Start();
 
-            //  ファイル追加
-            string[] subFilePaths = Directory.GetFiles(dirPath);
-            foreach (string subFilePath in subFilePaths)
-            {
-                string[] filePathParts = subFilePath.Split('\\');
-                string fileName = filePathParts[filePathParts.Length - 1];
-                if (_filterFile.IsPassFilter(fileName) &&
-                    !fileItems.ContainsKey(subFilePath))
-                {
-                    //  まだ追加していないもののみ追加
-                    projectItems.AddFromFile(subFilePath);
-                }
-            }
+            ////  ファイル追加
+            //string[] subFilePaths = Directory.GetFiles(dirPath);
+            //foreach (string subFilePath in subFilePaths)
+            //{
+            //    string[] filePathParts = subFilePath.Split('\\');
+            //    string fileName = filePathParts[filePathParts.Length - 1];
+            //    if (_filterFile.IsPassFilter(fileName) &&
+            //        !fileItems.ContainsKey(subFilePath))
+            //    {
+            //        //  まだ追加していないもののみ追加
+            //        projectItems.AddFromFile(subFilePath);
+            //    }
+            //}
+            FileAppender fileAppender = new FileAppender(
+                dirPath, _filterFile, projectItems, fileItems);
+            //fileAppender.Execute();
+            System.Threading.Thread fileThread = new Thread(
+                new ThreadStart(fileAppender.Execute));
+            fileThread.Start();
 
-            //  不要な要素は削除
-            foreach (ProjectItem projectItem in deleteTarget)
-            {
-                projectItem.Remove();
-            }
+            ////  不要な要素は削除
+            //foreach (ProjectItem projectItem in deleteTarget)
+            //{
+            //    projectItem.Remove();
+            //}
+            ProjectItemRemover projectItemRemover = new ProjectItemRemover(deleteTarget);
+            //projectItemRemover.Execute();
+            System.Threading.Thread removeThread = new Thread(
+                new ThreadStart(projectItemRemover.Execute));
+            removeThread.Start();
+
+            //dirThread.Join();
+            //fileThread.Join();
+            //removeThread.Join();
 
             //  残ったフォルダに対して同様の処理を再帰的に実行
-            //foreach (string projectDirPath in projectDirPaths)
             foreach (string projectDirPath in folderItems.Keys)
             {
                 ProjectItem dirItem = folderItems[projectDirPath];
-                ArrangeDirectories2(projectDirPath, dirItem.ProjectItems, statusLabel);
+                //ArrangeDirectories(projectDirPath, dirItem.ProjectItems, statusLabel);
+
+                Thread thread = new Thread(ExecuteArrange);
+                thread.Start(new object[] { projectDirPath, dirItem.ProjectItems, statusLabel });
             }
 
         }
-        /// <summary>
-        /// ディレクトリ内のリフレッシュ
-        /// </summary>
-        /// <param name="dirPath"></param>
-        /// <param name="projectItems"></param>
-        /// <param name="statusLabel"></param>
-        protected virtual void ArrangeDirectories(string dirPath, ProjectItems projectItems, string statusLabel)
+
+        private void ExecuteArrange(object parameter)
         {
-            StatusBar bar = _applicationObject.StatusBar;
-
-            IDictionary<string, ProjectItem> registeredItems = new Dictionary<string, ProjectItem>();
-            //  削除されているファイル、フォルダをプロジェクトからアンロード
-            for (int i = 1; i <= projectItems.Count; i++)
+            object[] parameters = parameter as object[];
+            if(parameters == null)
             {
-                bar.Progress(true, statusLabel, i, projectItems.Count);
-                
-                ProjectItem projectItem = projectItems.Item(i);
-
-                int beforeItemCount = projectItems.Count;
-                string existPath = ArrangeItem(dirPath, projectItem, statusLabel);
-                int afterItemCount = projectItems.Count;
-                //  プロジェクト要素を削除するとコレクションの数が
-                //  変わるためその調整
-                if (beforeItemCount > afterItemCount)
-                {
-                    i = i - (beforeItemCount - afterItemCount);
-                }
-
-                if (existPath != null)
-                {
-                    registeredItems.Add(existPath, projectItem);
-                }
+                return;
             }
+            ArrangeDirectories(parameters[0] as string,
+                parameters[1] as ProjectItems,
+                parameters[2] as string);
 
-            LoadNotRegisterFile(dirPath, registeredItems, projectItems);
-            LoadNotRegisterDirectory(dirPath, registeredItems, projectItems);
+            _applicationObject.StatusBar.Text = "";
         }
 
-        /// <summary>
-        /// 未登録のファイルをプロジェクトに追加する
-        /// </summary>
-        /// <param name="dirPath"></param>
-        /// <param name="registeredItems"></param>
-        /// <param name="projectItems"></param>
-        protected virtual void LoadNotRegisterFile(string dirPath,
-                                                   IDictionary<string, ProjectItem> registeredItems,
-                                                   ProjectItems projectItems)
+        private class ProjectItemRemover
         {
-            string[] filePaths = Directory.GetFiles(dirPath);
-            foreach (string s in filePaths)
+            private readonly IList<ProjectItem> _deleteTarget;
+
+            public ProjectItemRemover(IList<ProjectItem> deleteTarget)
             {
-                string[] dirNamePathParts = s.Split('\\');
-                string fileName = dirNamePathParts[dirNamePathParts.Length - 1];
-                if (!registeredItems.ContainsKey(s) &&
-                    _filterFile.IsPassFilter(fileName))
+                _deleteTarget = deleteTarget;
+            }
+
+            public void Execute()
+            {
+                foreach (ProjectItem projectItem in _deleteTarget)
                 {
-                    projectItems.AddFromFile(s);
+                    projectItem.Remove();
                 }
             }
         }
 
-        /// <summary>
-        /// 未登録のフォルダをプロジェクトに追加する
-        /// </summary>
-        /// <param name="dirPath"></param>
-        /// <param name="registeredItems"></param>
-        /// <param name="projectItems"></param>
-        protected virtual void LoadNotRegisterDirectory(string dirPath,
-                                                        IDictionary<string, ProjectItem> registeredItems,
-                                                        ProjectItems projectItems)
+        private class FileAppender
         {
-            string[] dirPaths = Directory.GetDirectories(dirPath);
-            foreach (string s in dirPaths)
+            private readonly string _dirPath;
+            private readonly ItemAttachmentFilter _filter;
+            private readonly ProjectItems _projectItems;
+            private readonly IDictionary<string, ProjectItem> _fileItems;
+
+            public FileAppender(
+                string dirPath, ItemAttachmentFilter filter, 
+                ProjectItems projectItems, IDictionary<string, ProjectItem> fileItems)
             {
-                string[] dirNamePathParts = s.Split('\\');
-                string dirName = dirNamePathParts[dirNamePathParts.Length - 1];
-                if (!registeredItems.ContainsKey(s) &&
-                    _filterFolder.IsPassFilter(dirName))
+                _dirPath = dirPath;
+                _filter = filter;
+                _projectItems = projectItems;
+                _fileItems = fileItems;
+            }
+
+            /// <summary>
+            /// ファイル追加実行
+            /// </summary>
+            public void Execute()
+            {
+                string[] subFilePaths = Directory.GetFiles(_dirPath);
+                foreach (string subFilePath in subFilePaths)
                 {
-                    ProjectItem addedProjectItem = projectItems.AddFromDirectory(s);
-                    if (addedProjectItem != null)
+                    string[] filePathParts = subFilePath.Split('\\');
+                    string fileName = filePathParts[filePathParts.Length - 1];
+                    if (_filter.IsPassFilter(fileName) &&
+                        !_fileItems.ContainsKey(subFilePath))
                     {
-                        //  冗長かもしれないが最後に追加対象外のファイル、フォルダがあれば削除
-                        //  (AddFromDirectoryで除外対象までプロジェクトに含まれている
-                        //  可能性があるため)
-                        RemoveOutofTarget(addedProjectItem);
+                        //  まだ追加していないもののみ追加
+                        _projectItems.AddFromFile(subFilePath);
                     }
                 }
             }
         }
-
+        
         /// <summary>
-        /// 対象外であるプロジェクト要素をプロジェクトから除外
+        /// ディレクトリ追加クラス
         /// </summary>
-        /// <param name="projectItem"></param>
-        protected virtual void RemoveOutofTarget(ProjectItem projectItem)
+        private class DirectoryAppender
         {
-            foreach (ProjectItem item in projectItem.ProjectItems)
+            private readonly string _dirPath;
+            private readonly ItemAttachmentFilter _filter;
+            private readonly ProjectItems _projectItems;
+            private readonly IDictionary<string, ProjectItem> _folderItems;
+
+            public DirectoryAppender(
+                string dirPath, ItemAttachmentFilter filter, 
+                ProjectItems projectItems, IDictionary<string, ProjectItem> folderItems)
             {
-                //  除外フィルターに引っかかる場合はプロジェクトから削除
-                if(!_filterFile.IsPassFilter(item.Name) ||
-                   !_filterFolder.IsPassFilter(item.Name))
+                _dirPath = dirPath;
+                _filter = filter;
+                _projectItems = projectItems;
+                _folderItems = folderItems;
+            }
+
+            /// <summary>
+            /// ディレクトリ追加実行
+            /// </summary>
+            public void Execute()
+            {
+                string[] subDirPaths = Directory.GetDirectories(_dirPath);
+                foreach (string subDirPath in subDirPaths)
                 {
-                    item.Remove();
-                    continue;
+                    string[] dirPathParts = subDirPath.Split('\\');
+                    string dirName = dirPathParts[dirPathParts.Length - 1];
+                    if (_filter.IsPassFilter(dirName) &&
+                        !_folderItems.ContainsKey(subDirPath))
+                    {
+                        //  まだ追加していないもののみ追加
+                        ProjectItem newItem = _projectItems.AddFromDirectory(subDirPath);
+                        _folderItems.Add(subDirPath, newItem);
+                    }
                 }
-
-                if(item.ProjectItems.Count > 0)
-                {
-                    RemoveOutofTarget(item);
-                }
             }
-        }
-
-        /// <summary>
-        /// 要素の更新（パスが存在しない要素をプロジェクトから削除する）
-        /// </summary>
-        /// <param name="dirPath"></param>
-        /// <param name="item"></param>
-        /// <param name="statusLabel"></param>
-        protected virtual string ArrangeItem(string dirPath, ProjectItem item, string statusLabel)
-        {
-            string targetPath = dirPath + item.Name;
-            if (File.Exists(targetPath) &&
-                _filterFile.IsPassFilter(Path.GetFileName(targetPath)))
-            {
-                //  存在するファイルパスの場合は削除対象としない
-                return targetPath;
-            }
-
-            //  ファイルでなければフォルダ？
-            if (Directory.Exists(targetPath) &&
-                _filterFolder.IsPassFilter(Path.GetFileName(targetPath)))
-            {
-                string childDirName = targetPath + Path.DirectorySeparatorChar;
-                //  再帰的に子アイテムも処理
-                ArrangeDirectories(childDirName, item.ProjectItems, statusLabel);
-
-                return targetPath;
-            }
-            //  ファイルとしてもフォルダとしても存在しないなら
-            //  プロジェクトから外す
-            item.Remove();
-            return null;
         }
 
         #endregion
