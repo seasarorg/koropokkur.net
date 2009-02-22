@@ -201,7 +201,7 @@ namespace VSArrange.Control
             ProjectItems projectItems = project.ProjectItems;
 
             string statusLabel = string.Format("プロジェクト[{0}]の要素を整理しています。", project.Name);
-            ArrangeDirectories(projectDirPath, projectItems, statusLabel);
+            ArrangeDirectories(projectDirPath, projectItems);
 
             _applicationObject.StatusBar.Text = string.Format("{0}の整理が終了しました。", project.Name);
         }
@@ -211,8 +211,7 @@ namespace VSArrange.Control
         /// </summary>
         /// <param name="dirPath"></param>
         /// <param name="projectItems"></param>
-        /// <param name="statusLabel"></param>
-        protected virtual void ArrangeDirectories(string dirPath, ProjectItems projectItems, string statusLabel)
+        protected virtual void ArrangeDirectories(string dirPath, ProjectItems projectItems)
         {
             _applicationObject.StatusBar.Text = string.Format("{0}を整理しています。", dirPath);
             IDictionary<string, ProjectItem> fileItems = new Dictionary<string, ProjectItem>();
@@ -282,30 +281,9 @@ namespace VSArrange.Control
             //  残ったフォルダに対して同様の処理を再帰的に実行
             foreach (string projectDirPath in folderItems.Keys)
             {
-                ProjectItem dirItem = folderItems[projectDirPath];
-                Thread thread = new Thread(ExecuteArrange);
-                thread.Start(new object[] { projectDirPath, dirItem.ProjectItems, statusLabel });
+                ArrangeDirectories(projectDirPath, folderItems[projectDirPath].ProjectItems);
             }
 
-        }
-
-        /// <summary>
-        /// マルチスレッド実行用
-        /// ディレクトリ整理メソッド
-        /// </summary>
-        /// <param name="parameter"></param>
-        private void ExecuteArrange(object parameter)
-        {
-            object[] parameters = parameter as object[];
-            if(parameters == null)
-            {
-                return;
-            }
-            ArrangeDirectories(parameters[0] as string,
-                parameters[1] as ProjectItems,
-                parameters[2] as string);
-
-            _applicationObject.StatusBar.Text = "";
         }
 
         #endregion
