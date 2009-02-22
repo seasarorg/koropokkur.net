@@ -136,6 +136,7 @@
             this.dgFilters.RowTemplate.Height = 21;
             this.dgFilters.Size = new System.Drawing.Size(531, 187);
             this.dgFilters.TabIndex = 0;
+            this.dgFilters.CellContentClick += dgFileFilters_CellContentClick;
             // 
             // IsEnableFileFilter
             // 
