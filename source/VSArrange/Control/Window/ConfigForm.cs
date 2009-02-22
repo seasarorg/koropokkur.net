@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using VSArrange.Config;
 using AddInCommon.Util;
+using VSArrange.Filter;
 
 namespace VSArrange.Control.Window
 {
@@ -36,7 +37,14 @@ namespace VSArrange.Control.Window
         public ConfigForm()
         {
             InitializeComponent();
-        }
+
+            filterFile.FilterName = "ファイル";
+            filterFile.TestExecuted += filter_TestExecuted;
+            filterFile.ReloadExecuted += filterFile_ReloadExecuted;
+            filterFolder.FilterName = "フォルダ";
+            filterFolder.TestExecuted += filter_TestExecuted;
+            filterFolder.ReloadExecuted += filterFolder_ReloadExecuted;
+        }        
 
         #region イベント
 
@@ -47,36 +55,13 @@ namespace VSArrange.Control.Window
         /// <param name="e"></param>
         private void ConfigForm_Load(object sender, EventArgs e)
         {
-            try
+            ConfigInfo configInfo = GetConfigInfo();
+            if (configInfo == null)
             {
-                string configPath = PathUtils.GetConfigPath();
-                ConfigInfo configInfo = ConfigFileManager.ReadConfig(configPath);
-                UpdateConfigInfo2Display(configInfo);
+                return;
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show(string.Format("設定情報の読み込みに失敗しました。\n{0}", ex.Message));
-            }
-        }
-        
-        /// <summary>
-        /// DataGridView（ファイル用）クリック
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void dgFileFilters_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-            RemoveRow(sender, e, "buttonRemoveFileFilter" );
-        }
-
-        /// <summary>
-        /// DataGridView（フォルダ用）クリック
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void dgFolderFilters_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-            RemoveRow(sender, e, "buttonRemoveFolderFilter");
+            SetDataGridView(configInfo.FilterFileStringList, filterFile);
+            SetDataGridView(configInfo.FilterFolderStringList, filterFolder);
         }
 
         /// <summary>
@@ -90,8 +75,10 @@ namespace VSArrange.Control.Window
             try
             {
                 ConfigInfo configInfo = ConfigInfo.GetInstance();
-                configInfo.FilterFileStringList = CreateConfigInfo(dgFileFilters.Rows);
-                configInfo.FilterFolderStringList = CreateConfigInfo(dgFolderFilters.Rows);
+                configInfo.FilterFileStringList = CreateConfigInfo(
+                    filterFile.GetFilterDefinitions());
+                configInfo.FilterFolderStringList = CreateConfigInfo(
+                    filterFolder.GetFilterDefinitions());
                 string configFilePath = PathUtils.GetConfigPath();
                 ConfigFileManager.WriteConfig(configFilePath, configInfo);
             }
@@ -113,26 +100,66 @@ namespace VSArrange.Control.Window
             Close();
         }
 
+        /// <summary>
+        /// フィルターテスト実行
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="inputText"></param>
+        /// <returns></returns>
+        private static bool filter_TestExecuted(FilterList sender, string inputText)
+        {
+            return IsFilterHit(inputText, sender.GetFilterDefinitions());
+        }
+
+        /// <summary>
+        /// フォルダ用フィルタ設定を再読込み
+        /// </summary>
+        private void filterFolder_ReloadExecuted()
+        {
+            ConfigInfo configInfo = GetConfigInfo();
+            if (configInfo == null)
+            {
+                return;
+            }
+            filterFolder.Clear();
+            SetDataGridView(GetConfigInfo().FilterFolderStringList, filterFolder);
+        }
+
+        /// <summary>
+        /// ファイル用のフィルタ設定を再読込み
+        /// </summary>
+        private void filterFile_ReloadExecuted()
+        {
+            ConfigInfo configInfo = GetConfigInfo();
+            if (configInfo == null)
+            {
+                return;
+            }
+            filterFile.Clear();
+            SetDataGridView(GetConfigInfo().FilterFileStringList, filterFile);
+        }
+
 
         #endregion
 
         #region 補助メソッド
 
         /// <summary>
-        /// 行削除
+        /// 入力文字列がフィルターを通過するか判定
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        /// <param name="targetControlName"></param>
-        private void RemoveRow(object sender, DataGridViewCellEventArgs e, string targetControlName)
+        /// <param name="inputText"></param>
+        /// <param name="filterDefinitions"></param>
+        /// <returns></returns>
+        private static bool IsFilterHit(string inputText, DataGridViewRowCollection filterDefinitions)
         {
-            DataGridView dgv = (DataGridView)sender;
-            //  最下（新規）行以外の削除ボタンがクリックされた
-            if (dgv.Columns[e.ColumnIndex].Name == targetControlName
-                && !dgv.Rows[e.RowIndex].IsNewRow)
+            if (string.IsNullOrEmpty(inputText))
             {
-                dgv.Rows.RemoveAt(e.RowIndex);
+                return false;
             }
+
+            ItemAttachmentFilter filter = new ItemAttachmentFilter();
+            filter.AddFilters(CreateConfigInfo(filterDefinitions));
+            return !filter.IsPassFilter(inputText);
         }
 
         /// <summary>
@@ -140,7 +167,7 @@ namespace VSArrange.Control.Window
         /// </summary>
         /// <param name="rows"></param>
         /// <returns></returns>
-        private IList<ConfigInfoFilter> CreateConfigInfo(DataGridViewRowCollection rows)
+        private static IList<ConfigInfoFilter> CreateConfigInfo(DataGridViewRowCollection rows)
         {
             IList<ConfigInfoFilter> configInfoFilters = new List<ConfigInfoFilter>(rows.Count);
             foreach (DataGridViewRow row in rows)
@@ -161,40 +188,42 @@ namespace VSArrange.Control.Window
         }
 
         /// <summary>
-        /// 設定情報を画面表示に反映させる
+        /// 設定情報の取得
         /// </summary>
-        /// <param name="configInfo"></param>
-        private void UpdateConfigInfo2Display(ConfigInfo configInfo)
+        /// <returns></returns>
+        private ConfigInfo GetConfigInfo()
         {
-            if(configInfo == null)
+            try
             {
-                throw new ArgumentNullException("configInfo");
+                string configPath = PathUtils.GetConfigPath();
+                return ConfigFileManager.ReadConfig(configPath);
             }
-
-            SetDataGridView(configInfo.FilterFileStringList, dgFileFilters);
-            SetDataGridView(configInfo.FilterFolderStringList, dgFolderFilters);
+            catch (Exception ex)
+            {
+                MessageBox.Show(string.Format("設定情報の読み込みに失敗しました。\n{0}", ex.Message));
+            }
+            return null;
         }
 
         /// <summary>
         /// 設定情報をDataGridViewに反映させる
         /// </summary>
         /// <param name="configInfoFilters"></param>
-        /// <param name="dataGridView"></param>
-        private void SetDataGridView(IList<ConfigInfoFilter> configInfoFilters, DataGridView dataGridView)
+        /// <param name="filterList"></param>
+        private static void SetDataGridView(IEnumerable<ConfigInfoFilter> configInfoFilters, FilterList filterList)
         {
+            if(configInfoFilters == null)
+            {
+                throw new ArgumentNullException("configInfoFilters");
+            }
+
             foreach (ConfigInfoFilter filter in configInfoFilters)
             {
-                dataGridView.Rows.Add(new object[] {filter.IsEnable, filter.Name, filter.FilterString});
+                filterList.SetFilterDefinitions(
+                    new object[] { filter.IsEnable, filter.Name, filter.FilterString });
             }
         }
 
         #endregion
-
-        
-
-        
-        
-
-        
     }
 }
