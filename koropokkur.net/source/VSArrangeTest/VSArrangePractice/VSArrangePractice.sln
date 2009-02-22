@@ -1,7 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VSArrangePractice", "ClassLibrary1\VSArrangePractice.csproj", "{2C07558D-F8FB-4A3E-A9E1-551AB5CBAC29}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VSArrangeTest", "..\VSArrangeTest.csproj", "{EC41D464-8506-4C3C-80E1-FADA19144051}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VSArrangePractice", "VSArrangePractice\VSArrangePractice.csproj", "{2C07558D-F8FB-4A3E-A9E1-551AB5CBAC29}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -9,6 +11,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EC41D464-8506-4C3C-80E1-FADA19144051}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC41D464-8506-4C3C-80E1-FADA19144051}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC41D464-8506-4C3C-80E1-FADA19144051}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC41D464-8506-4C3C-80E1-FADA19144051}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2C07558D-F8FB-4A3E-A9E1-551AB5CBAC29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2C07558D-F8FB-4A3E-A9E1-551AB5CBAC29}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2C07558D-F8FB-4A3E-A9E1-551AB5CBAC29}.Release|Any CPU.ActiveCfg = Release|Any CPU
