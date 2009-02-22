@@ -27,7 +27,12 @@ namespace VSArrange.Control.Window
     /// <param name="sender"></param>
     /// <param name="inputText"></param>
     /// <returns></returns>
-    public delegate bool TestExecutedEvent(FilterList sender, string inputText);
+    public delegate bool TestExecutedEventHandler(FilterList sender, string inputText);
+
+    /// <summary>
+    /// 再読み込みイベントデリゲート
+    /// </summary>
+    public delegate void ReloadExecutedEventHandler();
 
     /// <summary>
     /// フィルター設定コントロール
@@ -37,7 +42,12 @@ namespace VSArrange.Control.Window
         /// <summary>
         /// フィルターテスト実行イベント
         /// </summary>
-        public event TestExecutedEvent TestExecuted;
+        public event TestExecutedEventHandler TestExecuted;
+
+        /// <summary>
+        /// 再読み込み実行イベント
+        /// </summary>
+        public event ReloadExecutedEventHandler ReloadExecuted;
 
         /// <summary>
         /// フィルター名称
@@ -80,6 +90,19 @@ namespace VSArrange.Control.Window
         }
 
         #region イベント
+
+        /// <summary>
+        /// 元に戻すボタンクリック
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnUndo_Click(object sender, EventArgs e)
+        {
+            if (ReloadExecuted != null)
+            {
+                ReloadExecuted();
+            }
+        }
 
         private void txtTestInput_KeyDown(object sender, System.Windows.Forms.KeyEventArgs e)
         {
@@ -160,6 +183,8 @@ namespace VSArrange.Control.Window
         }
 
         #endregion
+
+        
 
         
     }

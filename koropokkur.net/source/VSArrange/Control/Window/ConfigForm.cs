@@ -40,11 +40,11 @@ namespace VSArrange.Control.Window
 
             filterFile.FilterName = "ファイル";
             filterFile.TestExecuted += filter_TestExecuted;
+            filterFile.ReloadExecuted += filterFile_ReloadExecuted;
             filterFolder.FilterName = "フォルダ";
             filterFolder.TestExecuted += filter_TestExecuted;
-        }
-
-        
+            filterFolder.ReloadExecuted += filterFolder_ReloadExecuted;
+        }        
 
         #region イベント
 
@@ -55,16 +55,13 @@ namespace VSArrange.Control.Window
         /// <param name="e"></param>
         private void ConfigForm_Load(object sender, EventArgs e)
         {
-            try
+            ConfigInfo configInfo = GetConfigInfo();
+            if (configInfo == null)
             {
-                string configPath = PathUtils.GetConfigPath();
-                ConfigInfo configInfo = ConfigFileManager.ReadConfig(configPath);
-                UpdateConfigInfo2Display(configInfo);
+                return;
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show(string.Format("設定情報の読み込みに失敗しました。\n{0}", ex.Message));
-            }
+            SetDataGridView(configInfo.FilterFileStringList, filterFile);
+            SetDataGridView(configInfo.FilterFolderStringList, filterFolder);
         }
 
         /// <summary>
@@ -112,6 +109,32 @@ namespace VSArrange.Control.Window
         private static bool filter_TestExecuted(FilterList sender, string inputText)
         {
             return IsFilterHit(inputText, sender.GetFilterDefinitions());
+        }
+
+        /// <summary>
+        /// フォルダ用フィルタ設定を再読込み
+        /// </summary>
+        private void filterFolder_ReloadExecuted()
+        {
+            ConfigInfo configInfo = GetConfigInfo();
+            if (configInfo == null)
+            {
+                return;
+            }
+            SetDataGridView(GetConfigInfo().FilterFolderStringList, filterFolder);
+        }
+
+        /// <summary>
+        /// ファイル用のフィルタ設定を再読込み
+        /// </summary>
+        private void filterFile_ReloadExecuted()
+        {
+            ConfigInfo configInfo = GetConfigInfo();
+            if (configInfo == null)
+            {
+                return;
+            }
+            SetDataGridView(GetConfigInfo().FilterFileStringList, filterFile);
         }
 
 
@@ -163,18 +186,21 @@ namespace VSArrange.Control.Window
         }
 
         /// <summary>
-        /// 設定情報を画面表示に反映させる
+        /// 設定情報の取得
         /// </summary>
-        /// <param name="configInfo"></param>
-        private void UpdateConfigInfo2Display(ConfigInfo configInfo)
+        /// <returns></returns>
+        private ConfigInfo GetConfigInfo()
         {
-            if(configInfo == null)
+            try
             {
-                throw new ArgumentNullException("configInfo");
+                string configPath = PathUtils.GetConfigPath();
+                return ConfigFileManager.ReadConfig(configPath);
             }
-
-            SetDataGridView(configInfo.FilterFileStringList, filterFile);
-            SetDataGridView(configInfo.FilterFolderStringList, filterFolder);
+            catch (Exception ex)
+            {
+                MessageBox.Show(string.Format("設定情報の読み込みに失敗しました。\n{0}", ex.Message));
+            }
+            return null;
         }
 
         /// <summary>
