@@ -31,15 +31,16 @@
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.grpFilter = new System.Windows.Forms.GroupBox();
+            this.button1 = new System.Windows.Forms.Button();
+            this.lblTestExplain = new System.Windows.Forms.Label();
             this.lblOK = new System.Windows.Forms.Label();
+            this.txtTestInput = new System.Windows.Forms.TextBox();
             this.lblNG = new System.Windows.Forms.Label();
             this.dgFilters = new System.Windows.Forms.DataGridView();
             this.IsEnableFileFilter = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.FileFilterName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.FileFilterString = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.buttonRemoveFileFilter = new System.Windows.Forms.DataGridViewButtonColumn();
-            this.txtTestInput = new System.Windows.Forms.TextBox();
-            this.lblTestExplain = new System.Windows.Forms.Label();
             this.timerCloseMessage = new System.Windows.Forms.Timer(this.components);
             this.grpFilter.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgFilters)).BeginInit();
@@ -47,6 +48,7 @@
             // 
             // grpFilter
             // 
+            this.grpFilter.Controls.Add(this.button1);
             this.grpFilter.Controls.Add(this.lblTestExplain);
             this.grpFilter.Controls.Add(this.lblOK);
             this.grpFilter.Controls.Add(this.txtTestInput);
@@ -58,6 +60,27 @@
             this.grpFilter.TabIndex = 11;
             this.grpFilter.TabStop = false;
             this.grpFilter.Text = "ファイル";
+            // 
+            // button1
+            // 
+            this.button1.Font = new System.Drawing.Font("MS UI Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.button1.Location = new System.Drawing.Point(442, 210);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(95, 23);
+            this.button1.TabIndex = 16;
+            this.button1.Text = "再読込み(&R)";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.btnUndo_Click);
+            // 
+            // lblTestExplain
+            // 
+            this.lblTestExplain.AutoSize = true;
+            this.lblTestExplain.Font = new System.Drawing.Font("MS UI Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.lblTestExplain.Location = new System.Drawing.Point(3, 214);
+            this.lblTestExplain.Name = "lblTestExplain";
+            this.lblTestExplain.Size = new System.Drawing.Size(244, 15);
+            this.lblTestExplain.TabIndex = 1;
+            this.lblTestExplain.Text = "フィルターテスト(Returnキーでテスト実行)";
             // 
             // lblOK
             // 
@@ -72,6 +95,16 @@
             this.lblOK.Text = "OK !!";
             this.lblOK.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.lblOK.Visible = false;
+            // 
+            // txtTestInput
+            // 
+            this.txtTestInput.Font = new System.Drawing.Font("MS UI Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.txtTestInput.Location = new System.Drawing.Point(250, 211);
+            this.txtTestInput.Name = "txtTestInput";
+            this.txtTestInput.Size = new System.Drawing.Size(186, 22);
+            this.txtTestInput.TabIndex = 13;
+            this.txtTestInput.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtTestInput_KeyDown);
+            this.txtTestInput.LostFocus += new System.EventHandler(this.txtTestInput_LostFocus);
             // 
             // lblNG
             // 
@@ -103,7 +136,6 @@
             this.dgFilters.RowTemplate.Height = 21;
             this.dgFilters.Size = new System.Drawing.Size(531, 187);
             this.dgFilters.TabIndex = 0;
-            this.dgFilters.CellContentClick += dgFileFilters_CellContentClick;
             // 
             // IsEnableFileFilter
             // 
@@ -134,26 +166,6 @@
             this.buttonRemoveFileFilter.Text = "×";
             this.buttonRemoveFileFilter.UseColumnTextForButtonValue = true;
             this.buttonRemoveFileFilter.Width = 35;
-            // 
-            // txtTestInput
-            // 
-            this.txtTestInput.Font = new System.Drawing.Font("MS UI Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.txtTestInput.Location = new System.Drawing.Point(250, 211);
-            this.txtTestInput.Name = "txtTestInput";
-            this.txtTestInput.Size = new System.Drawing.Size(287, 22);
-            this.txtTestInput.TabIndex = 13;
-            this.txtTestInput.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtTestInput_KeyDown);
-            this.txtTestInput.LostFocus += new System.EventHandler(this.txtTestInput_LostFocus);
-            // 
-            // lblTestExplain
-            // 
-            this.lblTestExplain.AutoSize = true;
-            this.lblTestExplain.Font = new System.Drawing.Font("MS UI Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.lblTestExplain.Location = new System.Drawing.Point(3, 214);
-            this.lblTestExplain.Name = "lblTestExplain";
-            this.lblTestExplain.Size = new System.Drawing.Size(244, 15);
-            this.lblTestExplain.TabIndex = 1;
-            this.lblTestExplain.Text = "フィルターテスト(Returnキーでテスト実行)";
             // 
             // timerCloseMessage
             // 
@@ -191,5 +203,6 @@
         private System.Windows.Forms.Label lblNG;
         private System.Windows.Forms.Label lblOK;
         private System.Windows.Forms.Timer timerCloseMessage;
+        private System.Windows.Forms.Button button1;
     }
 }
