@@ -121,6 +121,7 @@ namespace VSArrange.Control.Window
             {
                 return;
             }
+            filterFolder.Clear();
             SetDataGridView(GetConfigInfo().FilterFolderStringList, filterFolder);
         }
 
@@ -134,6 +135,7 @@ namespace VSArrange.Control.Window
             {
                 return;
             }
+            filterFile.Clear();
             SetDataGridView(GetConfigInfo().FilterFileStringList, filterFile);
         }
 
