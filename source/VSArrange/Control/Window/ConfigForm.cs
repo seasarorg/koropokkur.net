@@ -19,8 +19,8 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using VSArrange.Config;
 using AddInCommon.Util;
+using VSArrange.Config;
 using VSArrange.Filter;
 
 namespace VSArrange.Control.Window

@@ -16,23 +16,20 @@
  */
 #endregion
 
-using EnvDTE80;
-
-namespace AddInCommon.Util
+namespace AddInCommon.Exception
 {
     /// <summary>
-    /// 画面下部のステータスバー制御ユーティリティ
+    /// クラスが見つからなかったときの例外
     /// </summary>
-    public class StatusBarUtils
+    public class ClassNotFoundRuntimeException : KoropokkurException
     {
         /// <summary>
-        /// 表示しているステータスバーを消す
+        /// コンストラクタ
         /// </summary>
-        /// <param name="applicationObject"></param>
-        public static void Clear(DTE2 applicationObject)
+        /// <param name="expectedClassName">想定していたクラス名</param>
+        public ClassNotFoundRuntimeException(string expectedClassName)
         {
-            applicationObject.StatusBar.Progress(false, "", 0, 0);
-            applicationObject.StatusBar.Clear();
+            
         }
     }
 }

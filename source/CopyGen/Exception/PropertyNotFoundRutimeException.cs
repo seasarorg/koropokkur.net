@@ -16,23 +16,22 @@
  */
 #endregion
 
-using EnvDTE80;
+using AddInCommon.Exception;
 
-namespace AddInCommon.Util
+namespace CopyGen.Exception
 {
     /// <summary>
-    /// 画面下部のステータスバー制御ユーティリティ
+    /// 生成対象のプロパティが見つからなかった場合の例外
     /// </summary>
-    public class StatusBarUtils
+    public class PropertyNotFoundRutimeException : KoropokkurException
     {
         /// <summary>
-        /// 表示しているステータスバーを消す
+        /// コンストラクタ
         /// </summary>
-        /// <param name="applicationObject"></param>
-        public static void Clear(DTE2 applicationObject)
+        /// <param name="expectedClassName">プロパティ情報を抽出しようとしたクラス名</param>
+        public PropertyNotFoundRutimeException(string expectedClassName)
         {
-            applicationObject.StatusBar.Progress(false, "", 0, 0);
-            applicationObject.StatusBar.Clear();
+            
         }
     }
 }

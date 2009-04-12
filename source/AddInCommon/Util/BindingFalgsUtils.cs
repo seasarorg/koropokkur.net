@@ -16,23 +16,22 @@
  */
 #endregion
 
-using EnvDTE80;
+using System.Reflection;
 
 namespace AddInCommon.Util
 {
     /// <summary>
-    /// 画面下部のステータスバー制御ユーティリティ
+    /// BindingFalgsを取り扱うユーティリティ
     /// </summary>
-    public class StatusBarUtils
+    public static class BindingFalgsUtils
     {
         /// <summary>
-        /// 表示しているステータスバーを消す
+        /// public+instance
         /// </summary>
-        /// <param name="applicationObject"></param>
-        public static void Clear(DTE2 applicationObject)
+        /// <returns></returns>
+        public static BindingFlags GetPublicFlags()
         {
-            applicationObject.StatusBar.Progress(false, "", 0, 0);
-            applicationObject.StatusBar.Clear();
+            return (BindingFlags.Instance | BindingFlags.Public);
         }
     }
 }

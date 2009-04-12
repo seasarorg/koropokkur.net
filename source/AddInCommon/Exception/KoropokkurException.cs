@@ -16,23 +16,12 @@
  */
 #endregion
 
-using EnvDTE80;
-
-namespace AddInCommon.Util
+namespace AddInCommon.Exception
 {
     /// <summary>
-    /// 画面下部のステータスバー制御ユーティリティ
+    /// Koropokkurアドイン共通例外
     /// </summary>
-    public class StatusBarUtils
+    public class KoropokkurException : System.Exception
     {
-        /// <summary>
-        /// 表示しているステータスバーを消す
-        /// </summary>
-        /// <param name="applicationObject"></param>
-        public static void Clear(DTE2 applicationObject)
-        {
-            applicationObject.StatusBar.Progress(false, "", 0, 0);
-            applicationObject.StatusBar.Clear();
-        }
     }
 }
