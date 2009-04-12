@@ -16,23 +16,30 @@
  */
 #endregion
 
-using EnvDTE80;
+using System.Text;
 
-namespace AddInCommon.Util
+namespace CodeGeneratorCore.Impl
 {
     /// <summary>
-    /// 画面下部のステータスバー制御ユーティリティ
+    /// 戻り値行生成クラス
     /// </summary>
-    public class StatusBarUtils
+    public class LineReturnGenerator : LineGenerator
     {
         /// <summary>
-        /// 表示しているステータスバーを消す
+        /// 戻り値行を生成
         /// </summary>
-        /// <param name="applicationObject"></param>
-        public static void Clear(DTE2 applicationObject)
+        /// <returns></returns>
+        public override string GenerateCode(string startIndent)
         {
-            applicationObject.StatusBar.Progress(false, "", 0, 0);
-            applicationObject.StatusBar.Clear();
+            StringBuilder builder = new StringBuilder();
+            builder.Append(startIndent).Append("return");
+            if(Items.Count > 0)
+            {
+                builder.Append(" ").Append(base.GenerateCode(string.Empty));
+                return builder.ToString();
+            }
+            builder.Append(";");
+            return builder.ToString();
         }
     }
 }

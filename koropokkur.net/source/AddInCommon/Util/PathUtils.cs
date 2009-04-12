@@ -16,9 +16,6 @@
  */
 #endregion
 
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Reflection;
 using System.IO;
 
@@ -38,6 +35,24 @@ namespace AddInCommon.Util
             string assemblyFullName = Assembly.GetCallingAssembly().CodeBase;
             //  URI表記部分を削除して返す
             return Path.ChangeExtension(assemblyFullName.Replace("file:///", ""), ".config");
+        }
+
+        /// <summary>
+        /// フォルダパスを取り出して返す
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
+        public static string GetFolderPath(string filePath)
+        {
+            string[] pathParts = filePath.Split(Path.DirectorySeparatorChar);
+            if(pathParts.Length <= 1)
+            {
+                //  デフォルトの区切り文字で切り分けられなかった場合は
+                //  こちらで区切る
+                pathParts = filePath.Split('/');
+            }
+            //  配列最後の部分（ファイル名）だけ除外して返す
+            return filePath.Replace(pathParts[pathParts.Length - 1], "");
         }
     }
 }

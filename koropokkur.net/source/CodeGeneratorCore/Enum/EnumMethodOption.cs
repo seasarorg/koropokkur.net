@@ -16,23 +16,17 @@
  */
 #endregion
 
-using EnvDTE80;
-
-namespace AddInCommon.Util
+namespace CodeGeneratorCore.Enum
 {
     /// <summary>
-    /// 画面下部のステータスバー制御ユーティリティ
+    /// メソッド付加設定列挙体
     /// </summary>
-    public class StatusBarUtils
+    public enum EnumMethodOption
     {
-        /// <summary>
-        /// 表示しているステータスバーを消す
-        /// </summary>
-        /// <param name="applicationObject"></param>
-        public static void Clear(DTE2 applicationObject)
-        {
-            applicationObject.StatusBar.Progress(false, "", 0, 0);
-            applicationObject.StatusBar.Clear();
-        }
+        None = 0,
+        Static,
+        Virtual,
+        Override,
+        Abstract
     }
 }

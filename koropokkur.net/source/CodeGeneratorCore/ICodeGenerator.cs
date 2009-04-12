@@ -16,23 +16,19 @@
  */
 #endregion
 
-using EnvDTE80;
+using System.Xml;
 
-namespace AddInCommon.Util
+namespace CodeGeneratorCore
 {
     /// <summary>
-    /// 画面下部のステータスバー制御ユーティリティ
+    /// アドイン用コード生成インターフェース
     /// </summary>
-    public class StatusBarUtils
+    public interface ICodeGenerator
     {
         /// <summary>
-        /// 表示しているステータスバーを消す
+        /// 生成コードを返す
         /// </summary>
-        /// <param name="applicationObject"></param>
-        public static void Clear(DTE2 applicationObject)
-        {
-            applicationObject.StatusBar.Progress(false, "", 0, 0);
-            applicationObject.StatusBar.Clear();
-        }
+        /// <returns></returns>
+        string GenerateCode(string startIndent);
     }
 }

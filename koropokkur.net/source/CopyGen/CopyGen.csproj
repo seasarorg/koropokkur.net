@@ -2,15 +2,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{23022F2A-F97F-4570-8000-D2D9CB8EEFED}</ProjectGuid>
+    <ProjectGuid>{6874D751-FAB2-47C1-8EFF-B89DD30B69D2}</ProjectGuid>
     <OutputType>Library</OutputType>
     <StartupObject>
     </StartupObject>
     <NoStandardLibraries>false</NoStandardLibraries>
-    <AssemblyName>VSArrange</AssemblyName>
-    <RootNamespace>VSArrange</RootNamespace>
+    <AssemblyName>CopyGen</AssemblyName>
+    <RootNamespace>CopyGen</RootNamespace>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -45,18 +45,26 @@
     <Compile Include="Connect.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Control\ArrangeControl.cs" />
+    <Compile Include="Control\CopyMethodGenControl.cs" />
+    <Compile Include="Control\ConfigMenu.cs" />
+    <Compile Include="Control\Window\CopyConfig.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Control\Window\CopyConfig.Designer.cs">
+      <DependentUpon>CopyConfig.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Exception\ConfigNotFoundException.cs" />
+    <Compile Include="Exception\PropertyNotFoundRutimeException.cs" />
+    <Compile Include="Gen\CopyInfoFileManager.cs" />
+    <Compile Include="Gen\CopyBuilder.cs" />
+    <Compile Include="Gen\CopyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="CommandBar.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Control\Window\ConfigForm.resx">
-      <DependentUpon>ConfigForm.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Control\Window\FilterList.resx">
-      <DependentUpon>FilterList.cs</DependentUpon>
+    <EmbeddedResource Include="Control\Window\CopyConfig.resx">
+      <DependentUpon>CopyConfig.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
@@ -103,40 +111,20 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="VSArrange.AddIn" />
+    <Content Include="..\..\..\..\..\..\..\Documents and Settings\koyak\My Documents\Visual Studio 2008\Addins\CopyMethodGen - For Testing.AddIn">
+      <Link>CopyMethodGen - For Testing.AddIn</Link>
+    </Content>
+    <Content Include="CopyMethodGen.AddIn" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AddInCommon\AddInCommon.csproj">
       <Project>{4E1C075D-9803-4DA8-884E-3033D9AB9B58}</Project>
       <Name>AddInCommon</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Config\ConfigFileManager.cs" />
-    <Compile Include="Config\ConfigInfo.cs" />
-    <Compile Include="Config\ConfigInfoFilter.cs" />
-    <Compile Include="Control\ConfigMenu.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Control\Window\ConfigForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Control\Window\ConfigForm.Designer.cs">
-      <DependentUpon>ConfigForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Control\Window\FilterList.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Control\Window\FilterList.Designer.cs">
-      <DependentUpon>FilterList.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Filter\ItemAttachmentFilter.cs" />
-    <Compile Include="VSArrangeConst.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="VSArrange.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <ProjectReference Include="..\CodeGeneratorCore\CodeGeneratorCore.csproj">
+      <Project>{5B9E49BC-C148-419C-BC2A-D0C7C00ADB82}</Project>
+      <Name>CodeGeneratorCore</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
   <PropertyGroup>

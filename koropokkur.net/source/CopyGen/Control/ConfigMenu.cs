@@ -17,24 +17,24 @@
 #endregion
 
 using AddInCommon.Util;
+using CopyGen.Control.Window;
 using Microsoft.VisualStudio.CommandBars;
-using VSArrange.Control.Window;
 
-namespace VSArrange.Control
+namespace CopyGen.Control
 {
     /// <summary>
     /// 設定画面表示コントロール
     /// </summary>
     public class ConfigMenu
     {
-        private const string MENU_NAME = "VSArrange";
+        private const string MENU_NAME = "CopyGen";
 
         /// <summary>
-        /// ソリューション右クリックメニューに項目を一つ追加して返す
+        // 
         /// </summary>
         /// <param name="parentPopup"></param>
         /// <returns></returns>
-        public virtual CommandBarControl CreateSolutionContextMenuItem(CommandBarPopup parentPopup)
+        public virtual CommandBarControl CreateMenuItem(CommandBarPopup parentPopup)
         {
             CommandBarButton configMenuButton = 
                 CommandBarUtils.CreatePopupChildControl<CommandBarButton>(parentPopup);
@@ -52,9 +52,9 @@ namespace VSArrange.Control
         /// <param name="CancelDefault"></param>
         private void configMenuButton_Click(CommandBarButton Ctrl, ref bool CancelDefault)
         {
-            using (ConfigForm dialog = new ConfigForm())
+            using (CopyConfig config = new CopyConfig())
             {
-                dialog.ShowDialog();
+                config.ShowDialog();
             }
         }
         #endregion
