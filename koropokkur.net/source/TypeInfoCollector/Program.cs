@@ -21,14 +21,12 @@ namespace TypeInfoCollector
                 return;
             }
 
-            string assemblyPath = "";
+            string assemblyPath = args[0];
+            string typeName = args[1];
+            string outputPath = args[2];
 
             try
             {
-                assemblyPath = args[0];
-                string typeName = args[1];
-                string outputPath = args[2];
-
                 //  古いプロパティ情報は消しておく
                 if(File.Exists(outputPath))
                 {
@@ -61,7 +59,7 @@ namespace TypeInfoCollector
             }
             catch (Exception ex)
             {
-                using (var errorWriter = new StreamWriter(string.Format("{0}.error.log", assemblyPath), true))
+                using (var errorWriter = new StreamWriter(string.Format("{0}.error.log", outputPath), true))
                 {
                     errorWriter.WriteLine("{0} {1}\n{2}", DateTime.Now, ex.Message, ex.StackTrace);
                 }

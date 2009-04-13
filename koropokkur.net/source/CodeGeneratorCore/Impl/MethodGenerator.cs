@@ -151,12 +151,24 @@ namespace CodeGeneratorCore.Impl
             StringBuilder builder = new StringBuilder();
 
             builder.Append(HEADER_COMMENT).AppendLine(GetSectionStart(SECTION_SUMMARY));
-            builder.Append(startIndent).Append(HEADER_COMMENT).AppendLine(MethodComment);
-            builder.Append(startIndent).Append(HEADER_COMMENT).Append(GetSectionEnd(SECTION_SUMMARY));
+            if(startIndent != null)
+            {
+                builder.Append(startIndent);
+            }
+            builder.Append(HEADER_COMMENT).AppendLine(MethodComment);
+            if (startIndent != null)
+            {
+                builder.Append(startIndent);
+            }
+            builder.Append(HEADER_COMMENT).Append(GetSectionEnd(SECTION_SUMMARY));
             foreach (ArgumentGenerator argument in Arguments)
             {
                 builder.AppendLine();
-                builder.Append(startIndent).Append(HEADER_COMMENT);
+                if(startIndent != null)
+                {
+                    builder.Append(startIndent);
+                }
+                builder.Append(HEADER_COMMENT);
                 builder.Append(GetParamStart(argument.ArgumentName));
                 builder.Append(argument.Comment);
                 builder.Append(GetSectionEnd(SECTION_PARAM));
@@ -165,7 +177,11 @@ namespace CodeGeneratorCore.Impl
             if(ReturnTypeName != "void")
             {
                 builder.AppendLine();
-                builder.Append(startIndent).Append(GetOneLineSection(SECTION_RETURN, ReturnComment));
+                if (startIndent != null)
+                {
+                    builder.Append(startIndent);
+                }
+                builder.Append(GetOneLineSection(SECTION_RETURN, ReturnComment));
             }
 
             return builder.ToString();
@@ -215,12 +231,13 @@ namespace CodeGeneratorCore.Impl
             builder.Append(MethodName).Append("(");
             foreach (ArgumentGenerator argument in Arguments)
             {
-                builder.Append(argument.GenerateCode("")).Append(",");
+                builder.Append(argument.GenerateCode("")).Append(", ");
             }
             
             if (Arguments.Count > 0)
             {
                 //  最後を引数の終わり「)」に置換
+                builder.Remove(builder.Length - 1, 1);
                 builder[builder.Length - 1] = ')';
             }
             else
