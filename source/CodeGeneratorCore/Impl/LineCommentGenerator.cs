@@ -30,7 +30,11 @@ namespace CodeGeneratorCore.Impl
             StringBuilder builder = new StringBuilder();
             if(Items.Count > 0)
             {
-                builder.Append(startIndent).Append("//");
+                if(startIndent != null)
+                {
+                    builder.Append(startIndent);
+                }
+                builder.Append("//");
             }
 
             foreach (string item in Items)

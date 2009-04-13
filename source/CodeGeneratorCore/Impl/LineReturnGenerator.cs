@@ -32,7 +32,11 @@ namespace CodeGeneratorCore.Impl
         public override string GenerateCode(string startIndent)
         {
             StringBuilder builder = new StringBuilder();
-            builder.Append(startIndent).Append("return");
+            if(startIndent != null)
+            {
+                builder.Append(startIndent);
+            }
+            builder.Append("return");
             if(Items.Count > 0)
             {
                 builder.Append(" ").Append(base.GenerateCode(string.Empty));

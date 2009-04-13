@@ -48,7 +48,11 @@ namespace CodeGeneratorCore.Impl
         public virtual string GenerateCode(string startIndent)
         {
             StringBuilder codeBuilder = new StringBuilder();
-            codeBuilder.Append(startIndent);
+            if(startIndent != null)
+            {
+                codeBuilder.Append(startIndent);    
+            }
+            
             foreach (string item in Items)
             {
                 codeBuilder.Append(item).Append(" ");
