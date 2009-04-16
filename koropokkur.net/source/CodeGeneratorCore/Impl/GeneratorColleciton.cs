@@ -28,6 +28,11 @@ namespace CodeGeneratorCore.Impl
     {
         private readonly IList<ICodeGenerator> _codeGenerators = new List<ICodeGenerator>();
 
+        public int Count
+        {
+            get { return _codeGenerators.Count; }
+        }
+
         /// <summary>
         /// コード生成オブジェクトの追加
         /// </summary>

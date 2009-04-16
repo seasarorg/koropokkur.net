@@ -102,8 +102,9 @@ namespace CopyGen.Control
                     _copyInfo = CopyInfoFileManager.ReadConfig(configPath);
                 }
 
-                CopyBuilder builder = new CopyBuilder(_applicationObject, _copyInfo);
-                ICodeGenerator generator = builder.CreateCodeGenerator();
+                CopyBuilder builder = new CopyBuilder(_copyInfo);
+                ICodeGenerator generator = builder.CreateCodeGenerator(
+                    AssemblyUtils.GetAssemblyName(document), AssemblyUtils.GetTypeName(document));
                 if(generator == null)
                 {
                     MessageUtils.ShowWarnMessage("コピー処理を生成できませんでした。\nファイル名とクラス名が一致していない、\nまたはアドインのインストール先が書き込み不可になっていないかご確認下さい。");

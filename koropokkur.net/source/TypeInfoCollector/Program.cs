@@ -50,7 +50,9 @@ namespace TypeInfoCollector
                 {
                     foreach (PropertyInfo propertyInfo in propertyInfos)
                     {
-                        if (propertyInfo.CanRead && propertyInfo.CanWrite)
+                        if (propertyInfo.CanRead && propertyInfo.CanWrite
+                            && propertyInfo.GetGetMethod() != null
+                            && propertyInfo.GetSetMethod() != null)
                         {
                             writer.WriteLine(propertyInfo.Name);
                         }
