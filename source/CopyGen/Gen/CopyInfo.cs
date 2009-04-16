@@ -30,41 +30,6 @@ namespace CopyGen.Gen
     {
         #region プロパティ
 
-        #region 読み取り専用
-        
-        //protected Type _sourceType;
-        ///// <summary>
-        ///// コピー元の型（使用時にはnullではないことが前提）
-        ///// </summary>
-        //public Type SourceType { get { return _sourceType; } }
-        
-        ////protected PropertyInfo[] _sourcePropertyInfos;
-        /////// <summary>
-        /////// コピー元の公開プロパティ（使用時にはnullではないことが前提）
-        /////// </summary>
-        ////public PropertyInfo[] SourcePropertyInfos { get { return _sourcePropertyInfos; } }
-
-        //protected Type _targetType;
-        ///// <summary>
-        ///// コピー先の型（使用時にはnullではないことが前提）
-        ///// </summary>
-        //public Type TargetType { get { return _targetType; } }
-
-        //protected PropertyInfo[] _targetPropertyInfos;
-        ///// <summary>
-        ///// コピー先の公開プロパティ（使用時にはnullではないことが前提）
-        ///// </summary>
-        //public PropertyInfo[] TargetPropertyInfos { get { return _targetPropertyInfos; } }
-        
-        //protected readonly IDictionary<string, PropertyInfo> _targetPropertyMap
-        //    = new Dictionary<string, PropertyInfo>();
-        ///// <summary>
-        ///// コピー先のプロパティマッピング
-        ///// </summary>
-        //public IDictionary<string, PropertyInfo> TargetPropertyMap { get { return _targetPropertyMap; } }
-
-        #endregion
-
         private IList<string> _sourcePropertyNames;
         public IList<string> SourcePropertyNames
         {
@@ -156,22 +121,7 @@ namespace CopyGen.Gen
         public string SourceTypeName
         {
             get { return _sourceTypeName; }
-            set
-            {
-                //string inputSourceTypeName = value;
-                //_sourceType = AssemblyUtils.ForName(inputSourceTypeName);
-                //if(_sourceType == null)
-                //{
-                //    throw new ClassNotFoundRuntimeException(inputSourceTypeName);
-                //}
-
-                //_sourcePropertyInfos = _sourceType.GetProperties(BindingFalgsUtils.GetPublicFlags());
-                //if(!HasProperty(_sourcePropertyInfos))
-                //{
-                //    throw new PropertyNotFoundRutimeException(inputSourceTypeName);
-                //}
-                _sourceTypeName = value;
-            }
+            set { _sourceTypeName = value; }
         }
 
         private bool _isReturn;
@@ -211,27 +161,7 @@ namespace CopyGen.Gen
         public string TargetTypeName
         {
             get { return _targetTypeName; }
-            set
-            {
-                //string inputTargetName = value;
-                //_targetType = AssemblyUtils.ForName(inputTargetName);
-                //if (_targetType == null)
-                //{
-                //    throw new ClassNotFoundRuntimeException(inputTargetName);
-                //}
-
-                //_targetPropertyInfos = _targetType.GetProperties(BindingFalgsUtils.GetPublicFlags());
-                //if (!HasProperty(_targetPropertyInfos))
-                //{
-                //    throw new PropertyNotFoundRutimeException(inputTargetName);
-                //}
-
-                //foreach (PropertyInfo info in _targetPropertyInfos)
-                //{
-                //    _targetPropertyMap.Add(info.Name, info);
-                //}
-                _targetTypeName = value;
-            }
+            set { _targetTypeName = value; }
         }
 
         private bool _isEverytimeConfirm;

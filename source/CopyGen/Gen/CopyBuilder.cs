@@ -19,10 +19,9 @@
 using System.Collections.Generic;
 using System.IO;
 using AddInCommon.Util;
-using CodeGeneratorCore.Impl;
 using CodeGeneratorCore;
-using EnvDTE80;
-using EnvDTE;
+using CodeGeneratorCore.Impl;
+using System;
 
 namespace CopyGen.Gen
 {
@@ -42,32 +41,32 @@ namespace CopyGen.Gen
 
         protected readonly CopyInfo _copyInfo;
 
-        private readonly DTE2 _applicationObject;
-
         /// <summary>
         /// コンストラクタ
         /// </summary>
-        /// <param name="applicationObject"></param>
         /// <param name="copyInfo"></param>
-        public CopyBuilder(DTE2 applicationObject, CopyInfo copyInfo)
+        public CopyBuilder(CopyInfo copyInfo)
         {
-            _applicationObject = applicationObject;
+            if (copyInfo == null)
+            {
+                throw new ArgumentNullException("copyInfo");
+            }
             _copyInfo = copyInfo;
         }
 
         /// <summary>
         /// コード生成オブジェクトの生成
         /// </summary>
+        /// <param name="assemblyPath"></param>
+        /// <param name="typeName"></param>
         /// <returns></returns>
-        public ICodeGenerator CreateCodeGenerator()
+        public ICodeGenerator CreateCodeGenerator(string assemblyPath, string typeName)
         {
-            Document document = _applicationObject.ActiveDocument;
             //  型を自動設定する場合
             if(_copyInfo.IsSourceTypeAuto || _copyInfo.IsTargetTypeAuto)
             {
-                string typeName = AssemblyUtils.GetTypeName(document);
                 //  現在開いている型のプロパティ情報を出力する
-                IList<string> propList = ExtractPropertyInfo(AssemblyUtils.GetAssemblyName(document), typeName);
+                IList<string> propList = ExtractPropertyInfo(assemblyPath, typeName);
                 if(propList == null)
                 {
                     return null;
@@ -169,6 +168,12 @@ namespace CopyGen.Gen
         /// <returns></returns>
         protected ICodeGenerator CreateCopyLinesGenerator()
         {
+            if(_copyInfo.SourcePropertyNames == null ||
+                _copyInfo.TargetPropertyNames == null)
+            {
+                return null;
+            }
+
             GeneratorColleciton generatorColleciton = new GeneratorColleciton();
 
             foreach (string propertyName in _copyInfo.SourcePropertyNames)
