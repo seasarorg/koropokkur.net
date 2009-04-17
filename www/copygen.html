@@ -1,0 +1,152 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<meta http-equiv="Content-Language" content="ja" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta name="keywords" content="koropokkur.net, Seasar, The Seasar Project, The Seasar Foundation, OSS, Open Source Software, Java, Framework" />
+<meta name="description" content="koropokkur.net" />
+<title>koropokkur.net</title>
+<link rel="stylesheet" type="text/css" href="http://www.seasar.org/theme/main.css" media="screen,projection" />
+<link rel="stylesheet" type="text/css" href="http://www.seasar.org/theme/print.css" media="print" />
+</head>
+
+<body>
+
+<div id="wrapper">
+
+<div id="header">
+
+<div class="line"><span class="hide">spacer</span></div>
+
+<div id="logo"><h2 id="h01" class="hide">The Seasar Foundation Project Site</h2><img src="http://www.seasar.org/images/seasar_logo_blue.gif" alt="The Seasar Project" width="390" height="180" /></div>
+
+<div id="tool">
+
+<h2><a href="http://search.seasar.org/">Site Search</a></h2>
+
+<form id="search" name="search" action="http://search.seasar.org/">
+<div>
+	<input id="search_phrase" type="text" name="phrase" size="20" />
+	<input type="hidden" name="perpage" value="30" />
+	<input type="hidden" name="enc" value="UTF-8" />
+	<input id="search_go" type="submit" value="Search" />
+</div>
+</form>
+
+<h2>Seasar Banner</h2>
+
+<p><a href="http://www.seasar.org/images/seasar_banner.gif"><img src="http://www.seasar.org/images/seasar_banner.gif" alt="Seasar Banner" title="Seasar Banner" width="146" height="33" /></a></p>
+
+</div>
+
+</div><!-- header -->
+
+
+<div id="contents_left">
+
+<h2>Menu</h2>
+
+<ul> 
+	<li><a href="index.html">Koropokkur.NET</a></li>
+	<li><a href="#Abstract">概要</a></li>
+	<li><a href="#News">お知らせ</a></li>
+	<li><a href="#Register">アドイン登録方法</a></li>
+	<li><a href="#Config">設定方法</a></li>
+	<li><a href="#Usage">使い方</a></li>
+</ul> 
+
+</div><!-- contents_left -->
+
+<div id="contents_center">
+
+<div id="article">
+
+<div class="section">
+
+<h2>Welcome to the 「CopyGen」AddIn</h2>
+<!-- =============================================================================== -->
+<!--                                                                           概要  -->
+<!--                                                                          ====== -->
+<h3><a name="Abstract">概要</a></h3>
+<p>
+エンティティのコピー処理を自動生成します。<br>
+現バージョンでは下記の仕様となっています。
+<ul>
+	<li>開いているファイルと同名のクラスについてコピー処理を生成</li>
+	<li>コンパイル済のクラスが対象</li>
+	<li>コピー処理の生成対象となるプロパティは<b>public</b>＋<b>get・setの両方をもつ</b>もの</li>
+	<li>同じ名前のプロパティがあっても異なる型どうしのコピー処理は生成できない（今後のバージョンで対応予定）</li>
+</ul>
+</p>
+
+<!-- =============================================================================== -->
+<!--                                                                       お知らせ  -->
+<!--                                                                       ========= -->
+<h3><a name="News">お知らせ</a></h3>
+<ul>
+
+	<li>2009/04/17 Koropokkur.NET 0.2.0をリリースしました。<a href="index.html#Download">ダウンロード</a></li>
+	<p>(Koropokkur.NETはこのアドインが含まれるアドイン集です）</p>
+</ul>
+
+<!-- =============================================================================== -->
+<!--                                                               アドイン登録方法  -->
+<!--                                                              ================== -->
+<h3><a name="Register">アドイン登録方法</a></h3>
+アドインの登録方法は<a href="index.html#Setup">こちら</a>をご覧下さい。
+
+<!-- =============================================================================== -->
+<!--                                                                           設定  -->
+<!--                                                                        ======== -->
+<h3><a name="Config">プロジェクト除外条件の設定方法</a></h3>
+<p><b>１．VisualStudioの「ツール」メニューから「Koropokkurの設定」→「CopyGen」を選択します。</b></p>
+<img src="images/CopyGen/config_copy.JPG"/><br><br>
+<p><b>２．コピー処理をメソッドとして出力するか、コピー処理の出力するか選択します。</b></p>
+<img src="images/CopyGen/output_range.JPG"/><br><br>
+<p><b>３．「<font color="#0000FF"/>public</font> void Hoge(XXX target)」のように出力するメソッドのアクセス修飾子を選択します。</b></p>
+<img src="images/CopyGen/visibility.JPG"/><br><br>
+<p><b>４．「protected <font color="#0000FF"/>virtual</font> void Hoge(XXX target)」のように出力するメソッドの付加設定を選択します。</b></p>
+<img src="images/CopyGen/method_option.JPG"/><br><br>
+<p><b>５. コピー処理を行うメソッド名を設定します。</b></p>
+<img src="images/CopyGen/method_name.JPG"/><br><br>
+<p><b>６. コピー元のオブジェクトをインスタンスから受け取る（「なし」)か引数から受け取る（「引数」）か選択します。<br>
+「引数」で受け取る場合は引数名を設定します。</b></p>
+<img src="images/CopyGen/copy_source.JPG"/><br><br>
+<p><b>７. コピーしたオブジェクトを戻り値として返す（「なし」）か引数に対して設定（「引数」か選択します。<br>
+「引数」で受け取る場合は引数名を設定します。</b></p>
+<img src="images/CopyGen/copy_target.JPG"/><br><br>
+<p><b>８. コピー処理を行う直前にこの設定ダイアログを呼ぶ（チェックあり）か呼ばない（チェックなし）か設定します。</b></p>
+<img src="images/CopyGen/every_confirm.JPG"/><br><br>
+
+<!-- =============================================================================== -->
+<!--                                                                         使い方  -->
+<!--                                                                        ======== -->
+<h3><a name="Usage">使い方</a></h3>
+<p><b>１．コピー処理を生成したいクラスがアクティブになっているエディタ上で右クリックメニューを表示させます。</b></p>
+<p><b>２．メニューの下の方にある「コピー処理生成」を選択します。</b></p><br>
+<img src="images/CopyGen/call_copy_gen.JPG"/><br><br>
+<p><b>３．設定で「毎回確認」にチェックを入れている場合は設定ダイアログが表示されます。<br>
+（「キャンセル」を選ぶとコピー処理の生成を行わずに処理を終わります。<br>
+「OK」を押すとコピー処理生成を行います。<br>
+「毎回確認」にチェックが入っていない場合も同様です。）</b></p>
+<p><b>４．設定に従ってコピー処理が出力されます。</b></p>
+<img src="images/CopyGen/copy_result.JPG"/><br>
+
+</div><!-- section -->
+
+</div><!-- article -->
+
+</div><!-- contents_center -->
+
+<div id="footer">
+<address>&copy; Copyright The Seasar Foundation and the others 2009, all rights reserved.</address>
+<div class="line"><span class="hide">spacer</span></div>
+</div><!-- footer -->
+
+</div><!-- wrapper -->
+
+</body>
+</html>
+
