@@ -127,7 +127,7 @@ namespace CopyGen.Gen
                 //  戻り値のインスタンスを生成する
                 LineGenerator returnInstanceGenerator = new LineGenerator();
                 returnInstanceGenerator.Items.Add(_copyInfo.TargetTypeName);
-                returnInstanceGenerator.Items.Add("target");
+                returnInstanceGenerator.Items.Add(_copyInfo.TargetArgumentName);
                 returnInstanceGenerator.Items.Add("=");
                 returnInstanceGenerator.Items.Add("new");
                 returnInstanceGenerator.Items.Add(_copyInfo.TargetTypeName + "()");
@@ -135,7 +135,7 @@ namespace CopyGen.Gen
 
                 //  return文の生成設定
                 returnGenerator = new LineReturnGenerator();
-                returnGenerator.Items.Add("target");
+                returnGenerator.Items.Add(_copyInfo.TargetArgumentName);
             }
             else
             {
@@ -181,12 +181,12 @@ namespace CopyGen.Gen
                 if (_copyInfo.TargetPropertyNames.Contains(propertyName))
                 {
                     LineGenerator lineGenerator = new LineGenerator();
-                    lineGenerator.Items.Add(string.Format("target.{0}", propertyName));
+                    lineGenerator.Items.Add(string.Format("{0}.{1}", _copyInfo.TargetArgumentName, propertyName));
                     lineGenerator.Items.Add("=");
 
                     if (_copyInfo.HasSourceArgument)
                     {
-                        lineGenerator.Items.Add(string.Format("source.{0}", propertyName));
+                        lineGenerator.Items.Add(string.Format("{0}.{1}", _copyInfo.SourceArgumentName, propertyName));
                     }
                     else
                     {

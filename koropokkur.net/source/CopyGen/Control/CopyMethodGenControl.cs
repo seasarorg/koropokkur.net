@@ -92,7 +92,10 @@ namespace CopyGen.Control
                 {
                     using(CopyConfig config = new CopyConfig())
                     {
-                        config.ShowDialog();
+                        if(config.ShowDialog() == DialogResult.Cancel)
+                        {
+                            return;
+                        }
                     }
                 }
 
