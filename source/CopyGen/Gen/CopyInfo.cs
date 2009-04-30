@@ -20,7 +20,6 @@ using System.Collections.Generic;
 using System.Reflection;
 using CodeGeneratorCore.Enum;
 
-
 namespace CopyGen.Gen
 {
     /// <summary>
@@ -104,16 +103,6 @@ namespace CopyGen.Gen
             set { _copySourceName = value; }
         }
 
-        private bool _isSourceTypeAuto;
-        /// <summary>
-        /// コピー元の型を自動設定するか？
-        /// </summary>
-        public bool IsSourceTypeAuto
-        {
-            get { return _isSourceTypeAuto; }
-            set { _isSourceTypeAuto = value; }
-        }
-
         private string _sourceTypeName;
         /// <summary>
         /// コピー元の型名
@@ -144,16 +133,6 @@ namespace CopyGen.Gen
             set { _copyTargetName = value; }
         }
 
-        private bool _isTargetTypeAuto;
-        /// <summary>
-        /// コピー先の型を自動設定するか？
-        /// </summary>
-        public bool IsTargetTypeAuto
-        {
-            get { return _isTargetTypeAuto; }
-            set { _isTargetTypeAuto = value; }
-        }
-
         private string _targetTypeName;
         /// <summary>
         /// コピー先の型名
@@ -180,8 +159,6 @@ namespace CopyGen.Gen
         /// </summary>
         public CopyInfo()
         {
-            IsSourceTypeAuto = true;
-            IsTargetTypeAuto = true;
             IsEverytimeConfirm = true;
             SourceArgumentName = "source";
             TargetArgumentName = "target";

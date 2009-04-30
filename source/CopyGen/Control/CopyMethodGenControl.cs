@@ -25,6 +25,7 @@ using CopyGen.Gen;
 using EnvDTE;
 using EnvDTE80;
 using Microsoft.VisualStudio.CommandBars;
+using System.Text.RegularExpressions;
 
 namespace CopyGen.Control
 {
@@ -34,10 +35,14 @@ namespace CopyGen.Control
     public class CopyMethodGenControl
     {
         private const string COPY_GEN = "コピー処理生成";
-        private const string METHOD_INDENT = "\t\t";
+        private const string DEFAULT_METHOD_INDENT = "\t\t";
         
-
         private readonly DTE2 _applicationObject;
+        /// <summary>
+        /// 空白、タブ以外の文字列を取り出すための正規表現
+        /// </summary>
+        private readonly Regex _regNotSpace = new Regex(@"[^ \t]");
+
         /// <summary>
         /// コピー情報
         /// </summary>
@@ -64,6 +69,21 @@ namespace CopyGen.Control
             refreshSolutuinButton.Caption = COPY_GEN;
             refreshSolutuinButton.Click += generateCode_Click;
             return refreshSolutuinButton;
+        }
+
+        /// <summary>
+        /// インデントの取得
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        private string GetIndent(string input)
+        {
+            string indent = _regNotSpace.Replace(input, string.Empty);
+            if(indent.Length == 0)
+            {
+                return DEFAULT_METHOD_INDENT;
+            }
+            return indent;
         }
 
         #region イベント
@@ -104,35 +124,48 @@ namespace CopyGen.Control
                 {
                     _copyInfo = CopyInfoFileManager.ReadConfig(configPath);
                 }
-
                 CopyBuilder builder = new CopyBuilder(_copyInfo);
+
+                //  コピーする型名を取得
+                TextSelection selection = (TextSelection)document.Selection;
+                selection.StartOfLine(vsStartOfLineOptions.vsStartOfLineOptionsFirstColumn, false);
+                selection.SelectLine();
+                string indent = GetIndent(selection.Text);
+                
+                CopyTypeNameInfo generateInfo = CopyTypeNameInfo.Create(document.FullName, selection.Text);
+                //  参照先アセンブリパスを取得
+                string referencePaths = AssemblyUtils.GetReferencePath(document);
+
                 ICodeGenerator generator = builder.CreateCodeGenerator(
-                    AssemblyUtils.GetAssemblyName(document), AssemblyUtils.GetTypeName(document));
+                    referencePaths, generateInfo.SourceTypeFullNames, generateInfo.TargetTypeFullNames);
                 if(generator == null)
                 {
                     MessageUtils.ShowWarnMessage("コピー処理を生成できませんでした。\nファイル名とクラス名が一致していない、\nまたはアドインのインストール先が書き込み不可になっていないかご確認下さい。");
                     return;
                 }
-
-                TextSelection selection = (TextSelection)document.Selection;
+                
                 if (_copyInfo.IsOutputMethod)
                 {
                     selection.StartOfLine(vsStartOfLineOptions.vsStartOfLineOptionsFirstColumn, true);
-                    selection.Insert(generator.GenerateCode(METHOD_INDENT),
+                    selection.Insert(generator.GenerateCode(indent),
                                      (int) vsInsertFlags.vsInsertFlagsCollapseToEnd);
                 }
                 else
                 {
-                    selection.Insert(generator.GenerateCode(string.Empty),
+                    selection.Insert(generator.GenerateCode(indent),
                                      (int)vsInsertFlags.vsInsertFlagsCollapseToEnd);
                 }
+                //  生成コードの末尾にカーソルを合わせる
+                selection.LineUp(false, 1);
+                selection.EndOfLine(false);
             }
             catch (System.Exception ex)
             {
-                MessageUtils.ShowErrorMessage(ex.Message);
+                MessageUtils.ShowErrorMessage(ex.Message + "\n" + ex.StackTrace);
             }
             
         }
+        
 
         #endregion
     }

@@ -44,12 +44,10 @@ namespace CopyGen.Gen
 
         private const string SECTION_SOURCE_HAS_ARG = "hasArgument";
         private const string SECTION_SOURCE_ARG_NAME = "argName";
-        private const string SECTION_SOURCE_TYPE_IS_AUTO = "isAuto";
         private const string SECTION_SOURCE_TYPE_NAME = "typeName";
 
         private const string SECTION_TARGET_IS_RETURN = "isReturn";
         private const string SECTION_TARGET_ARG_NAME = "argName";
-        private const string SECTION_TARGET_TYPE_IS_AUTO = "isAuto";
         private const string SECTION_TARGET_TYPE_NAME = "typeName";
         #endregion
 
@@ -122,15 +120,15 @@ namespace CopyGen.Gen
                 copyInfo.TargetArgumentName = argNameNode.InnerText;
             }
 
-            XmlNode isAutoNode = node[SECTION_TARGET_TYPE_IS_AUTO];
-            if(isAutoNode != null)
-            {
-                bool isAuto;
-                if (bool.TryParse(isAutoNode.InnerText, out isAuto))
-                {
-                    copyInfo.IsTargetTypeAuto = isAuto;
-                }
-            }
+            //XmlNode isAutoNode = node[SECTION_TARGET_TYPE_IS_AUTO];
+            //if(isAutoNode != null)
+            //{
+            //    bool isAuto;
+            //    if (bool.TryParse(isAutoNode.InnerText, out isAuto))
+            //    {
+            //        copyInfo.IsTargetTypeAuto = isAuto;
+            //    }
+            //}
 
             XmlNode typeNameNode = node[SECTION_TARGET_TYPE_NAME];
             if(typeNameNode != null)
@@ -167,15 +165,15 @@ namespace CopyGen.Gen
                 copyInfo.SourceArgumentName = argNameNode.InnerText;
             }
 
-            XmlNode isAutoNode = node[SECTION_SOURCE_TYPE_IS_AUTO];
-            if(isAutoNode != null)
-            {
-                bool isAuto;
-                if (bool.TryParse(isAutoNode.InnerText, out isAuto))
-                {
-                    copyInfo.IsSourceTypeAuto = isAuto;
-                }
-            }
+            //XmlNode isAutoNode = node[SECTION_SOURCE_TYPE_IS_AUTO];
+            //if(isAutoNode != null)
+            //{
+            //    bool isAuto;
+            //    if (bool.TryParse(isAutoNode.InnerText, out isAuto))
+            //    {
+            //        copyInfo.IsSourceTypeAuto = isAuto;
+            //    }
+            //}
 
             XmlNode nameNode = node[SECTION_SOURCE_TYPE_NAME];
             if(nameNode != null)
@@ -323,10 +321,6 @@ namespace CopyGen.Gen
             argNameNode.InnerText = copyInfo.TargetArgumentName;
             node.AppendChild(argNameNode);
 
-            XmlElement isAutoNode = document.CreateElement(SECTION_TARGET_TYPE_IS_AUTO);
-            isAutoNode.InnerText = copyInfo.IsTargetTypeAuto.ToString();
-            node.AppendChild(isAutoNode);
-
             XmlElement typeNameNode = document.CreateElement(SECTION_TARGET_TYPE_NAME);
             typeNameNode.InnerText = copyInfo.TargetTypeName;
             node.AppendChild(typeNameNode);
@@ -347,10 +341,6 @@ namespace CopyGen.Gen
             XmlElement argNameNode = document.CreateElement(SECTION_SOURCE_ARG_NAME);
             argNameNode.InnerText = copyInfo.SourceArgumentName;
             node.AppendChild(argNameNode);
-
-            XmlElement isAutoNode = document.CreateElement(SECTION_SOURCE_TYPE_IS_AUTO);
-            isAutoNode.InnerText = copyInfo.IsSourceTypeAuto.ToString();
-            node.AppendChild(isAutoNode);
 
             XmlElement typeNameNode = document.CreateElement(SECTION_SOURCE_TYPE_NAME);
             typeNameNode.InnerText = copyInfo.SourceTypeName;
