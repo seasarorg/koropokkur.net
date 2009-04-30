@@ -134,7 +134,10 @@ namespace CodeGeneratorCore.Impl
             string methodLineIndent = startIndent + "\t";
             foreach (ICodeGenerator codeGenerator in Lines)
             {
-                builder.AppendLine(codeGenerator.GenerateCode(methodLineIndent));
+                if (codeGenerator != null)
+                {
+                    builder.AppendLine(codeGenerator.GenerateCode(methodLineIndent));
+                }
             }
             builder.Append(startIndent).AppendLine("}");
             return builder.ToString();

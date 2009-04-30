@@ -17,9 +17,11 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using EnvDTE;
+using VSLangProj;
 
 namespace AddInCommon.Util
 {
@@ -54,8 +56,29 @@ namespace AddInCommon.Util
         /// <returns></returns>
         public static string GetTypeName(Document document)
         {
+            return GetTypeName(document.FullName);
+        }
+
+        /// <summary>
+        /// ドキュメント情報から型名を取得する
+        /// </summary>
+        /// <param name="documentPath"></param>
+        /// <returns></returns>
+        public static string GetTypeName(string documentPath)
+        {
+            string ns = GetNamespace(documentPath);
+            return ns + "." + Path.GetFileNameWithoutExtension(documentPath);
+        }
+
+        /// <summary>
+        /// ファイルから名前空間を取得
+        /// </summary>
+        /// <param name="documentPath"></param>
+        /// <returns></returns>
+        public static string GetNamespace(string documentPath)
+        {
             string ns = "";
-            using (StreamReader reader = new StreamReader(document.FullName))
+            using (StreamReader reader = new StreamReader(documentPath))
             {
                 while (!reader.EndOfStream)
                 {
@@ -68,9 +91,9 @@ namespace AddInCommon.Util
                     }
                 }
             }
-
-            return ns + "." + Path.GetFileNameWithoutExtension(document.FullName);
+            return ns;
         }
+
         /// <summary>
         /// ドキュメント情報からアセンブリ名を取得
         /// </summary>
@@ -91,6 +114,31 @@ namespace AddInCommon.Util
                    config.Properties.Item("OutputPath").Value,
                    project.Properties.Item("OutputFileName").Value);
             return currentAssemblyPath;
+        }
+
+        /// <summary>
+        /// 参照先アセンブリパス一覧を取得
+        /// </summary>
+        /// <param name="document"></param>
+        /// <returns></returns>
+        public static string GetReferencePath(Document document)
+        {
+            EnvDTE.Project project = document.ProjectItem.ContainingProject;
+            VSProject vsProject = project.Object as VSProject;
+            if(vsProject == null)
+            {
+                return null;
+            }
+
+            List<string> referencePaths = new List<string>();
+            referencePaths.Add(GetAssemblyName(document));
+
+            foreach (Reference reference in vsProject.References)
+            {
+                referencePaths.Add(reference.Path);
+            }
+
+            return string.Join(",", referencePaths.ToArray());
         }
 
         /// <summary>

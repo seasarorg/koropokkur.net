@@ -35,9 +35,13 @@ namespace CopyGen.Gen
         /// </summary>
         private const string FILE_NAME_PROPERTY_INFO_COLLECTOR = "TypeInfoCollector.exe";
         /// <summary>
-        /// プロパティ情報ファイル名
+        /// プロパティ情報ファイル名（コピー元）
         /// </summary>
-        private const string FILE_NAME_PROPERTY_INFO = "props.txt";
+        private const string FILE_NAME_SOURCE_PROPERTY_INFO = "source_props.txt";
+        /// <summary>
+        /// プロパティ情報ファイル名（コピー先）
+        /// </summary>
+        private const string FILE_NAME_TARGET_PROPERTY_INFO = "target_props.txt";
 
         protected readonly CopyInfo _copyInfo;
 
@@ -57,32 +61,32 @@ namespace CopyGen.Gen
         /// <summary>
         /// コード生成オブジェクトの生成
         /// </summary>
-        /// <param name="assemblyPath"></param>
-        /// <param name="typeName"></param>
+        /// <param name="assemblyPaths"></param>
+        /// <param name="sourceTypeNames"></param>
+        /// <param name="targetTypeNames"></param>
         /// <returns></returns>
-        public ICodeGenerator CreateCodeGenerator(string assemblyPath, string typeName)
+        public ICodeGenerator CreateCodeGenerator(string assemblyPaths, string sourceTypeNames, string targetTypeNames)
         {
-            //  型を自動設定する場合
-            if(_copyInfo.IsSourceTypeAuto || _copyInfo.IsTargetTypeAuto)
+            string path = PathUtils.GetFolderPath(AssemblyUtils.GetExecutingAssemblyPath());
+            string sourcePropInfoPath = string.Format("{0}{1}", path, FILE_NAME_SOURCE_PROPERTY_INFO);
+            string targetPropInfoPath = string.Format("{0}{1}", path, FILE_NAME_TARGET_PROPERTY_INFO);
+
+            //  型情報を出力
+            ExtractPropertyInfo(assemblyPaths, sourcePropInfoPath, targetPropInfoPath, sourceTypeNames, targetTypeNames);
+
+            string useSourceTypeName = null;
+            IList<string> sourcePropList = ReadPropertyInfo(sourcePropInfoPath, ref useSourceTypeName);
+            _copyInfo.SourcePropertyNames = sourcePropList;
+            _copyInfo.SourceTypeName = useSourceTypeName;
+
+            string useTargetTypeName = null;
+            IList<string> targetPropList = ReadPropertyInfo(targetPropInfoPath, ref useTargetTypeName);
+            _copyInfo.TargetPropertyNames = targetPropList;
+            _copyInfo.TargetTypeName = useTargetTypeName;
+
+            if(useSourceTypeName == null || useTargetTypeName == null)
             {
-                //  現在開いている型のプロパティ情報を出力する
-                IList<string> propList = ExtractPropertyInfo(assemblyPath, typeName);
-                if(propList == null)
-                {
-                    return null;
-                }
-
-                if(_copyInfo.IsSourceTypeAuto)
-                {
-                    _copyInfo.SourcePropertyNames = propList;
-                    _copyInfo.SourceTypeName = typeName;
-                }
-
-                if(_copyInfo.IsTargetTypeAuto)
-                {
-                    _copyInfo.TargetPropertyNames = propList;
-                    _copyInfo.TargetTypeName = typeName;
-                }
+                return null;
             }
 
             if (_copyInfo.IsOutputMethod)
@@ -144,11 +148,16 @@ namespace CopyGen.Gen
                 ArgumentGenerator targetArgument = new ArgumentGenerator();
                 targetArgument.ArgumentTypeName = _copyInfo.TargetTypeName;
                 targetArgument.ArgumentName = _copyInfo.TargetArgumentName;
+                targetArgument.Comment = "コピー元";
                 methodGenerator.Arguments.Add(targetArgument);
             }
 
             //  コピー処理の設定
-            methodGenerator.Lines.Add(CreateCopyLinesGenerator());
+            ICodeGenerator copyLinesGenerator = CreateCopyLinesGenerator();
+            if (copyLinesGenerator != null)
+            {
+                methodGenerator.Lines.Add(copyLinesGenerator);
+            }
 
             //  戻り値
             if (returnGenerator != null)
@@ -201,25 +210,44 @@ namespace CopyGen.Gen
         /// <summary>
         /// プロパティ情報を収集＆ファイル出力
         /// </summary>
-        /// <param name="targetAssemblyPath"></param>
-        /// <param name="typeName"></param>
-        protected IList<string> ExtractPropertyInfo(string targetAssemblyPath, string typeName)
+        /// <param name="targetAssemblyPath">アセンブリ候補</param>
+        /// <param name="sourcePropInfoPath">コピー元プロパティ情報出力先パス</param>
+        /// <param name="targetPropInfoPath">コピー先プロパティ情報出力先パス</param>
+        /// <param name="proposedSourceTypeNames">コピー元型候補</param>
+        /// <param name="proposedTargetTypeNames">コピー先型候補</param>
+        protected void ExtractPropertyInfo(string targetAssemblyPath,
+            string sourcePropInfoPath, string targetPropInfoPath,
+            string proposedSourceTypeNames, string proposedTargetTypeNames )
         {
             string path = PathUtils.GetFolderPath(AssemblyUtils.GetExecutingAssemblyPath());
-            string propInfoPath = string.Format("{0}{1}", path, FILE_NAME_PROPERTY_INFO);
             ProcessUtils.StartProcessWithoutWindow(
                 string.Format("{0}{1}", path, FILE_NAME_PROPERTY_INFO_COLLECTOR),
-                string.Format("{0} {1} {2}", targetAssemblyPath, typeName, propInfoPath));
+                string.Format("\"{0}\" \"{1}\" \"{2}\" \"{3}\" \"{4}\"",
+                    sourcePropInfoPath, targetPropInfoPath, targetAssemblyPath, proposedSourceTypeNames, proposedTargetTypeNames));
+        }
 
+        /// <summary>
+        /// プロパティ情報を読み込む
+        /// </summary>
+        /// <param name="propInfoPath"></param>
+        /// <param name="typeName"></param>
+        /// <returns></returns>
+        protected IList<string> ReadPropertyInfo(string propInfoPath, ref string typeName)
+        {
             List<string> propList = new List<string>();
             //  プロパティ情報の生成に失敗している場合は処理を終了
-            if(!File.Exists(propInfoPath))
+            if (!File.Exists(propInfoPath))
             {
                 return null;
             }
-            
+
             using (StreamReader reader = new StreamReader(propInfoPath))
             {
+                if (!reader.EndOfStream)
+                {
+                    typeName = reader.ReadLine();
+                }
+
                 while (!reader.EndOfStream)
                 {
                     propList.Add(reader.ReadLine());

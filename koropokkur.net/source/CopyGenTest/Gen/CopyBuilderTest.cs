@@ -373,7 +373,7 @@ namespace CopyGenTest.Gen
                 copyInfo.MethodName = "Hoge";
                 CopyBuilder copyBuilder = new CopyBuilder(copyInfo);
 
-                ICodeGenerator generator = copyBuilder.CreateCodeGenerator(TARGET_ASSEMBLY, TARGET_CLASS);
+                ICodeGenerator generator = copyBuilder.CreateCodeGenerator(TARGET_ASSEMBLY, TARGET_CLASS, TARGET_CLASS);
                 GeneratorColleciton generatorColleciton = generator as GeneratorColleciton;
                 Assert.That(generatorColleciton, Is.Not.Null);
                 Assert.That(generator.GenerateCode(null), Is.EqualTo(
@@ -390,7 +390,7 @@ namespace CopyGenTest.Gen
                 copyInfo.MethodName = "Hoge";
                 CopyBuilder copyBuilder = new CopyBuilder(copyInfo);
 
-                ICodeGenerator generator = copyBuilder.CreateCodeGenerator(TARGET_ASSEMBLY, TARGET_CLASS);
+                ICodeGenerator generator = copyBuilder.CreateCodeGenerator(TARGET_ASSEMBLY, TARGET_CLASS, TARGET_CLASS);
                 MethodGenerator methodGenerator = generator as MethodGenerator;
                 Assert.That(methodGenerator, Is.Not.Null);
                 Assert.That(methodGenerator.Arguments.Count, Is.EqualTo(2));
@@ -403,7 +403,7 @@ namespace CopyGenTest.Gen
         public void TestCreateCodeGenerator_NotExistAssembly()
         {
             CopyBuilder copyBuilder = new CopyBuilder(new CopyInfo());
-            object result = copyBuilder.CreateCodeGenerator("NotExists", "Hoge");
+            object result = copyBuilder.CreateCodeGenerator("NotExists", "Hoge", "Huga");
             Assert.That(result, Is.Null);
         }
 
@@ -411,7 +411,7 @@ namespace CopyGenTest.Gen
         public void TestCreateCodeGenerator_NotExistType()
         {
             CopyBuilder copyBuilder = new CopyBuilder(new CopyInfo());
-            object result = copyBuilder.CreateCodeGenerator(TARGET_ASSEMBLY, "Hoge");
+            object result = copyBuilder.CreateCodeGenerator(TARGET_ASSEMBLY, "Hoge", "Huga");
             Assert.That(result, Is.Null);
         }
 
