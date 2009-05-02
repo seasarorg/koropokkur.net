@@ -181,14 +181,20 @@ namespace CopyGen.Control.Window
                 rdoSourceHasArgument.Checked = true;
             }
 
+            if(rdoAsCopyOnly.Checked)
+            {
+                rdoSourceHasArgument.Checked = true;
+                rdoTargetArgument.Checked = true;
+            }
+            rdoSourceNoArgument.Enabled = rdoAsMethod.Checked;
+            rdoTargetReturn.Enabled = rdoAsMethod.Checked;
+
             //  引数がないときは引数名は入力しない
             txtSourceArgumentName.Enabled = rdoSourceHasArgument.Checked;
             txtTargetArgumentName.Enabled = rdoTargetArgument.Checked;
 
             //  コピー処理のみ出力する場合はメソッド系の設定は行わない
             grpMethodConfig.Enabled = rdoAsMethod.Checked;
-            grpCopySource.Enabled = rdoAsMethod.Checked;
-            grpCopyTarget.Enabled = rdoAsMethod.Checked;
         }
 
         #endregion
