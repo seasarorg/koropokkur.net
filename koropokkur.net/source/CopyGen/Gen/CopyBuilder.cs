@@ -190,12 +190,16 @@ namespace CopyGen.Gen
                 if (_copyInfo.TargetPropertyNames.Contains(propertyName))
                 {
                     LineGenerator lineGenerator = new LineGenerator();
-                    lineGenerator.Items.Add(string.Format("{0}.{1}", _copyInfo.TargetArgumentName, propertyName));
+                    lineGenerator.Items.Add(string.Format("{0}.{1}", 
+                        string.IsNullOrEmpty(_copyInfo.TargetArgumentName) ? "this" : _copyInfo.TargetArgumentName, 
+                        propertyName));
                     lineGenerator.Items.Add("=");
 
                     if (_copyInfo.HasSourceArgument)
                     {
-                        lineGenerator.Items.Add(string.Format("{0}.{1}", _copyInfo.SourceArgumentName, propertyName));
+                        lineGenerator.Items.Add(string.Format("{0}.{1}", 
+                            string.IsNullOrEmpty(_copyInfo.SourceArgumentName) ? "this" : _copyInfo.SourceArgumentName, 
+                            propertyName));
                     }
                     else
                     {
