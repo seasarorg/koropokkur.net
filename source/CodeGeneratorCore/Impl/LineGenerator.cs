@@ -34,6 +34,10 @@ namespace CodeGeneratorCore.Impl
         /// 行を構成する要素
         /// </summary>
         protected readonly IList<string> _items = new List<string>();
+        /// <summary>
+        /// 行を構成する要素の集合
+        /// 各要素はGenerateCodeメソッドで空白区切りで接続されて出力される
+        /// </summary>
         public IList<string> Items
         {
             get { return _items; }

@@ -22,11 +22,37 @@ using CodeGeneratorCore.Enum;
 
 namespace CopyGen.Gen
 {
+    #region Enum
+    /// <summary>
+    /// コピー元取得方法列挙体
+    /// </summary>
+    public enum EnumCopySource
+    {
+        This = 0,
+        PropertyOnly,
+        AsArgument
+    } ;
+
+    /// <summary>
+    /// コピー先取得方法列挙体
+    /// </summary>
+    public enum EnumCopyTarget
+    {
+        This = 0,
+        PropertyOnly,
+        AsArgument,
+        Return
+    } ;
+    #endregion
+
     /// <summary>
     /// コピー情報
     /// </summary>
     public class CopyInfo
     {
+        protected const string DEFAULT_COPY_SOURCE_NAME = "source";
+        protected const string DEFAULT_COPY_TARGET_NAME = "target";
+
         #region プロパティ
 
         private IList<string> _sourcePropertyNames;
@@ -83,14 +109,14 @@ namespace CopyGen.Gen
             set { _methodName = value; }
         }
 
-        private bool _hasSourceArgument;
+        private EnumCopySource _copySource;
         /// <summary>
-        /// コピー元を引数として渡すフラグ
+        /// コピー元の取得元
         /// </summary>
-        public bool HasSourceArgument
+        public EnumCopySource CopySource
         {
-            get { return _hasSourceArgument;}
-            set { _hasSourceArgument = value; }
+            get { return _copySource; }
+            set { _copySource = value; }
         }
 
         private string _copySourceName;
@@ -99,7 +125,10 @@ namespace CopyGen.Gen
         /// </summary>
         public string SourceArgumentName
         {
-            get { return _copySourceName; }
+            get
+            {
+                return string.IsNullOrEmpty(_copySourceName) ? DEFAULT_COPY_SOURCE_NAME : _copySourceName;
+            }
             set { _copySourceName = value; }
         }
 
@@ -113,14 +142,14 @@ namespace CopyGen.Gen
             set { _sourceTypeName = value; }
         }
 
-        private bool _isReturn;
+        private EnumCopyTarget _copyTarget;
         /// <summary>
-        /// コピー先のインスタンスをメソッドとして返すか？
+        /// コピー先の取得元
         /// </summary>
-        public bool IsReturn
+        public EnumCopyTarget CopyTarget
         {
-            get { return _isReturn; }
-            set { _isReturn = value; }
+            get { return _copyTarget; }
+            set { _copyTarget = value; }
         }
 
         private string _copyTargetName;
@@ -129,7 +158,10 @@ namespace CopyGen.Gen
         /// </summary>
         public string TargetArgumentName
         {
-            get { return _copyTargetName; }
+            get
+            {
+                return string.IsNullOrEmpty(_copyTargetName) ? DEFAULT_COPY_TARGET_NAME : _copyTargetName;
+            }
             set { _copyTargetName = value; }
         }
 

@@ -42,11 +42,11 @@ namespace CopyGen.Gen
         private const string SECTION_METFOD_OPTION = "option";
         private const string SECTION_METFOD_NAME = "methodName";
 
-        private const string SECTION_SOURCE_HAS_ARG = "hasArgument";
+        private const string SECTION_SOURCE_WAY = "copySource";
         private const string SECTION_SOURCE_ARG_NAME = "argName";
         private const string SECTION_SOURCE_TYPE_NAME = "typeName";
 
-        private const string SECTION_TARGET_IS_RETURN = "isReturn";
+        private const string SECTION_TARGET_WAY = "copyTarget";
         private const string SECTION_TARGET_ARG_NAME = "argName";
         private const string SECTION_TARGET_TYPE_NAME = "typeName";
         #endregion
@@ -104,13 +104,13 @@ namespace CopyGen.Gen
                 return;
             }
 
-            XmlNode isReturnNode = node[SECTION_TARGET_IS_RETURN];
-            if(isReturnNode != null)
+            XmlNode copyTargetNode = node[SECTION_TARGET_WAY];
+            if(copyTargetNode != null)
             {
-                bool isReturn;
-                if (bool.TryParse(isReturnNode.InnerText, out isReturn))
+                int copyTarget;
+                if (int.TryParse(copyTargetNode.InnerText, out copyTarget))
                 {
-                    copyInfo.IsReturn = isReturn;
+                    copyInfo.CopyTarget = (EnumCopyTarget) copyTarget;
                 }
             }
 
@@ -119,16 +119,6 @@ namespace CopyGen.Gen
             {
                 copyInfo.TargetArgumentName = argNameNode.InnerText;
             }
-
-            //XmlNode isAutoNode = node[SECTION_TARGET_TYPE_IS_AUTO];
-            //if(isAutoNode != null)
-            //{
-            //    bool isAuto;
-            //    if (bool.TryParse(isAutoNode.InnerText, out isAuto))
-            //    {
-            //        copyInfo.IsTargetTypeAuto = isAuto;
-            //    }
-            //}
 
             XmlNode typeNameNode = node[SECTION_TARGET_TYPE_NAME];
             if(typeNameNode != null)
@@ -149,13 +139,13 @@ namespace CopyGen.Gen
                 return;
             }
 
-            XmlNode hasArgumentNode = node[SECTION_SOURCE_HAS_ARG];
-            if(hasArgumentNode != null)
+            XmlNode copySourceNode = node[SECTION_SOURCE_WAY];
+            if(copySourceNode != null)
             {
-                bool hasArg;
-                if (bool.TryParse(hasArgumentNode.InnerText, out hasArg))
+                int copySource;
+                if (int.TryParse(copySourceNode.InnerText, out copySource))
                 {
-                    copyInfo.HasSourceArgument = hasArg;
+                    copyInfo.CopySource = (EnumCopySource)copySource;
                 }
             }
 
@@ -164,16 +154,6 @@ namespace CopyGen.Gen
             {
                 copyInfo.SourceArgumentName = argNameNode.InnerText;
             }
-
-            //XmlNode isAutoNode = node[SECTION_SOURCE_TYPE_IS_AUTO];
-            //if(isAutoNode != null)
-            //{
-            //    bool isAuto;
-            //    if (bool.TryParse(isAutoNode.InnerText, out isAuto))
-            //    {
-            //        copyInfo.IsSourceTypeAuto = isAuto;
-            //    }
-            //}
 
             XmlNode nameNode = node[SECTION_SOURCE_TYPE_NAME];
             if(nameNode != null)
@@ -313,8 +293,8 @@ namespace CopyGen.Gen
         /// <param name="node"></param>
         private static void SetupForWriteTarget(XmlDocument document, CopyInfo copyInfo, XmlNode node)
         {
-            XmlElement isReturnNode = document.CreateElement(SECTION_TARGET_IS_RETURN);
-            isReturnNode.InnerText = copyInfo.IsReturn.ToString();
+            XmlElement isReturnNode = document.CreateElement(SECTION_TARGET_WAY);
+            isReturnNode.InnerText = ((int) copyInfo.CopyTarget).ToString();
             node.AppendChild(isReturnNode);
 
             XmlElement argNameNode = document.CreateElement(SECTION_TARGET_ARG_NAME);
@@ -334,8 +314,8 @@ namespace CopyGen.Gen
         /// <param name="node"></param>
         private static void SetupForWriteSource(XmlDocument document, CopyInfo copyInfo, XmlNode node)
         {
-            XmlElement hasArgNode = document.CreateElement(SECTION_SOURCE_HAS_ARG);
-            hasArgNode.InnerText = copyInfo.HasSourceArgument.ToString();
+            XmlElement hasArgNode = document.CreateElement(SECTION_SOURCE_WAY);
+            hasArgNode.InnerText = ((int) copyInfo.CopySource).ToString();
             node.AppendChild(hasArgNode);
 
             XmlElement argNameNode = document.CreateElement(SECTION_SOURCE_ARG_NAME);

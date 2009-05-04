@@ -1,4 +1,22 @@
-﻿using System;
+﻿#region Copyright
+/*
+ * Copyright 2005-2009 the Seasar Foundation and the Others.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
+ */
+#endregion
+
+using System;
 using System.IO;
 using System.Windows.Forms;
 using AddInCommon.Util;
@@ -58,52 +76,179 @@ namespace CopyGen.Control.Window
             rdoAsMethod.Checked = copyInfo.IsOutputMethod;
             rdoAsCopyOnly.Checked = !copyInfo.IsOutputMethod;
 
-            switch (copyInfo.Visibility)
-            {
-                case EnumVisibility.Public:
-                    rdoPublic.Checked = true;
-                    break;
-                case EnumVisibility.Protected:
-                    rdoProtected.Checked = true;
-                    break;
-                case EnumVisibility.Private:
-                    rdoPrivate.Checked = true;
-                    break;
-                case EnumVisibility.Internal:
-                    rdoInternal.Checked = true;
-                    break;
-            }
-
-            switch (copyInfo.MethodOption)
-            {
-                case EnumMethodOption.None:
-                    rdoOptionNone.Checked = true;
-                    break;
-                case EnumMethodOption.Static:
-                    rdoOptionStatic.Checked = true;
-                    break;
-                case EnumMethodOption.Virtual:
-                    rdoOptionVirtual.Checked = true;
-                    break;
-                case EnumMethodOption.Override:
-                    rdoOptionOverride.Checked = true;
-                    break;
-            }
+            SetupViewVisibility(copyInfo);
+            SetupViewMethodOption(copyInfo);
 
             txtNameInput.Text = copyInfo.MethodName;
 
             txtSourceArgumentName.Text = copyInfo.SourceArgumentName;
-            rdoSourceHasArgument.Checked = copyInfo.HasSourceArgument;
-            rdoSourceNoArgument.Checked = !copyInfo.HasSourceArgument;
+            SetupViewCopySource(copyInfo);
 
             txtTargetArgumentName.Text = copyInfo.TargetArgumentName;
-            rdoTargetReturn.Checked = copyInfo.IsReturn;
-            rdoTargetArgument.Checked = !copyInfo.IsReturn;
+            SetupViewCopyTarget(copyInfo);
 
             chkEverytimeConfirm.Checked = copyInfo.IsEverytimeConfirm;
 
             ControlInput();
         }
+
+        #region 設定を画面へ反映する
+
+        /// <summary>
+        /// アクセス修飾子設定を画面へ反映する
+        /// </summary>
+        /// <param name="copyInfo"></param>
+        private void SetupViewVisibility(CopyInfo copyInfo)
+        {
+            switch (copyInfo.Visibility)
+            {
+                case EnumVisibility.Public:
+                    rdoPublic.Checked = true;
+                    rdoProtected.Checked = false;
+                    rdoPrivate.Checked = false;
+                    rdoInternal.Checked = false;
+                    break;
+                case EnumVisibility.Protected:
+                    rdoPublic.Checked = false;
+                    rdoProtected.Checked = true;
+                    rdoPrivate.Checked = false;
+                    rdoInternal.Checked = false;
+                    break;
+                case EnumVisibility.Private:
+                    rdoPublic.Checked = false;
+                    rdoProtected.Checked = false;
+                    rdoPrivate.Checked = true;
+                    rdoInternal.Checked = false;
+                    break;
+                case EnumVisibility.Internal:
+                    rdoPublic.Checked = false;
+                    rdoProtected.Checked = false;
+                    rdoPrivate.Checked = false;
+                    rdoInternal.Checked = true;
+                    break;
+                default:
+                    rdoPublic.Checked = true;
+                    rdoProtected.Checked = false;
+                    rdoPrivate.Checked = false;
+                    rdoInternal.Checked = false;
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// メソッド付加設定の画面への反映
+        /// </summary>
+        /// <param name="copyInfo"></param>
+        private void SetupViewMethodOption(CopyInfo copyInfo)
+        {
+            switch (copyInfo.MethodOption)
+            {
+                case EnumMethodOption.None:
+                    rdoOptionNone.Checked = true;
+                    rdoOptionStatic.Checked = false;
+                    rdoOptionVirtual.Checked = false;
+                    rdoOptionOverride.Checked = false;
+                    break;
+                case EnumMethodOption.Static:
+                    rdoOptionNone.Checked = false;
+                    rdoOptionStatic.Checked = true;
+                    rdoOptionVirtual.Checked = false;
+                    rdoOptionOverride.Checked = false;
+                    break;
+                case EnumMethodOption.Virtual:
+                    rdoOptionNone.Checked = false;
+                    rdoOptionStatic.Checked = false;
+                    rdoOptionVirtual.Checked = true;
+                    rdoOptionOverride.Checked = false;
+                    break;
+                case EnumMethodOption.Override:
+                    rdoOptionNone.Checked = false;
+                    rdoOptionStatic.Checked = false;
+                    rdoOptionVirtual.Checked = false;
+                    rdoOptionOverride.Checked = true;
+                    break;
+                default:
+                    rdoOptionNone.Checked = true;
+                    rdoOptionStatic.Checked = false;
+                    rdoOptionVirtual.Checked = false;
+                    rdoOptionOverride.Checked = false;
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// コピー先設定を画面へ反映させる
+        /// </summary>
+        /// <param name="copyInfo"></param>
+        private void SetupViewCopyTarget(CopyInfo copyInfo)
+        {
+            switch (copyInfo.CopyTarget)
+            {
+                case EnumCopyTarget.Return:
+                    rdoTargetReturn.Checked = true;
+                    rdoTargetArgument.Checked = false;
+                    rdoTargetThis.Checked = false;
+                    rdoTargetProperty.Checked = false;
+                    break;
+                case EnumCopyTarget.AsArgument:
+                    rdoTargetReturn.Checked = false;
+                    rdoTargetArgument.Checked = true;
+                    rdoTargetThis.Checked = false;
+                    rdoTargetProperty.Checked = false;
+                    break;
+                case EnumCopyTarget.This:
+                    rdoTargetReturn.Checked = false;
+                    rdoTargetArgument.Checked = false;
+                    rdoTargetThis.Checked = true;
+                    rdoTargetProperty.Checked = false;
+                    break;
+                case EnumCopyTarget.PropertyOnly:
+                    rdoTargetReturn.Checked = false;
+                    rdoTargetArgument.Checked = false;
+                    rdoTargetThis.Checked = false;
+                    rdoTargetProperty.Checked = true;
+                    break;
+                default:
+                    rdoTargetReturn.Checked = true;
+                    rdoTargetArgument.Checked = false;
+                    rdoTargetThis.Checked = false;
+                    rdoTargetProperty.Checked = false;
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// コピー元設定を画面へ反映する
+        /// </summary>
+        /// <param name="copyInfo"></param>
+        private void SetupViewCopySource(CopyInfo copyInfo)
+        {
+            switch (copyInfo.CopySource)
+            {
+                case EnumCopySource.AsArgument:
+                    rdoSourceHasArgument.Checked = true;
+                    rdoSourceThis.Checked = false;
+                    rdoSourceProperty.Checked = false;
+                    break;
+                case EnumCopySource.This:
+                    rdoSourceHasArgument.Checked = false;
+                    rdoSourceThis.Checked = true;
+                    rdoSourceProperty.Checked = false;
+                    break;
+                case EnumCopySource.PropertyOnly:
+                    rdoSourceHasArgument.Checked = false;
+                    rdoSourceThis.Checked = true;
+                    rdoSourceProperty.Checked = true;
+                    break;
+                default:
+                    rdoSourceHasArgument.Checked = false;
+                    rdoSourceThis.Checked = true;
+                    rdoSourceProperty.Checked = false;
+                    break;
+            }
+        }
+
+        #endregion
 
         /// <summary>
         /// 設定を保存する
@@ -123,52 +268,114 @@ namespace CopyGen.Control.Window
             CopyInfo copyInfo = new CopyInfo();
             copyInfo.IsOutputMethod = rdoAsMethod.Checked;
 
-            if(rdoPublic.Checked)
-            {
-                copyInfo.Visibility = EnumVisibility.Public;
-            }
-            else if(rdoProtected.Checked)
-            {
-                copyInfo.Visibility = EnumVisibility.Protected;
-            }
-            else if(rdoPrivate.Checked)
-            {
-                copyInfo.Visibility = EnumVisibility.Private;
-            }
-            else if(rdoInternal.Checked)
-            {
-                copyInfo.Visibility = EnumVisibility.Internal;
-            }
-
-            if(rdoOptionNone.Checked)
-            {
-                copyInfo.MethodOption = EnumMethodOption.None;
-            }
-            else if(rdoOptionStatic.Checked)
-            {
-                copyInfo.MethodOption = EnumMethodOption.Static;
-            }
-            else if(rdoOptionVirtual.Checked)
-            {
-                copyInfo.MethodOption = EnumMethodOption.Virtual;
-            }
-            else if(rdoOptionOverride.Checked)
-            {
-                copyInfo.MethodOption = EnumMethodOption.Override;
-            }
+            SetupVisibility(copyInfo);
+            SetupMethodOption(copyInfo);
 
             copyInfo.MethodName = txtNameInput.Text;
 
-            copyInfo.HasSourceArgument = rdoSourceHasArgument.Checked;
-            copyInfo.SourceArgumentName = txtSourceArgumentName.Text;
-
-            copyInfo.IsReturn = rdoTargetReturn.Checked;
-            copyInfo.TargetArgumentName = txtTargetArgumentName.Text;
-
+            SetupCopySource(copyInfo);
+            SetupCopyTarget(copyInfo);
+            
             copyInfo.IsEverytimeConfirm = chkEverytimeConfirm.Checked;
 
             return copyInfo;
         }
+
+        #region 入力内容をCopyInfoへ反映させる処理
+        /// <summary>
+        /// メソッドアクセス修飾子の設定
+        /// </summary>
+        /// <param name="copyInfo"></param>
+        private void SetupVisibility(CopyInfo copyInfo)
+        {
+            if (rdoPublic.Checked)
+            {
+                copyInfo.Visibility = EnumVisibility.Public;
+            }
+            else if (rdoProtected.Checked)
+            {
+                copyInfo.Visibility = EnumVisibility.Protected;
+            }
+            else if (rdoPrivate.Checked)
+            {
+                copyInfo.Visibility = EnumVisibility.Private;
+            }
+            else if (rdoInternal.Checked)
+            {
+                copyInfo.Visibility = EnumVisibility.Internal;
+            }
+        }
+
+        /// <summary>
+        /// メソッド付加設定の設定
+        /// </summary>
+        /// <param name="copyInfo"></param>
+        private void SetupMethodOption(CopyInfo copyInfo)
+        {
+            if (rdoOptionNone.Checked)
+            {
+                copyInfo.MethodOption = EnumMethodOption.None;
+            }
+            else if (rdoOptionStatic.Checked)
+            {
+                copyInfo.MethodOption = EnumMethodOption.Static;
+            }
+            else if (rdoOptionVirtual.Checked)
+            {
+                copyInfo.MethodOption = EnumMethodOption.Virtual;
+            }
+            else if (rdoOptionOverride.Checked)
+            {
+                copyInfo.MethodOption = EnumMethodOption.Override;
+            }
+        }
+
+        /// <summary>
+        /// コピー先取得方法の設定
+        /// </summary>
+        /// <param name="copyInfo"></param>
+        private void SetupCopyTarget(CopyInfo copyInfo)
+        {
+            if (rdoTargetReturn.Checked)
+            {
+                copyInfo.CopyTarget = EnumCopyTarget.Return;
+            }
+            else if (rdoTargetArgument.Checked)
+            {
+                copyInfo.CopyTarget = EnumCopyTarget.AsArgument;
+            }
+            else if (rdoTargetThis.Checked)
+            {
+                copyInfo.CopyTarget = EnumCopyTarget.This;
+            }
+            else if (rdoTargetProperty.Checked)
+            {
+                copyInfo.CopyTarget = EnumCopyTarget.PropertyOnly;
+            }
+            copyInfo.TargetArgumentName = txtTargetArgumentName.Text;
+        }
+
+        /// <summary>
+        /// コピー元取得方法の設定
+        /// </summary>
+        /// <param name="copyInfo"></param>
+        private void SetupCopySource(CopyInfo copyInfo)
+        {
+            if (rdoSourceHasArgument.Checked)
+            {
+                copyInfo.CopySource = EnumCopySource.AsArgument;
+            }
+            else if (rdoSourceThis.Checked)
+            {
+                copyInfo.CopySource = EnumCopySource.This;
+            }
+            else if (rdoSourceProperty.Checked)
+            {
+                copyInfo.CopySource = EnumCopySource.PropertyOnly;
+            }
+            copyInfo.SourceArgumentName = txtSourceArgumentName.Text;
+        }
+        #endregion
 
         /// <summary>
         /// 設定状態に従って入力を制御する
@@ -177,21 +384,39 @@ namespace CopyGen.Control.Window
         {
             if(rdoOptionStatic.Checked)
             {
-                //  staticメソッドの場合は必ずコピー元は引数として取得
+                //  staticメソッドの場合は自分自身のプロパティを
+                //  参照することはできないため、コピー元は必ず引数として取得
                 rdoSourceHasArgument.Checked = true;
             }
 
+            //  コピー処理のみ出力する場合はコピー先、コピー元を特定する
+            //  変数名が必要になるので引数名入力のみとなる
             if(rdoAsCopyOnly.Checked)
             {
                 rdoSourceHasArgument.Checked = true;
                 rdoTargetArgument.Checked = true;
             }
-            rdoSourceNoArgument.Enabled = rdoAsMethod.Checked;
+            rdoSourceThis.Enabled = rdoAsMethod.Checked;
+            rdoSourceProperty.Enabled = rdoAsMethod.Checked;
+            
             rdoTargetReturn.Enabled = rdoAsMethod.Checked;
+            rdoTargetThis.Enabled = rdoAsMethod.Checked;
+            rdoTargetProperty.Enabled = rdoAsMethod.Checked;
 
             //  引数がないときは引数名は入力しない
             txtSourceArgumentName.Enabled = rdoSourceHasArgument.Checked;
             txtTargetArgumentName.Enabled = rdoTargetArgument.Checked;
+
+            //  privateのときはvirtual,overrideは使えない
+            if(rdoPrivate.Checked)
+            {
+                if(rdoOptionVirtual.Checked || rdoOptionOverride.Checked)
+                {
+                    rdoOptionNone.Checked = true;
+                }
+            }
+            rdoOptionVirtual.Enabled = !rdoPrivate.Checked;
+            rdoOptionOverride.Enabled = !rdoPrivate.Checked;
 
             //  コピー処理のみ出力する場合はメソッド系の設定は行わない
             grpMethodConfig.Enabled = rdoAsMethod.Checked;
@@ -210,8 +435,6 @@ namespace CopyGen.Control.Window
         {
             Reload();
         }
-
-        #endregion
 
         /// <summary>
         /// OKボタン
@@ -268,15 +491,49 @@ namespace CopyGen.Control.Window
         }
 
         /// <summary>
-        /// コピー元引数なし設定が変更されたとき
+        /// アクセス修飾子(private)かどうかが変更されたとき
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void rdoSourceNoArgument_CheckedChanged(object sender, EventArgs e)
+        private void rdoPrivate_CheckedChanged(object sender, EventArgs e)
         {
             ControlInput();
         }
 
+        #region コピー元参照設定変更
+        /// <summary>
+        /// コピー元This参照が変更されたとき
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void rdoSourceThis_CheckedChanged(object sender, EventArgs e)
+        {
+            ControlInput();
+        }
+
+        /// <summary>
+        /// コピー元プロパティ参照設定が変更されたとき
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void rdoSourceProperty_CheckedChanged(object sender, EventArgs e)
+        {
+            ControlInput();
+        }
+
+        /// <summary>
+        /// コピー元引数あり設定が変更されたとき
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void rdoSourceHasArgument_CheckedChanged(object sender, EventArgs e)
+        {
+            ControlInput();
+        }
+
+        #endregion
+
+        #region コピー先参照設定変更
         /// <summary>
         /// コピー処理のみ設定が変更されたとき
         /// </summary>
@@ -296,5 +553,40 @@ namespace CopyGen.Control.Window
         {
             ControlInput();
         }
+
+        /// <summary>
+        /// コピー先This参照設定が変更されたとき
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void rdoTargetThis_CheckedChanged(object sender, EventArgs e)
+        {
+            ControlInput();
+        }
+
+        /// <summary>
+        /// コピー先プロパティ参照設定が変更されたとき
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void rdoTargetProperty_CheckedChanged(object sender, EventArgs e)
+        {
+            ControlInput();
+        }
+
+        /// <summary>
+        /// コピー先引数あり設定が変更されたとき
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void rdoTargetArgument_CheckedChanged(object sender, EventArgs e)
+        {
+            ControlInput();
+        }
+        #endregion
+
+ 
+
+        #endregion
     }
 }

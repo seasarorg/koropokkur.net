@@ -39,10 +39,13 @@
             this.rdoOptionStatic = new System.Windows.Forms.RadioButton();
             this.rdoOptionNone = new System.Windows.Forms.RadioButton();
             this.grpCopySource = new System.Windows.Forms.GroupBox();
+            this.rdoSourceProperty = new System.Windows.Forms.RadioButton();
             this.rdoSourceHasArgument = new System.Windows.Forms.RadioButton();
-            this.rdoSourceNoArgument = new System.Windows.Forms.RadioButton();
+            this.rdoSourceThis = new System.Windows.Forms.RadioButton();
             this.txtSourceArgumentName = new System.Windows.Forms.TextBox();
             this.grpCopyTarget = new System.Windows.Forms.GroupBox();
+            this.rdoTargetProperty = new System.Windows.Forms.RadioButton();
+            this.rdoTargetThis = new System.Windows.Forms.RadioButton();
             this.rdoTargetArgument = new System.Windows.Forms.RadioButton();
             this.rdoTargetReturn = new System.Windows.Forms.RadioButton();
             this.txtTargetArgumentName = new System.Windows.Forms.TextBox();
@@ -57,9 +60,6 @@
             this.rdoAsMethod = new System.Windows.Forms.RadioButton();
             this.btnReload = new System.Windows.Forms.Button();
             this.btnApply = new System.Windows.Forms.Button();
-            this.rdoNotUseThis = new System.Windows.Forms.RadioButton();
-            this.rdoTargetThis = new System.Windows.Forms.RadioButton();
-            this.rdoTargetProperty = new System.Windows.Forms.RadioButton();
             this.grpVisibility.SuspendLayout();
             this.ｇrpOption.SuspendLayout();
             this.grpCopySource.SuspendLayout();
@@ -102,6 +102,7 @@
             this.rdoPrivate.TabIndex = 113;
             this.rdoPrivate.Text = "private";
             this.rdoPrivate.UseVisualStyleBackColor = true;
+            this.rdoPrivate.CheckedChanged += new System.EventHandler(this.rdoPrivate_CheckedChanged);
             // 
             // rdoProtected
             // 
@@ -185,9 +186,9 @@
             // 
             // grpCopySource
             // 
-            this.grpCopySource.Controls.Add(this.rdoNotUseThis);
+            this.grpCopySource.Controls.Add(this.rdoSourceProperty);
             this.grpCopySource.Controls.Add(this.rdoSourceHasArgument);
-            this.grpCopySource.Controls.Add(this.rdoSourceNoArgument);
+            this.grpCopySource.Controls.Add(this.rdoSourceThis);
             this.grpCopySource.Controls.Add(this.txtSourceArgumentName);
             this.grpCopySource.Font = new System.Drawing.Font("MS UI Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
             this.grpCopySource.Location = new System.Drawing.Point(12, 258);
@@ -196,6 +197,17 @@
             this.grpCopySource.TabIndex = 200;
             this.grpCopySource.TabStop = false;
             this.grpCopySource.Text = "コピー元(&S)";
+            // 
+            // rdoSourceProperty
+            // 
+            this.rdoSourceProperty.AutoSize = true;
+            this.rdoSourceProperty.Location = new System.Drawing.Point(67, 21);
+            this.rdoSourceProperty.Name = "rdoSourceProperty";
+            this.rdoSourceProperty.Size = new System.Drawing.Size(118, 19);
+            this.rdoSourceProperty.TabIndex = 315;
+            this.rdoSourceProperty.Text = "プロパティ名のみ";
+            this.rdoSourceProperty.UseVisualStyleBackColor = true;
+            this.rdoSourceProperty.CheckedChanged += new System.EventHandler(this.rdoSourceProperty_CheckedChanged);
             // 
             // rdoSourceHasArgument
             // 
@@ -206,19 +218,20 @@
             this.rdoSourceHasArgument.TabIndex = 314;
             this.rdoSourceHasArgument.Text = "引数";
             this.rdoSourceHasArgument.UseVisualStyleBackColor = true;
+            this.rdoSourceHasArgument.CheckedChanged += new System.EventHandler(this.rdoSourceHasArgument_CheckedChanged);
             // 
-            // rdoSourceNoArgument
+            // rdoSourceThis
             // 
-            this.rdoSourceNoArgument.AutoSize = true;
-            this.rdoSourceNoArgument.Checked = true;
-            this.rdoSourceNoArgument.Location = new System.Drawing.Point(13, 21);
-            this.rdoSourceNoArgument.Name = "rdoSourceNoArgument";
-            this.rdoSourceNoArgument.Size = new System.Drawing.Size(48, 19);
-            this.rdoSourceNoArgument.TabIndex = 313;
-            this.rdoSourceNoArgument.TabStop = true;
-            this.rdoSourceNoArgument.Text = "this";
-            this.rdoSourceNoArgument.UseVisualStyleBackColor = true;
-            this.rdoSourceNoArgument.CheckedChanged += new System.EventHandler(this.rdoSourceNoArgument_CheckedChanged);
+            this.rdoSourceThis.AutoSize = true;
+            this.rdoSourceThis.Checked = true;
+            this.rdoSourceThis.Location = new System.Drawing.Point(13, 21);
+            this.rdoSourceThis.Name = "rdoSourceThis";
+            this.rdoSourceThis.Size = new System.Drawing.Size(48, 19);
+            this.rdoSourceThis.TabIndex = 313;
+            this.rdoSourceThis.TabStop = true;
+            this.rdoSourceThis.Text = "this";
+            this.rdoSourceThis.UseVisualStyleBackColor = true;
+            this.rdoSourceThis.CheckedChanged += new System.EventHandler(this.rdoSourceThis_CheckedChanged);
             // 
             // txtSourceArgumentName
             // 
@@ -243,6 +256,28 @@
             this.grpCopyTarget.TabStop = false;
             this.grpCopyTarget.Text = "コピー先(&T)";
             // 
+            // rdoTargetProperty
+            // 
+            this.rdoTargetProperty.AutoSize = true;
+            this.rdoTargetProperty.Location = new System.Drawing.Point(148, 21);
+            this.rdoTargetProperty.Name = "rdoTargetProperty";
+            this.rdoTargetProperty.Size = new System.Drawing.Size(118, 19);
+            this.rdoTargetProperty.TabIndex = 319;
+            this.rdoTargetProperty.Text = "プロパティ名のみ";
+            this.rdoTargetProperty.UseVisualStyleBackColor = true;
+            this.rdoTargetProperty.CheckedChanged += new System.EventHandler(this.rdoTargetProperty_CheckedChanged);
+            // 
+            // rdoTargetThis
+            // 
+            this.rdoTargetThis.AutoSize = true;
+            this.rdoTargetThis.Location = new System.Drawing.Point(88, 21);
+            this.rdoTargetThis.Name = "rdoTargetThis";
+            this.rdoTargetThis.Size = new System.Drawing.Size(48, 19);
+            this.rdoTargetThis.TabIndex = 318;
+            this.rdoTargetThis.Text = "this";
+            this.rdoTargetThis.UseVisualStyleBackColor = true;
+            this.rdoTargetThis.CheckedChanged += new System.EventHandler(this.rdoTargetThis_CheckedChanged);
+            // 
             // rdoTargetArgument
             // 
             this.rdoTargetArgument.AutoSize = true;
@@ -252,6 +287,7 @@
             this.rdoTargetArgument.TabIndex = 317;
             this.rdoTargetArgument.Text = "引数";
             this.rdoTargetArgument.UseVisualStyleBackColor = true;
+            this.rdoTargetArgument.CheckedChanged += new System.EventHandler(this.rdoTargetArgument_CheckedChanged);
             // 
             // rdoTargetReturn
             // 
@@ -288,9 +324,9 @@
             // btnCancel
             // 
             this.btnCancel.Font = new System.Drawing.Font("MS UI Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.btnCancel.Location = new System.Drawing.Point(123, 450);
+            this.btnCancel.Location = new System.Drawing.Point(122, 455);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(105, 32);
+            this.btnCancel.Size = new System.Drawing.Size(113, 32);
             this.btnCancel.TabIndex = 413;
             this.btnCancel.Text = "キャンセル(&C)";
             this.btnCancel.UseVisualStyleBackColor = true;
@@ -299,7 +335,7 @@
             // btnOK
             // 
             this.btnOK.Font = new System.Drawing.Font("MS UI Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.btnOK.Location = new System.Drawing.Point(12, 450);
+            this.btnOK.Location = new System.Drawing.Point(11, 455);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(105, 32);
             this.btnOK.TabIndex = 412;
@@ -378,9 +414,9 @@
             // btnReload
             // 
             this.btnReload.Font = new System.Drawing.Font("MS UI Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.btnReload.Location = new System.Drawing.Point(342, 450);
+            this.btnReload.Location = new System.Drawing.Point(351, 455);
             this.btnReload.Name = "btnReload";
-            this.btnReload.Size = new System.Drawing.Size(119, 32);
+            this.btnReload.Size = new System.Drawing.Size(111, 32);
             this.btnReload.TabIndex = 415;
             this.btnReload.Text = "再読込(&L)";
             this.btnReload.UseVisualStyleBackColor = true;
@@ -389,53 +425,19 @@
             // btnApply
             // 
             this.btnApply.Font = new System.Drawing.Font("MS UI Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.btnApply.Location = new System.Drawing.Point(234, 450);
+            this.btnApply.Location = new System.Drawing.Point(241, 455);
             this.btnApply.Name = "btnApply";
-            this.btnApply.Size = new System.Drawing.Size(102, 32);
+            this.btnApply.Size = new System.Drawing.Size(104, 32);
             this.btnApply.TabIndex = 416;
             this.btnApply.Text = "適用(&W)";
             this.btnApply.UseVisualStyleBackColor = true;
             this.btnApply.Click += new System.EventHandler(this.btnApply_Click);
             // 
-            // rdoNotUseThis
-            // 
-            this.rdoNotUseThis.AutoSize = true;
-            this.rdoNotUseThis.Location = new System.Drawing.Point(67, 21);
-            this.rdoNotUseThis.Name = "rdoNotUseThis";
-            this.rdoNotUseThis.Size = new System.Drawing.Size(118, 19);
-            this.rdoNotUseThis.TabIndex = 315;
-            this.rdoNotUseThis.Text = "プロパティ名のみ";
-            this.rdoNotUseThis.UseVisualStyleBackColor = true;
-            // 
-            // rdoTargetThis
-            // 
-            this.rdoTargetThis.AutoSize = true;
-            this.rdoTargetThis.Checked = true;
-            this.rdoTargetThis.Location = new System.Drawing.Point(88, 21);
-            this.rdoTargetThis.Name = "rdoTargetThis";
-            this.rdoTargetThis.Size = new System.Drawing.Size(48, 19);
-            this.rdoTargetThis.TabIndex = 318;
-            this.rdoTargetThis.TabStop = true;
-            this.rdoTargetThis.Text = "this";
-            this.rdoTargetThis.UseVisualStyleBackColor = true;
-            // 
-            // rdoTargetProperty
-            // 
-            this.rdoTargetProperty.AutoSize = true;
-            this.rdoTargetProperty.Checked = true;
-            this.rdoTargetProperty.Location = new System.Drawing.Point(148, 21);
-            this.rdoTargetProperty.Name = "rdoTargetProperty";
-            this.rdoTargetProperty.Size = new System.Drawing.Size(118, 19);
-            this.rdoTargetProperty.TabIndex = 319;
-            this.rdoTargetProperty.TabStop = true;
-            this.rdoTargetProperty.Text = "プロパティ名のみ";
-            this.rdoTargetProperty.UseVisualStyleBackColor = true;
-            // 
             // CopyConfig
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(479, 492);
+            this.ClientSize = new System.Drawing.Size(479, 497);
             this.Controls.Add(this.btnApply);
             this.Controls.Add(this.btnReload);
             this.Controls.Add(this.grpOutputRange);
@@ -491,13 +493,13 @@
         private System.Windows.Forms.RadioButton rdoAsCopyOnly;
         private System.Windows.Forms.RadioButton rdoAsMethod;
         private System.Windows.Forms.RadioButton rdoSourceHasArgument;
-        private System.Windows.Forms.RadioButton rdoSourceNoArgument;
+        private System.Windows.Forms.RadioButton rdoSourceThis;
         private System.Windows.Forms.RadioButton rdoTargetArgument;
         private System.Windows.Forms.RadioButton rdoTargetReturn;
         private System.Windows.Forms.TextBox txtTargetArgumentName;
         private System.Windows.Forms.Button btnReload;
         private System.Windows.Forms.Button btnApply;
-        private System.Windows.Forms.RadioButton rdoNotUseThis;
+        private System.Windows.Forms.RadioButton rdoSourceProperty;
         private System.Windows.Forms.RadioButton rdoTargetProperty;
         private System.Windows.Forms.RadioButton rdoTargetThis;
     }
