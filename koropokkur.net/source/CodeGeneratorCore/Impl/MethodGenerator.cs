@@ -132,6 +132,12 @@ namespace CodeGeneratorCore.Impl
             builder.Append(startIndent).AppendLine("{");
 
             string methodLineIndent = startIndent + "\t";
+            string assertNullLines = GenerateAssertNull(methodLineIndent);
+            if(!string.IsNullOrEmpty(assertNullLines))
+            {
+                builder.AppendLine(assertNullLines);
+            }
+   
             foreach (ICodeGenerator codeGenerator in Lines)
             {
                 if (codeGenerator != null)
@@ -174,6 +180,10 @@ namespace CodeGeneratorCore.Impl
                 builder.Append(HEADER_COMMENT);
                 builder.Append(GetParamStart(argument.ArgumentName));
                 builder.Append(argument.Comment);
+                if(argument.IsNotNull)
+                {
+                    builder.Append("(NotNull)");
+                }
                 builder.Append(GetSectionEnd(SECTION_PARAM));
             }
 
@@ -247,6 +257,30 @@ namespace CodeGeneratorCore.Impl
             {
                 //  引き数がないときはそのままカッコを閉じる
                 builder.Append(")");
+            }
+            return builder.ToString();
+        }
+        
+        /// <summary>
+        /// Nullチェック処理の生成
+        /// </summary>
+        /// <param name="indent"></param>
+        /// <returns></returns>
+        protected virtual string GenerateAssertNull(string indent)
+        {
+            StringBuilder builder = new StringBuilder();
+            foreach (ArgumentGenerator argument in Arguments)
+            {
+                if (argument.IsNotNull)
+                {
+                    if(!string.IsNullOrEmpty(indent))
+                    {
+                        builder.Append(indent);
+                    }
+                    builder.Append("if(").Append(argument.ArgumentName);
+                    builder.Append(" == null) { throw new System.ArgumentNullException(\"");
+                    builder.Append(argument.ArgumentName).AppendLine("\"); }");
+                }
             }
             return builder.ToString();
         }

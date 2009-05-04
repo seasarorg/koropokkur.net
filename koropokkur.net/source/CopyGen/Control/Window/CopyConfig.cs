@@ -81,10 +81,7 @@ namespace CopyGen.Control.Window
 
             txtNameInput.Text = copyInfo.MethodName;
 
-            txtSourceArgumentName.Text = copyInfo.SourceArgumentName;
             SetupViewCopySource(copyInfo);
-
-            txtTargetArgumentName.Text = copyInfo.TargetArgumentName;
             SetupViewCopyTarget(copyInfo);
 
             chkEverytimeConfirm.Checked = copyInfo.IsEverytimeConfirm;
@@ -215,6 +212,9 @@ namespace CopyGen.Control.Window
                     rdoTargetProperty.Checked = false;
                     break;
             }
+
+            txtTargetArgumentName.Text = copyInfo.TargetArgumentName;
+            chkTargetIfNullCheck.Checked = copyInfo.IsNotNullTarget;
         }
 
         /// <summary>
@@ -246,6 +246,9 @@ namespace CopyGen.Control.Window
                     rdoSourceProperty.Checked = false;
                     break;
             }
+
+            txtSourceArgumentName.Text = copyInfo.SourceArgumentName;
+            chkSouceIfNullCheck.Checked = copyInfo.IsNotNullSource;
         }
 
         #endregion
@@ -353,6 +356,7 @@ namespace CopyGen.Control.Window
                 copyInfo.CopyTarget = EnumCopyTarget.PropertyOnly;
             }
             copyInfo.TargetArgumentName = txtTargetArgumentName.Text;
+            copyInfo.IsNotNullTarget = chkTargetIfNullCheck.Checked;
         }
 
         /// <summary>
@@ -374,6 +378,7 @@ namespace CopyGen.Control.Window
                 copyInfo.CopySource = EnumCopySource.PropertyOnly;
             }
             copyInfo.SourceArgumentName = txtSourceArgumentName.Text;
+            copyInfo.IsNotNullSource = chkSouceIfNullCheck.Checked;
         }
         #endregion
 
@@ -405,7 +410,9 @@ namespace CopyGen.Control.Window
 
             //  引数がないときは引数名は入力しない
             txtSourceArgumentName.Enabled = rdoSourceHasArgument.Checked;
+            chkSouceIfNullCheck.Enabled = rdoSourceHasArgument.Checked;
             txtTargetArgumentName.Enabled = rdoTargetArgument.Checked;
+            chkTargetIfNullCheck.Enabled = rdoTargetArgument.Checked;
 
             //  privateのときはvirtual,overrideは使えない
             if(rdoPrivate.Checked)

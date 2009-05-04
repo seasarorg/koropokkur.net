@@ -109,6 +109,7 @@ namespace CopyGen.Gen
             set { _methodName = value; }
         }
 
+        #region コピー元情報
         private EnumCopySource _copySource;
         /// <summary>
         /// コピー元の取得元
@@ -142,6 +143,18 @@ namespace CopyGen.Gen
             set { _sourceTypeName = value; }
         }
 
+        private bool _isNotNullSource;
+        /// <summary>
+        /// Nullチェックを生成するか
+        /// </summary>
+        public bool IsNotNullSource
+        {
+            get { return _isNotNullSource; }
+            set { _isNotNullSource = value; }
+        }
+        #endregion
+
+        #region コピー先情報
         private EnumCopyTarget _copyTarget;
         /// <summary>
         /// コピー先の取得元
@@ -174,6 +187,17 @@ namespace CopyGen.Gen
             get { return _targetTypeName; }
             set { _targetTypeName = value; }
         }
+
+        private bool _isNotNullTarget;
+        /// <summary>
+        /// Nullチェックを生成するか
+        /// </summary>
+        public bool IsNotNullTarget
+        {
+            get { return _isNotNullTarget; }
+            set { _isNotNullTarget = value; }
+        }
+        #endregion
 
         private bool _isEverytimeConfirm;
         /// <summary>

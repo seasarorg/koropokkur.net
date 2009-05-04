@@ -38,17 +38,19 @@ namespace CopyGen.Gen
         private const string SECTION_TARGET = "target";
         private const string SECTION_IS_CONFIRM = "isConfirm";
 
-        private const string SECTION_METFOD_VISIBILITY = "visibility";
-        private const string SECTION_METFOD_OPTION = "option";
-        private const string SECTION_METFOD_NAME = "methodName";
+        private const string SECTION_METHOD_VISIBILITY = "visibility";
+        private const string SECTION_METHOD_OPTION = "option";
+        private const string SECTION_METHOD_NAME = "methodName";
 
         private const string SECTION_SOURCE_WAY = "copySource";
         private const string SECTION_SOURCE_ARG_NAME = "argName";
         private const string SECTION_SOURCE_TYPE_NAME = "typeName";
+        private const string SECTION_SOURCE_IS_NOT_NULL = "isNotNull";
 
         private const string SECTION_TARGET_WAY = "copyTarget";
         private const string SECTION_TARGET_ARG_NAME = "argName";
         private const string SECTION_TARGET_TYPE_NAME = "typeName";
+        private const string SECTION_TARGET_IS_NOT_NULL = "isNotNull";
         #endregion
 
         /// <summary>
@@ -125,6 +127,16 @@ namespace CopyGen.Gen
             {
                 copyInfo.TargetTypeName = typeNameNode.InnerText;
             }
+
+            XmlNode isNotNullNode = node[SECTION_TARGET_IS_NOT_NULL];
+            if(isNotNullNode != null)
+            {
+                bool isNotNull;
+                if(bool.TryParse(isNotNullNode.InnerText, out isNotNull))
+                {
+                    copyInfo.IsNotNullTarget = isNotNull;
+                }
+            }
         }
 
         /// <summary>
@@ -160,6 +172,16 @@ namespace CopyGen.Gen
             {
                 copyInfo.SourceTypeName = nameNode.InnerText;
             }
+
+            XmlNode isNotNullNode = node[SECTION_SOURCE_IS_NOT_NULL];
+            if(isNotNullNode != null)
+            {
+                bool isNotNull;
+                if(bool.TryParse(isNotNullNode.InnerText, out isNotNull))
+                {
+                    copyInfo.IsNotNullSource = isNotNull;
+                }
+            }
         }
 
         /// <summary>
@@ -174,7 +196,7 @@ namespace CopyGen.Gen
                 return;
             }
 
-            XmlNode visibilityNode = node[SECTION_METFOD_VISIBILITY];
+            XmlNode visibilityNode = node[SECTION_METHOD_VISIBILITY];
             if (visibilityNode != null)
             {
                 int visiblity;
@@ -184,7 +206,7 @@ namespace CopyGen.Gen
                 }
             }
 
-            XmlNode optionNode = node[SECTION_METFOD_OPTION];
+            XmlNode optionNode = node[SECTION_METHOD_OPTION];
             if (optionNode != null)
             {
                 int option;
@@ -194,7 +216,7 @@ namespace CopyGen.Gen
                 }
             }
 
-            XmlNode nameNode = node[SECTION_METFOD_NAME];
+            XmlNode nameNode = node[SECTION_METHOD_NAME];
             if(nameNode != null)
             {
                 copyInfo.MethodName = nameNode.InnerText;
@@ -304,6 +326,10 @@ namespace CopyGen.Gen
             XmlElement typeNameNode = document.CreateElement(SECTION_TARGET_TYPE_NAME);
             typeNameNode.InnerText = copyInfo.TargetTypeName;
             node.AppendChild(typeNameNode);
+
+            XmlElement isNotNullNode = document.CreateElement(SECTION_TARGET_IS_NOT_NULL);
+            isNotNullNode.InnerText = copyInfo.IsNotNullTarget.ToString();
+            node.AppendChild(isNotNullNode);
         }
 
         /// <summary>
@@ -325,6 +351,10 @@ namespace CopyGen.Gen
             XmlElement typeNameNode = document.CreateElement(SECTION_SOURCE_TYPE_NAME);
             typeNameNode.InnerText = copyInfo.SourceTypeName;
             node.AppendChild(typeNameNode);
+
+            XmlElement isNotNullNode = document.CreateElement(SECTION_SOURCE_IS_NOT_NULL);
+            isNotNullNode.InnerText = copyInfo.IsNotNullSource.ToString();
+            node.AppendChild(isNotNullNode);
         }
 
         /// <summary>
@@ -335,15 +365,15 @@ namespace CopyGen.Gen
         /// <param name="node"></param>
         private static void SetupForWriteMethod(XmlDocument document, CopyInfo copyInfo, XmlNode node)
         {
-            XmlElement visibilityNode = document.CreateElement(SECTION_METFOD_VISIBILITY);
+            XmlElement visibilityNode = document.CreateElement(SECTION_METHOD_VISIBILITY);
             visibilityNode.InnerText = ((int)copyInfo.Visibility).ToString();
             node.AppendChild(visibilityNode);
 
-            XmlElement optionNode = document.CreateElement(SECTION_METFOD_OPTION);
+            XmlElement optionNode = document.CreateElement(SECTION_METHOD_OPTION);
             optionNode.InnerText = ((int)copyInfo.MethodOption).ToString();
             node.AppendChild(optionNode);
 
-            XmlElement nameNode = document.CreateElement(SECTION_METFOD_NAME);
+            XmlElement nameNode = document.CreateElement(SECTION_METHOD_NAME);
             nameNode.InnerText = copyInfo.MethodName;
             node.AppendChild(nameNode);
         }

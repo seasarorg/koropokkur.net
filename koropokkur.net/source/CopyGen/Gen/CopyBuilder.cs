@@ -116,7 +116,7 @@ namespace CopyGen.Gen
                 sourceArgument.ArgumentTypeName = _copyInfo.SourceTypeName;
                 sourceArgument.ArgumentName = _copyInfo.SourceArgumentName;
                 sourceArgument.Comment = "コピー元";
-                sourceArgument.IsNotNull = true;
+                sourceArgument.IsNotNull = _copyInfo.IsNotNullSource;
                 methodGenerator.Arguments.Add(sourceArgument);
             }
 
@@ -151,6 +151,7 @@ namespace CopyGen.Gen
                     targetArgument.ArgumentTypeName = _copyInfo.TargetTypeName;
                     targetArgument.ArgumentName = _copyInfo.TargetArgumentName;
                     targetArgument.Comment = "コピー先";
+                    targetArgument.IsNotNull = _copyInfo.IsNotNullTarget;
                     methodGenerator.Arguments.Add(targetArgument);
                 }
             }
