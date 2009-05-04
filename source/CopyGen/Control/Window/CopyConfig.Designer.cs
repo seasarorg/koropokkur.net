@@ -60,6 +60,8 @@
             this.rdoAsMethod = new System.Windows.Forms.RadioButton();
             this.btnReload = new System.Windows.Forms.Button();
             this.btnApply = new System.Windows.Forms.Button();
+            this.chkSouceIfNullCheck = new System.Windows.Forms.CheckBox();
+            this.chkTargetIfNullCheck = new System.Windows.Forms.CheckBox();
             this.grpVisibility.SuspendLayout();
             this.ｇrpOption.SuspendLayout();
             this.grpCopySource.SuspendLayout();
@@ -186,6 +188,7 @@
             // 
             // grpCopySource
             // 
+            this.grpCopySource.Controls.Add(this.chkSouceIfNullCheck);
             this.grpCopySource.Controls.Add(this.rdoSourceProperty);
             this.grpCopySource.Controls.Add(this.rdoSourceHasArgument);
             this.grpCopySource.Controls.Add(this.rdoSourceThis);
@@ -237,12 +240,13 @@
             // 
             this.txtSourceArgumentName.Location = new System.Drawing.Point(74, 46);
             this.txtSourceArgumentName.Name = "txtSourceArgumentName";
-            this.txtSourceArgumentName.Size = new System.Drawing.Size(351, 22);
+            this.txtSourceArgumentName.Size = new System.Drawing.Size(278, 22);
             this.txtSourceArgumentName.TabIndex = 201;
             this.txtSourceArgumentName.Text = "source";
             // 
             // grpCopyTarget
             // 
+            this.grpCopyTarget.Controls.Add(this.chkTargetIfNullCheck);
             this.grpCopyTarget.Controls.Add(this.rdoTargetProperty);
             this.grpCopyTarget.Controls.Add(this.rdoTargetThis);
             this.grpCopyTarget.Controls.Add(this.rdoTargetArgument);
@@ -306,7 +310,7 @@
             // 
             this.txtTargetArgumentName.Location = new System.Drawing.Point(75, 45);
             this.txtTargetArgumentName.Name = "txtTargetArgumentName";
-            this.txtTargetArgumentName.Size = new System.Drawing.Size(351, 22);
+            this.txtTargetArgumentName.Size = new System.Drawing.Size(278, 22);
             this.txtTargetArgumentName.TabIndex = 315;
             this.txtTargetArgumentName.Text = "target";
             // 
@@ -433,6 +437,30 @@
             this.btnApply.UseVisualStyleBackColor = true;
             this.btnApply.Click += new System.EventHandler(this.btnApply_Click);
             // 
+            // chkSouceIfNullCheck
+            // 
+            this.chkSouceIfNullCheck.AutoSize = true;
+            this.chkSouceIfNullCheck.Checked = true;
+            this.chkSouceIfNullCheck.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkSouceIfNullCheck.Location = new System.Drawing.Point(358, 46);
+            this.chkSouceIfNullCheck.Name = "chkSouceIfNullCheck";
+            this.chkSouceIfNullCheck.Size = new System.Drawing.Size(80, 19);
+            this.chkSouceIfNullCheck.TabIndex = 316;
+            this.chkSouceIfNullCheck.Text = "Null禁止";
+            this.chkSouceIfNullCheck.UseVisualStyleBackColor = true;
+            // 
+            // chkTargetIfNullCheck
+            // 
+            this.chkTargetIfNullCheck.AutoSize = true;
+            this.chkTargetIfNullCheck.Checked = true;
+            this.chkTargetIfNullCheck.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkTargetIfNullCheck.Location = new System.Drawing.Point(359, 46);
+            this.chkTargetIfNullCheck.Name = "chkTargetIfNullCheck";
+            this.chkTargetIfNullCheck.Size = new System.Drawing.Size(80, 19);
+            this.chkTargetIfNullCheck.TabIndex = 317;
+            this.chkTargetIfNullCheck.Text = "Null禁止";
+            this.chkTargetIfNullCheck.UseVisualStyleBackColor = true;
+            // 
             // CopyConfig
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -502,5 +530,7 @@
         private System.Windows.Forms.RadioButton rdoSourceProperty;
         private System.Windows.Forms.RadioButton rdoTargetProperty;
         private System.Windows.Forms.RadioButton rdoTargetThis;
+        private System.Windows.Forms.CheckBox chkSouceIfNullCheck;
+        private System.Windows.Forms.CheckBox chkTargetIfNullCheck;
     }
 }
