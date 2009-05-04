@@ -53,6 +53,7 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>copy $(TargetPath) $(SolutionDir)CopyGen\bin\$(TargetFileName)</PostBuildEvent>
+    <PostBuildEvent>copy $(TargetPath) $(SolutionDir)CopyGen\bin\$(TargetFileName)
+copy $(TargetPath) $(SolutionDir)CopyGenTest\bin\Debug\$(TargetFileName)</PostBuildEvent>
   </PropertyGroup>
 </Project>

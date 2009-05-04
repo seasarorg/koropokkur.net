@@ -17,6 +17,7 @@
 #endregion
 
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using AddInCommon.Util;
 using CodeGeneratorCore;
@@ -25,7 +26,6 @@ using CopyGen.Gen;
 using EnvDTE;
 using EnvDTE80;
 using Microsoft.VisualStudio.CommandBars;
-using System.Text.RegularExpressions;
 
 namespace CopyGen.Control
 {

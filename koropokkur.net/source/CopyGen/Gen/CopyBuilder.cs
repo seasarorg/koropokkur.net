@@ -16,12 +16,12 @@
  */
 #endregion
 
+using System;
 using System.Collections.Generic;
 using System.IO;
 using AddInCommon.Util;
 using CodeGeneratorCore;
 using CodeGeneratorCore.Impl;
-using System;
 
 namespace CopyGen.Gen
 {
@@ -65,7 +65,7 @@ namespace CopyGen.Gen
         /// <param name="sourceTypeNames"></param>
         /// <param name="targetTypeNames"></param>
         /// <returns></returns>
-        public ICodeGenerator CreateCodeGenerator(string assemblyPaths, string sourceTypeNames, string targetTypeNames)
+        public virtual ICodeGenerator CreateCodeGenerator(string assemblyPaths, string sourceTypeNames, string targetTypeNames)
         {
             string path = PathUtils.GetFolderPath(AssemblyUtils.GetExecutingAssemblyPath());
             string sourcePropInfoPath = string.Format("{0}{1}", path, FILE_NAME_SOURCE_PROPERTY_INFO);
@@ -100,7 +100,7 @@ namespace CopyGen.Gen
         /// コピーメソッド生成オブジェクトの生成
         /// </summary>
         /// <returns></returns>
-        protected ICodeGenerator CreateCopyMethodGenerator()
+        protected virtual ICodeGenerator CreateCopyMethodGenerator()
         {
             MethodGenerator methodGenerator = new MethodGenerator();
             //  TODO:メッセージ管理方法を考える
@@ -110,7 +110,7 @@ namespace CopyGen.Gen
             methodGenerator.MethodName = _copyInfo.MethodName;
 
             //  コピー元の設定
-            if (_copyInfo.HasSourceArgument)
+            if (_copyInfo.CopySource == EnumCopySource.AsArgument)
             {
                 ArgumentGenerator sourceArgument = new ArgumentGenerator();
                 sourceArgument.ArgumentTypeName = _copyInfo.SourceTypeName;
@@ -122,7 +122,7 @@ namespace CopyGen.Gen
 
             LineReturnGenerator returnGenerator = null;
             //  コピー先の設定
-            if (_copyInfo.IsReturn)
+            if (_copyInfo.CopyTarget == EnumCopyTarget.Return)
             {
                 methodGenerator.ReturnTypeName = _copyInfo.TargetTypeName;
                 //  TODO:メッセージ管理方法を考える
@@ -145,11 +145,14 @@ namespace CopyGen.Gen
             {
                 methodGenerator.ReturnTypeName = "void";
 
-                ArgumentGenerator targetArgument = new ArgumentGenerator();
-                targetArgument.ArgumentTypeName = _copyInfo.TargetTypeName;
-                targetArgument.ArgumentName = _copyInfo.TargetArgumentName;
-                targetArgument.Comment = "コピー元";
-                methodGenerator.Arguments.Add(targetArgument);
+                if (_copyInfo.CopyTarget == EnumCopyTarget.AsArgument)
+                {
+                    ArgumentGenerator targetArgument = new ArgumentGenerator();
+                    targetArgument.ArgumentTypeName = _copyInfo.TargetTypeName;
+                    targetArgument.ArgumentName = _copyInfo.TargetArgumentName;
+                    targetArgument.Comment = "コピー先";
+                    methodGenerator.Arguments.Add(targetArgument);
+                }
             }
 
             //  コピー処理の設定
@@ -175,7 +178,7 @@ namespace CopyGen.Gen
         /// コピー処理生成オブジェクトの生成
         /// </summary>
         /// <returns></returns>
-        protected ICodeGenerator CreateCopyLinesGenerator()
+        protected virtual ICodeGenerator CreateCopyLinesGenerator()
         {
             if(_copyInfo.SourcePropertyNames == null ||
                 _copyInfo.TargetPropertyNames == null)
@@ -190,25 +193,58 @@ namespace CopyGen.Gen
                 if (_copyInfo.TargetPropertyNames.Contains(propertyName))
                 {
                     LineGenerator lineGenerator = new LineGenerator();
-                    lineGenerator.Items.Add(string.Format("{0}.{1}", 
-                        string.IsNullOrEmpty(_copyInfo.TargetArgumentName) ? "this" : _copyInfo.TargetArgumentName, 
-                        propertyName));
+                    lineGenerator.Items.Add(GetCopyTargetString(_copyInfo, propertyName));
                     lineGenerator.Items.Add("=");
-
-                    if (_copyInfo.HasSourceArgument)
-                    {
-                        lineGenerator.Items.Add(string.Format("{0}.{1}", 
-                            string.IsNullOrEmpty(_copyInfo.SourceArgumentName) ? "this" : _copyInfo.SourceArgumentName, 
-                            propertyName));
-                    }
-                    else
-                    {
-                        lineGenerator.Items.Add(string.Format("this.{0}", propertyName));
-                    }
+                    lineGenerator.Items.Add(GetCopySourceString(_copyInfo, propertyName));
+                    
                     generatorColleciton.Add(lineGenerator);
                 }
             }
             return generatorColleciton;
+        }
+
+        /// <summary>
+        /// コピー元文字列の取得
+        /// </summary>
+        /// <param name="copyInfo"></param>
+        /// <param name="propertyName"></param>
+        /// <returns></returns>
+        protected virtual string GetCopySourceString(CopyInfo copyInfo, string propertyName)
+        {
+            if(copyInfo.CopySource == EnumCopySource.AsArgument &&
+                !string.IsNullOrEmpty(copyInfo.SourceArgumentName))
+            {
+                return string.Format("{0}.{1}", _copyInfo.SourceArgumentName, propertyName);
+            }
+
+            if(copyInfo.CopySource == EnumCopySource.This)
+            {
+                return string.Format("this.{0}", propertyName);
+            }
+
+            return propertyName;
+        }
+
+        /// <summary>
+        /// コピー先文字列の取得
+        /// </summary>
+        /// <param name="copyInfo"></param>
+        /// <param name="propertyName"></param>
+        /// <returns></returns>
+        protected virtual string GetCopyTargetString(CopyInfo copyInfo, string propertyName)
+        {
+            if((copyInfo.CopyTarget == EnumCopyTarget.AsArgument || copyInfo.CopyTarget == EnumCopyTarget.Return)
+                && !string.IsNullOrEmpty(copyInfo.TargetArgumentName))
+            {
+                return string.Format("{0}.{1}", _copyInfo.TargetArgumentName, propertyName);
+            }
+
+            if(copyInfo.CopyTarget == EnumCopyTarget.This)
+            {
+                return string.Format("this.{0}", propertyName);
+            }
+
+            return propertyName;
         }
 
         /// <summary>
@@ -219,7 +255,7 @@ namespace CopyGen.Gen
         /// <param name="targetPropInfoPath">コピー先プロパティ情報出力先パス</param>
         /// <param name="proposedSourceTypeNames">コピー元型候補</param>
         /// <param name="proposedTargetTypeNames">コピー先型候補</param>
-        protected void ExtractPropertyInfo(string targetAssemblyPath,
+        protected virtual void ExtractPropertyInfo(string targetAssemblyPath,
             string sourcePropInfoPath, string targetPropInfoPath,
             string proposedSourceTypeNames, string proposedTargetTypeNames )
         {
@@ -236,7 +272,7 @@ namespace CopyGen.Gen
         /// <param name="propInfoPath"></param>
         /// <param name="typeName"></param>
         /// <returns></returns>
-        protected IList<string> ReadPropertyInfo(string propInfoPath, ref string typeName)
+        protected virtual IList<string> ReadPropertyInfo(string propInfoPath, ref string typeName)
         {
             List<string> propList = new List<string>();
             //  プロパティ情報の生成に失敗している場合は処理を終了
