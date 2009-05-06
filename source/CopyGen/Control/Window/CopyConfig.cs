@@ -410,9 +410,9 @@ namespace CopyGen.Control.Window
 
             //  引数がないときは引数名は入力しない
             txtSourceArgumentName.Enabled = rdoSourceHasArgument.Checked;
-            chkSouceIfNullCheck.Enabled = rdoSourceHasArgument.Checked;
+            chkSouceIfNullCheck.Enabled = (rdoSourceHasArgument.Checked && rdoAsMethod.Checked);
             txtTargetArgumentName.Enabled = rdoTargetArgument.Checked;
-            chkTargetIfNullCheck.Enabled = rdoTargetArgument.Checked;
+            chkTargetIfNullCheck.Enabled = (rdoTargetArgument.Checked && rdoAsMethod.Checked);
 
             //  privateのときはvirtual,overrideは使えない
             if(rdoPrivate.Checked)
