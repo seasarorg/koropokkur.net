@@ -111,18 +111,18 @@
 <img src="images/CopyGen/method_option.JPG"/><br><br>
 <p><b>５. コピー処理を行うメソッド名を設定します。</b></p>
 <img src="images/CopyGen/method_name.JPG"/><br><br>
-<p><b>６. コピー元のオブジェクトをインスタンスから受け取る（「this」「プロパティのみ」)</b>か<br>
-<b>引数から受け取る（「引数」）</b>か選択します。<br>
-<b>「this」の場合は「this.プロパティ名」、「プロパティ名のみ」の場合はプロパティのみ</b>の形で出力されます。<br>
-<b>「引数」で受け取る場合は引数名を設定</b>します。<br>
-<b>「Null禁止」チェックを入れている場合nullチェックコードも出力</b>されます。</p>
+<p><b>６. コピー元のオブジェクトをインスタンスから受け取る</b>（「<font color="blue">this</font>」「<font color="blue">プロパティのみ</font>」)か<br>
+<b>引数から受け取る</b>（「<font color="blue">引数</font>」）か選択します。<br>
+「<font color="blue">this</font>」の場合は「<font color="green">this.プロパティ名</font>」、「<font color="blue">プロパティ名のみ</font>」の場合は<font color="green">プロパティのみ</font>の形で出力されます。<br>
+「<font color="blue">引数</font>」で受け取る場合は<b>引数名を設定</b>します。<br>
+<b>「<font color="blue">Null禁止</font>」チェックを入れている</b>場合は<font color="green">nullチェックコードも出力</font>されます。</p>
 <img src="images/CopyGen/copy_source.JPG"/><br><br>
-<p><b>７. コピーしたオブジェクトを戻り値として返す（「戻り値」）</b>か、<br>
-<b>インスタンスに受け取る（「this」「プロパティ」）</b>か、<br>
-<b>引数に対して設定（「引数」）</b>か選択します。<br>
-<b>「this」の場合は「this.プロパティ名」、「プロパティ名のみ」の場合はプロパティのみ</b>の形で出力されます。<br>
-<b>「引数」で受け取る場合は引数名を設定</b>します。<br>
-<b>「Null禁止」チェックを入れている場合nullチェックコードも出力</b>されます。</p>
+<p><b>７. コピーしたオブジェクトを戻り値として返す</b>（「<font color="blue">戻り値</font>」）か、<br>
+<b>インスタンスに受け取る</b>（「<font color="blue">this</font>」「<font color="blue">プロパティのみ</font>」）か、<br>
+<b>引数に対して設定する</b>（「<font color="blue">引数</font>」）か選択します。<br>
+「<font color="blue">this</font>」の場合は「<font color="green">this.プロパティ名</font>」、「<font color="blue">プロパティ名のみ</font>」の場合は<font color="green">プロパティのみ</font>の形で出力されます。<br>
+「<font color="blue">引数</font>」で受け取る場合は<b>引数名を設定</b>します。<br>
+<b>「<font color="blue">Null禁止</font>」チェックを入れている</b>場合は<font color="green">nullチェックコードも出力</font>されます。</p>
 <img src="images/CopyGen/copy_target.JPG"/><br><br>
 <p><b>８. コピー処理を行う直前にこの設定ダイアログを呼ぶ（チェックあり）か呼ばない（チェックなし）か設定します。</b></p>
 <img src="images/CopyGen/every_confirm.JPG"/><br><br>
@@ -134,34 +134,34 @@
 <p><b>１．コピー処理を生成したいクラスがアクティブになっているエディタ上で右クリックメニューを表示させます。</b></p>
 <p><b>２．メニューの下の方にある「コピー処理生成」を選択します。</b></p><br>
 <img src="images/CopyGen/call_copy_gen.JPG"/><br><br>
-<p><b>３．設定で「毎回確認」にチェックを入れている場合は設定ダイアログが表示されます。<br>
-（「キャンセル」を選ぶとコピー処理の生成を行わずに処理を終わります。<br>
-「OK」を押すとコピー処理生成を行います。<br>
-「毎回確認」にチェックが入っていない場合も同様です。）</b></p>
+<p><b>３．設定で「<font color="blue">毎回確認</font>」にチェックを入れている</b>場合は<font color="green">設定ダイアログが表示</font>されます。<br>
+（<b>「<font color="blue">キャンセル</font>」を選ぶ</b>と<font color="green">コピー処理の生成を行わずに処理を終わります</font>。<br>
+<b>「<font color="blue">OK</font>」を押す</b>と<font color="green">コピー処理生成</font>を行います。<br>
+<b>「<font color="blue">毎回確認</font>」にチェックが入っていない</b>場合も同様です。）</p>
 <p><b>４．設定と選択行の文字列に従ってコピー処理が出力されます。</b></p>
 具体的には下記のように出力内容が変化します。
-<p>・<b>空文字列、空白、タブのみの場合</b></p>
-<i>生成前</i><br>
+<p>・<font color="blue"><b>空文字列、空白、タブのみの場合</b></font></p>
+<b><i>生成前</i></b><br>
 <img src="images/CopyGen/generate_default.JPG"/><br>
-<i>生成後</i>　（開いているファイルと同名なクラスのコピー処理が生成される）<br><br>
+<b><i>生成後</i></b>　（開いているファイルと同名なクラスのコピー処理が生成される）<br><br>
 <img src="images/CopyGen/generate_default_after.JPG"/><br>
-<p>・<b>クラス名を指定した場合</b></p>
-<i>生成前</i><br>
+<p>・<font color="blue"><b>クラス名を指定した場合</b></font></p>
+<b><i>生成前</i></b><br>
 <img src="images/CopyGen/generate_set_class.JPG"/><br>
-<i>生成後</i>　(指定したクラスのコピー処理が生成される)<br><br>
+<b><i>生成後</i></b>　(指定したクラスのコピー処理が生成される)<br><br>
 <img src="images/CopyGen/generate_set_class_after.JPG"/><br>
-<p>・<b>(クラス名),(空文字列)と指定した場合（カンマで区切る）</b></p>
-<i>生成前</i><br>
+<p>・<font color="blue"><b>(クラス名),(空文字列)と指定した場合（カンマで区切る）</b></font></p>
+<b><i>生成前</i></b><br>
 <img src="images/CopyGen/generate_set_class_default.JPG"/><br>
-<i>生成後</i>　（指定したクラス→開いているファイルと同名なクラスへのコピー処理が生成される）<br>
+<b><i>生成後</i></b>　（指定したクラス→開いているファイルと同名なクラスへのコピー処理が生成される）<br>
 (この場合はプロパティ名が同じもののみ出力されます）<br><br>
 <img src="images/CopyGen/generate_set_class_default_after.JPG"/><br>
 ※<b>(空文字列),(クラス名)</b>の場合は<br>
 <b>開いているファイルと同名なクラス→指定したクラス</b>へのコピー処理画生成されます。<br><br>
-<p>・<b>(クラス名),(クラス名)と指定した場合（カンマで区切る）</b></p>
-<i>生成前</i><br>
+<p>・<font color="blue"><b>(クラス名),(クラス名)と指定した場合（カンマで区切る）</b></font></p>
+<b><i>生成前</i></b><br>
 <img src="images/CopyGen/generate_set_source_target.JPG"/><br>
-<i>生成後</i>　（「,」の左側のクラス→右側のクラスへのコピー処理が生成される）<br>
+<b><i>生成後</i></b>　（「,」の左側のクラス→右側のクラスへのコピー処理が生成される）<br>
 (この場合はプロパティ名が同じもののみ出力されます）<br><br>
 <img src="images/CopyGen/generate_set_source_target_after.JPG"/><br><br>
 <p>※<b>名前空間付きでクラス名を指定した場合も同様です。</b></p>
