@@ -40,16 +40,16 @@ namespace TypeInfoCollector
         /// [2]:読み込むアセンブリのパス
         /// [3]:プロパティ情報を取り出したいコピー元の型
         /// [4]:プロパティ情報を取り出したいコピー先の型
+        /// [5]:ログ出力パス
         /// </param>
         static void Main(string[] args)
         {
-            if(args.Length < 5)
+            using (var errorWriter = new StreamWriter("c:\\TypeInfoCollector.error.log", true))
             {
-                using (StreamWriter writer = new StreamWriter("c:\\check0.txt"))
+                foreach (var s in args)
                 {
-                    writer.WriteLine("args.Length={0}", args.Length);
+                    errorWriter.WriteLine(s);
                 }
-                return;
             }
 
             string sourcePropOutputPath = args[0];
@@ -57,14 +57,7 @@ namespace TypeInfoCollector
             string assemblyPathSource = args[2];
             string sourceTypeName = args[3];
             string targetTypeName = args[4];
-
-            using(StreamWriter writer = new StreamWriter("c:\\check1.txt"))
-            {
-                foreach (string s in args)
-                {
-                    writer.WriteLine(s);
-                }
-            }
+            string logFilePath = args[5];
 
             try
             {
@@ -79,14 +72,14 @@ namespace TypeInfoCollector
                 Type targetType = null;
                 bool isSameType = (sourceTypeName == targetTypeName);
                 //  型情報が見つかるまで各アセンブリ情報を調べる
-                foreach (string s in assemblyPaths)
+                foreach (string assemblyPath in assemblyPaths)
                 {
-                    if(!File.Exists(s))
+                    if(!File.Exists(assemblyPath))
                     {
                         continue;
                     }
 
-                    Assembly assembly = Assembly.LoadFrom(s);
+                    Assembly assembly = Assembly.LoadFrom(assemblyPath);
                     if (sourceType == null)
                     {
                         sourceType = GetType(assembly, sourceTypeNames);
@@ -111,7 +104,8 @@ namespace TypeInfoCollector
                 //  型情報が見つからなかった場合
                 if(sourceType == null || targetType == null)
                 {
-                    OutputNotFoundTypeWarning(sourceType, targetType, sourceTypeName, targetTypeName, assemblyPathSource);
+                    OutputNotFoundTypeWarning(sourceType, targetType, sourceTypeName, 
+                        targetTypeName, assemblyPathSource, logFilePath);
                     return;
                 }
 
@@ -120,7 +114,7 @@ namespace TypeInfoCollector
             }
             catch (Exception ex)
             {
-                using (var errorWriter = new StreamWriter("c:\\TypeInfoCollector.error.log", true))
+                using (var errorWriter = new StreamWriter(logFilePath, true))
                 {
                     errorWriter.WriteLine("{0} {1}\n{2}", DateTime.Now, ex.Message, ex.StackTrace);
                 }
@@ -158,10 +152,12 @@ namespace TypeInfoCollector
         /// <param name="sourceTypeName"></param>
         /// <param name="targetTypeName"></param>
         /// <param name="assemblyPathSource"></param>
+        /// <param name="logFilePath"></param>
         private static void OutputNotFoundTypeWarning(Type sourceType, Type targetType,
-            string sourceTypeName, string targetTypeName, string assemblyPathSource)
+            string sourceTypeName, string targetTypeName, string assemblyPathSource,
+            string logFilePath)
         {
-            using (StreamWriter writer = new StreamWriter(string.Format("{0}.warn.log", assemblyPathSource), true))
+            using (StreamWriter writer = new StreamWriter(string.Format(logFilePath, assemblyPathSource), true))
             {
                 if (sourceType == null)
                 {
@@ -185,16 +181,22 @@ namespace TypeInfoCollector
         /// <returns></returns>
         private static Type GetType(Assembly assembly, IEnumerable<string> typeNames)
         {
-            Type type = null;
-            foreach (string name in typeNames)
+            Type retType = null;
+            IDictionary<string, Type> typeMap = new Dictionary<string, Type>();
+            foreach (Type type in assembly.GetTypes())
             {
-                type = assembly.GetType(name);
-                if (type != null)
+                typeMap[type.Name] = type;
+            }
+
+            foreach (string typeName in typeNames)
+            {
+                if(typeMap.ContainsKey(typeName))
                 {
+                    retType = typeMap[typeName];
                     break;
                 }
             }
-            return type;
+            return retType;
         }
 
         /// <summary>

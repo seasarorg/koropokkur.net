@@ -26,7 +26,7 @@ namespace CopyGen.Gen
     /// <summary>
     /// 設定ファイルを読み書きするクラス
     /// </summary>
-    public class CopyInfoFileManager
+    public class CopyConfigFileManager
     {
         #region セクション名定義
 
@@ -122,11 +122,11 @@ namespace CopyGen.Gen
                 copyInfo.TargetArgumentName = argNameNode.InnerText;
             }
 
-            XmlNode typeNameNode = node[SECTION_TARGET_TYPE_NAME];
-            if(typeNameNode != null)
-            {
-                copyInfo.TargetTypeName = typeNameNode.InnerText;
-            }
+            //XmlNode typeNameNode = node[SECTION_TARGET_TYPE_NAME];
+            //if(typeNameNode != null)
+            //{
+            //    copyInfo.TargetTypeName = typeNameNode.InnerText;
+            //}
 
             XmlNode isNotNullNode = node[SECTION_TARGET_IS_NOT_NULL];
             if(isNotNullNode != null)
@@ -167,11 +167,11 @@ namespace CopyGen.Gen
                 copyInfo.SourceArgumentName = argNameNode.InnerText;
             }
 
-            XmlNode nameNode = node[SECTION_SOURCE_TYPE_NAME];
-            if(nameNode != null)
-            {
-                copyInfo.SourceTypeName = nameNode.InnerText;
-            }
+            //XmlNode nameNode = node[SECTION_SOURCE_TYPE_NAME];
+            //if(nameNode != null)
+            //{
+            //    copyInfo.SourceTypeName = nameNode.InnerText;
+            //}
 
             XmlNode isNotNullNode = node[SECTION_SOURCE_IS_NOT_NULL];
             if(isNotNullNode != null)
@@ -323,9 +323,9 @@ namespace CopyGen.Gen
             argNameNode.InnerText = copyInfo.TargetArgumentName;
             node.AppendChild(argNameNode);
 
-            XmlElement typeNameNode = document.CreateElement(SECTION_TARGET_TYPE_NAME);
-            typeNameNode.InnerText = copyInfo.TargetTypeName;
-            node.AppendChild(typeNameNode);
+            //XmlElement typeNameNode = document.CreateElement(SECTION_TARGET_TYPE_NAME);
+            //typeNameNode.InnerText = copyInfo.TargetTypeName;
+            //node.AppendChild(typeNameNode);
 
             XmlElement isNotNullNode = document.CreateElement(SECTION_TARGET_IS_NOT_NULL);
             isNotNullNode.InnerText = copyInfo.IsNotNullTarget.ToString();
@@ -348,9 +348,9 @@ namespace CopyGen.Gen
             argNameNode.InnerText = copyInfo.SourceArgumentName;
             node.AppendChild(argNameNode);
 
-            XmlElement typeNameNode = document.CreateElement(SECTION_SOURCE_TYPE_NAME);
-            typeNameNode.InnerText = copyInfo.SourceTypeName;
-            node.AppendChild(typeNameNode);
+            //XmlElement typeNameNode = document.CreateElement(SECTION_SOURCE_TYPE_NAME);
+            //typeNameNode.InnerText = copyInfo.SourceTypeName;
+            //node.AppendChild(typeNameNode);
 
             XmlElement isNotNullNode = document.CreateElement(SECTION_SOURCE_IS_NOT_NULL);
             isNotNullNode.InnerText = copyInfo.IsNotNullSource.ToString();

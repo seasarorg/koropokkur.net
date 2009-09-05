@@ -16,17 +16,16 @@
  */
 #endregion
 
-using System;
 using System.Collections.Generic;
 using System.Text;
 using CodeGeneratorCore.Enum;
 
-namespace CodeGeneratorCore.Impl
+namespace CodeGeneratorCore.Impl.Cs
 {
     /// <summary>
     /// メソッド生成クラス
     /// </summary>
-    public class MethodGenerator : ICodeGenerator
+    public class MethodGeneratorCs : ICodeGenerator
     {
         protected const string HEADER_COMMENT = "/// ";
         protected const string SECTION_SUMMARY = "summary";
@@ -98,12 +97,12 @@ namespace CodeGeneratorCore.Impl
             set { _returnTypeName = value; }
         }
 
-        private readonly IList<ArgumentGenerator> _arguments
-            = new List<ArgumentGenerator>();
+        private readonly IList<ArgumentGeneratorCs> _arguments
+            = new List<ArgumentGeneratorCs>();
         /// <summary>
         /// 引数
         /// </summary>
-        public IList<ArgumentGenerator> Arguments
+        public IList<ArgumentGeneratorCs> Arguments
         {
             get { return _arguments; }
         }
@@ -170,7 +169,7 @@ namespace CodeGeneratorCore.Impl
                 builder.Append(startIndent);
             }
             builder.Append(HEADER_COMMENT).Append(GetSectionEnd(SECTION_SUMMARY));
-            foreach (ArgumentGenerator argument in Arguments)
+            foreach (ArgumentGeneratorCs argument in Arguments)
             {
                 builder.AppendLine();
                 if(startIndent != null)
@@ -242,7 +241,7 @@ namespace CodeGeneratorCore.Impl
 
             builder.Append(ReturnTypeName).Append(" ");
             builder.Append(MethodName).Append("(");
-            foreach (ArgumentGenerator argument in Arguments)
+            foreach (ArgumentGeneratorCs argument in Arguments)
             {
                 builder.Append(argument.GenerateCode("")).Append(", ");
             }
@@ -269,7 +268,7 @@ namespace CodeGeneratorCore.Impl
         protected virtual string GenerateAssertNull(string indent)
         {
             StringBuilder builder = new StringBuilder();
-            foreach (ArgumentGenerator argument in Arguments)
+            foreach (ArgumentGeneratorCs argument in Arguments)
             {
                 if (argument.IsNotNull)
                 {

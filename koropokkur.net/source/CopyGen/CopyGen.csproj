@@ -54,11 +54,25 @@
       <DependentUpon>CopyConfig.cs</DependentUpon>
     </Compile>
     <Compile Include="Exception\ConfigNotFoundException.cs" />
+    <Compile Include="Exception\NotSupportLanguageException.cs" />
     <Compile Include="Exception\PropertyNotFoundRutimeException.cs" />
-    <Compile Include="Gen\CopyInfoFileManager.cs" />
-    <Compile Include="Gen\CopyBuilder.cs" />
+    <Compile Include="Gen\CopyConfigFileManager.cs" />
+    <Compile Include="Gen\CopyCodeGeneratorCreationFacade.cs" />
     <Compile Include="Gen\CopyInfo.cs" />
-    <Compile Include="Gen\CopyTypeNameInfo.cs" />
+    <Compile Include="Gen\CopyTargetBaseInfo.cs" />
+    <Compile Include="Gen\ICopyCodeBuildFactory.cs" />
+    <Compile Include="Gen\ICopyCodeGeneratorCreator.cs" />
+    <Compile Include="Gen\ICopyTargetBaseInfoCreator.cs" />
+    <Compile Include="Gen\Impl\AbstractCopyTargetBaseInfoCreator.cs" />
+    <Compile Include="Gen\Impl\Cs\CopyCodeBuildFactoryCs.cs" />
+    <Compile Include="Gen\Impl\Cs\CopyCodeGeneratorCreatorCs.cs" />
+    <Compile Include="Gen\Impl\Cs\CopyTargetBaseInfoCreatorCs.cs" />
+    <Compile Include="Gen\Impl\Vb\CopyCodeBuildFactoryVb.cs" />
+    <Compile Include="Gen\Impl\Vb\CopyCodeGeneratorCreatorVb.cs" />
+    <Compile Include="Gen\Impl\Vb\CopyTargetBaseInfoCreatorVb.cs" />
+    <Compile Include="Gen\PropertyCodeInfo.cs" />
+    <Compile Include="Util\ProgramLanguageUtils.cs" />
+    <Compile Include="Util\CodeInfoUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="CommandBar.resx">

@@ -55,19 +55,19 @@ namespace CopyGen.Gen
 
         #region プロパティ
 
-        private IList<string> _sourcePropertyNames;
-        public IList<string> SourcePropertyNames
-        {
-            get { return _sourcePropertyNames; }
-            set { _sourcePropertyNames = value; }
-        }
+        //private IList<string> _sourcePropertyNames;
+        //public IList<string> SourcePropertyNames
+        //{
+        //    get { return _sourcePropertyNames; }
+        //    set { _sourcePropertyNames = value; }
+        //}
 
-        private IList<string> _targetPropertyNames;
-        public IList<string> TargetPropertyNames
-        {
-            get { return _targetPropertyNames; }
-            set { _targetPropertyNames = value; }
-        }
+        //private IList<string> _targetPropertyNames;
+        //public IList<string> TargetPropertyNames
+        //{
+        //    get { return _targetPropertyNames; }
+        //    set { _targetPropertyNames = value; }
+        //}
 
         private bool _isOutputMethod;
         /// <summary>
@@ -133,15 +133,15 @@ namespace CopyGen.Gen
             set { _copySourceName = value; }
         }
 
-        private string _sourceTypeName;
-        /// <summary>
-        /// コピー元の型名
-        /// </summary>
-        public string SourceTypeName
-        {
-            get { return _sourceTypeName; }
-            set { _sourceTypeName = value; }
-        }
+        //private string _sourceTypeName;
+        ///// <summary>
+        ///// コピー元の型名
+        ///// </summary>
+        //public string SourceTypeName
+        //{
+        //    get { return _sourceTypeName; }
+        //    set { _sourceTypeName = value; }
+        //}
 
         private bool _isNotNullSource;
         /// <summary>
@@ -178,15 +178,15 @@ namespace CopyGen.Gen
             set { _copyTargetName = value; }
         }
 
-        private string _targetTypeName;
-        /// <summary>
-        /// コピー先の型名
-        /// </summary>
-        public string TargetTypeName
-        {
-            get { return _targetTypeName; }
-            set { _targetTypeName = value; }
-        }
+        //private string _targetTypeName;
+        ///// <summary>
+        ///// コピー先の型名
+        ///// </summary>
+        //public string TargetTypeName
+        //{
+        //    get { return _targetTypeName; }
+        //    set { _targetTypeName = value; }
+        //}
 
         private bool _isNotNullTarget;
         /// <summary>

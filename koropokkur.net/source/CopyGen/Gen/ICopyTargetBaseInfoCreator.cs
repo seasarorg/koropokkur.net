@@ -16,15 +16,20 @@
  */
 #endregion
 
-using AddInCommon.Exception;
 
-namespace CopyGen.Exception
+namespace CopyGen.Gen
 {
     /// <summary>
-    /// 設定が見つからないときに投げられる例外
+    /// コピー処理生成対象情報生成インターフェース
     /// </summary>
-    public class ConfigNotFoundException : KoropokkurException
+    public interface ICopyTargetBaseInfoCreator
     {
-
+        /// <summary>
+        /// コピー処理生成対象情報の生成
+        /// </summary>
+        /// <param name="editingFilePath">編集中のファイルパス</param>
+        /// <param name="targetLine">編集中の行</param>
+        /// <returns></returns>
+        CopyTargetBaseInfo Create(string editingFilePath, string targetLine);
     }
 }

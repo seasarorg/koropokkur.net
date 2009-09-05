@@ -16,7 +16,7 @@
  */
 #endregion
 
-using CodeGeneratorCore.Impl;
+using CodeGeneratorCore.Impl.Cs;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 
@@ -30,7 +30,7 @@ namespace CodeGeneratorCoreTest.Impl
         {
             const string EXPECT_CODE = "\t// １行コメントが生成されました !! ???";
     
-            LineCommentGenerator generator = new LineCommentGenerator();
+            LineCommentGeneratorCs generator = new LineCommentGeneratorCs();
             generator.Items.Add("１行コメントが生成されました");
             generator.Items.Add("!!");
             generator.Items.Add("???");
@@ -44,7 +44,7 @@ namespace CodeGeneratorCoreTest.Impl
         {
             const string EXPECT_CODE = "";
 
-            LineCommentGenerator generator = new LineCommentGenerator();
+            LineCommentGeneratorCs generator = new LineCommentGeneratorCs();
 
             string actual = generator.GenerateCode(null);
             Assert.That(actual, Is.EqualTo(EXPECT_CODE));

@@ -18,14 +18,13 @@
 
 using System.Collections.Generic;
 using System.Text;
-using System.Xml;
 
-namespace CodeGeneratorCore.Impl
+namespace CodeGeneratorCore.Impl.Vb
 {
     /// <summary>
     /// １行分のコードを生成する
     /// </summary>
-    public class LineGenerator : ICodeGenerator
+    public class LineGeneratorVb : ICodeGenerator
     {
         protected const string SECTION_NAME = "line";
         protected const string SECTION_PARTS_NAME = "item";
@@ -61,28 +60,13 @@ namespace CodeGeneratorCore.Impl
             {
                 codeBuilder.Append(item).Append(" ");
             }
-            if(Items.Count > 0)
+            //  最後の空白は取り除いておく
+            if(codeBuilder.Length > 0)
             {
-                //  最後の空白分を末尾文字に置き換える
-                codeBuilder[codeBuilder.Length - 1] = ';';
+                codeBuilder.Remove(codeBuilder.Length - 1, 1);
             }
-            return codeBuilder.ToString();
-        }
 
-        /// <summary>
-        /// 設定ファイル用XmlElementを返す
-        /// </summary>
-        /// <returns></returns>
-        public virtual XmlElement CreateXmlElement(XmlDocument document)
-        {
-            XmlElement element = document.CreateElement(SECTION_NAME);
-            foreach (string item in Items)
-            {
-                XmlNode node = document.CreateElement(SECTION_PARTS_NAME);
-                node.Value = item;
-                element.AppendChild(node);
-            }
-            return element;
+            return codeBuilder.ToString();
         }
 
         #endregion

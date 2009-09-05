@@ -66,6 +66,7 @@
     <Compile Include="Gen\TestResources\NoPublicPropertyClass.cs" />
     <Compile Include="Gen\TestResources\TestClass.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Util\PropertyCodeInfoUtilsTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AddInCommon\AddInCommon.csproj">

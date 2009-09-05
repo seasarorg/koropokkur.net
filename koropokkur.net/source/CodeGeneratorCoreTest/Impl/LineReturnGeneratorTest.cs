@@ -16,7 +16,7 @@
  */
 #endregion
 
-using CodeGeneratorCore.Impl;
+using CodeGeneratorCore.Impl.Cs;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 
@@ -30,7 +30,7 @@ namespace CodeGeneratorCoreTest.Impl
         {
             const string EXPECT_CODE = "\t\treturn new Hoge();";
 
-            LineReturnGenerator generator = new LineReturnGenerator();
+            LineReturnGeneratorCs generator = new LineReturnGeneratorCs();
             generator.Items.Add("new");
             generator.Items.Add("Hoge()");
 
@@ -43,7 +43,7 @@ namespace CodeGeneratorCoreTest.Impl
         {
             const string EXPECT_CODE = "return;";
 
-            LineReturnGenerator generator = new LineReturnGenerator();
+            LineReturnGeneratorCs generator = new LineReturnGeneratorCs();
 
             string actual = generator.GenerateCode(null);
             Assert.That(actual, Is.EqualTo(EXPECT_CODE));

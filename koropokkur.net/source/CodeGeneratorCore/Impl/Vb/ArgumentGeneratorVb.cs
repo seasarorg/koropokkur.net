@@ -19,12 +19,12 @@
 using System.Text;
 using CodeGeneratorCore.Enum;
 
-namespace CodeGeneratorCore.Impl
+namespace CodeGeneratorCore.Impl.Vb
 {
     /// <summary>
     /// 引数情報クラス
     /// </summary>
-    public class ArgumentGenerator : ICodeGenerator
+    public class ArgumentGeneratorVb : ICodeGenerator
     {
         #region property
         protected EnumArgumentReference _reference;
@@ -99,22 +99,23 @@ namespace CodeGeneratorCore.Impl
             StringBuilder builder = new StringBuilder();
             if(Reference == EnumArgumentReference.Params)
             {
-                builder.Append("params object[]");
+                builder.Append("Optional ").Append(ArgumentName).Append(" As Object = Nothing");
             }
             else
             { 
                 if (Reference == EnumArgumentReference.Ref)
                 {
-                    builder.Append("ref ");
+                    builder.Append("ByRef ");
                 }
                 else if (Reference == EnumArgumentReference.Out)
                 {
-                    builder.Append("out ");
+                    builder.Append("ByRef ");
                 }
 
-                builder.Append(ArgumentTypeName);
+                builder.Append(ArgumentName);
+                builder.Append(" As ").Append(ArgumentTypeName);
             }
-            builder.Append(" ").Append(ArgumentName);
+            
             return builder.ToString();
         }
 

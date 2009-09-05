@@ -18,30 +18,30 @@
 
 using System.Text;
 
-namespace CodeGeneratorCore.Impl
+namespace CodeGeneratorCore.Impl.Vb
 {
     /// <summary>
-    /// 行コメント生成クラス
+    /// 戻り値行生成クラス
     /// </summary>
-    public class LineCommentGenerator : LineGenerator
+    public class LineReturnGeneratorVb : LineGeneratorVb
     {
+        /// <summary>
+        /// 戻り値行を生成
+        /// </summary>
+        /// <returns></returns>
         public override string GenerateCode(string startIndent)
         {
             StringBuilder builder = new StringBuilder();
+            if(startIndent != null)
+            {
+                builder.Append(startIndent);
+            }
+            builder.Append("Return");
             if(Items.Count > 0)
             {
-                if(startIndent != null)
-                {
-                    builder.Append(startIndent);
-                }
-                builder.Append("//");
+                builder.Append(" ").Append(base.GenerateCode(string.Empty));
+                return builder.ToString();
             }
-
-            foreach (string item in Items)
-            {
-                builder.Append(" ").Append(item);
-            }
-
             return builder.ToString();
         }
     }

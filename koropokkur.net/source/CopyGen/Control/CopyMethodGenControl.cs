@@ -23,6 +23,7 @@ using AddInCommon.Util;
 using CodeGeneratorCore;
 using CopyGen.Control.Window;
 using CopyGen.Gen;
+using CopyGen.Util;
 using EnvDTE;
 using EnvDTE80;
 using Microsoft.VisualStudio.CommandBars;
@@ -35,13 +36,10 @@ namespace CopyGen.Control
     public class CopyMethodGenControl
     {
         private const string COPY_GEN = "コピー処理生成";
-        private const string DEFAULT_METHOD_INDENT = "\t\t";
+        
         
         private readonly DTE2 _applicationObject;
-        /// <summary>
-        /// 空白、タブ以外の文字列を取り出すための正規表現
-        /// </summary>
-        private readonly Regex _regNotSpace = new Regex(@"[^ \t]");
+
 
         /// <summary>
         /// コピー情報
@@ -71,21 +69,6 @@ namespace CopyGen.Control
             return refreshSolutuinButton;
         }
 
-        /// <summary>
-        /// インデントの取得
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
-        private string GetIndent(string input)
-        {
-            string indent = _regNotSpace.Replace(input, string.Empty);
-            if(indent.Length == 0)
-            {
-                return DEFAULT_METHOD_INDENT;
-            }
-            return indent;
-        }
-
         #region イベント
 
         /// <summary>
@@ -96,11 +79,10 @@ namespace CopyGen.Control
         private void generateCode_Click(CommandBarButton Ctrl, ref bool CancelDefault)
         {
             Document document = _applicationObject.ActiveDocument;
-            string docExt = Path.GetExtension(document.FullName);
-            if (docExt != ".cs")
+            if (!ProgramLanguageUtils.IsEnableLanguage(document.FullName))
             {
                 MessageUtils.ShowWarnMessage(
-                    "[{0}]は\nC#ソースコードファイルではないため、コピー処理を生成できません。", 
+                    "[{0}]は\n未対応言語のコードファイルのため、コピー処理を生成できません。\n使用可能な言語は「C#、VB.NET」です。", 
                     document.FullName);
                 return;
             }
@@ -119,25 +101,35 @@ namespace CopyGen.Control
                     }
                 }
 
-                string configPath = PathUtils.GetConfigPath();
-                if(File.Exists(configPath))
-                {
-                    _copyInfo = CopyInfoFileManager.ReadConfig(configPath);
-                }
-                CopyBuilder builder = new CopyBuilder(_copyInfo);
+                //  言語依存のロジック生成ファクトリを取得
+                ICopyCodeBuildFactory factory = ProgramLanguageUtils.CreateCopyCodePartsBuilder(document.FullName);
 
                 //  コピーする型名を取得
                 TextSelection selection = (TextSelection)document.Selection;
                 selection.StartOfLine(vsStartOfLineOptions.vsStartOfLineOptionsFirstColumn, false);
                 selection.SelectLine();
-                string indent = GetIndent(selection.Text);
-                
-                CopyTypeNameInfo generateInfo = CopyTypeNameInfo.Create(document.FullName, selection.Text);
+                //  コード出力開始地点のインデントを取得
+                string indent = factory.GetIndent(selection.Text);
+
+                //  コピー生成対象の情報を生成
+                ICopyTargetBaseInfoCreator targetBaseInfoCreator = factory.CreateCopyTargetBaseInfoCreator();
+                CopyTargetBaseInfo targetBaseInfo = targetBaseInfoCreator.Create(document.FullName, selection.Text);
+
                 //  参照先アセンブリパスを取得
                 string referencePaths = AssemblyUtils.GetReferencePath(document);
 
-                ICodeGenerator generator = builder.CreateCodeGenerator(
-                    referencePaths, generateInfo.SourceTypeFullNames, generateInfo.TargetTypeFullNames);
+                PropertyCodeInfo propertyCodeInfo =
+                    CodeInfoUtils.ReadPropertyInfo(referencePaths,
+                                                       targetBaseInfo.SourceTypeFullNames,
+                                                       targetBaseInfo.DestTypeFullNames);
+                string configPath = PathUtils.GetConfigPath();
+                if (File.Exists(configPath))
+                {
+                    _copyInfo = CopyConfigFileManager.ReadConfig(configPath);
+                }
+                CopyCodeGeneratorCreationFacade facade = new CopyCodeGeneratorCreationFacade(
+                    factory.CreateCopyCodeGeneratorCreator(), _copyInfo, propertyCodeInfo);
+                ICodeGenerator generator = facade.CreateCodeGenerator();
                 if(generator == null)
                 {
                     MessageUtils.ShowWarnMessage("コピー処理を生成できませんでした。\nファイル名とクラス名が一致していない、\nまたはアドインのインストール先が書き込み不可になっていないかご確認下さい。");
