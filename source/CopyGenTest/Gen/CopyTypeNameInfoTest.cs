@@ -18,6 +18,7 @@
 
 using System.Collections.Generic;
 using CopyGen.Gen;
+using CopyGen.Gen.Impl.Cs;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 
@@ -35,10 +36,11 @@ namespace CopyGenTest.Gen
         [Test]
         public void TestCreate_DefaultOnly()
         {
-            CopyTypeNameInfo actual = CopyTypeNameInfo.Create(TARGET_FILE_PATH, string.Empty);
+            ICopyTargetBaseInfoCreator creator = new CopyTargetBaseInfoCreatorCs();
+            CopyTargetBaseInfo actual = creator.Create(TARGET_FILE_PATH, string.Empty);
             
             Assert.That(actual.SourceTypeFullNames, Is.EqualTo(EXPECT_DEFAULT_TYPE_NAME));
-            Assert.That(actual.TargetTypeFullNames, Is.EqualTo(EXPECT_DEFAULT_TYPE_NAME));
+            Assert.That(actual.DestTypeFullNames, Is.EqualTo(EXPECT_DEFAULT_TYPE_NAME));
         }
         
         /// <summary>
@@ -47,10 +49,11 @@ namespace CopyGenTest.Gen
         [Test]
         public void TestCreate_DefaultDefault()
         {
-            CopyTypeNameInfo actual = CopyTypeNameInfo.Create(TARGET_FILE_PATH, ",");
+            ICopyTargetBaseInfoCreator creator = new CopyTargetBaseInfoCreatorCs();
+            CopyTargetBaseInfo actual = creator.Create(TARGET_FILE_PATH, ",");
 
             Assert.That(actual.SourceTypeFullNames, Is.EqualTo(EXPECT_DEFAULT_TYPE_NAME));
-            Assert.That(actual.TargetTypeFullNames, Is.EqualTo(EXPECT_DEFAULT_TYPE_NAME));
+            Assert.That(actual.DestTypeFullNames, Is.EqualTo(EXPECT_DEFAULT_TYPE_NAME));
         }
 
         /// <summary>
@@ -60,7 +63,8 @@ namespace CopyGenTest.Gen
         public void TestCreate_OneClassName_NoNameSpace()
         {
             string targetClassName = typeof (HogeClass).Name;
-            CopyTypeNameInfo actual = CopyTypeNameInfo.Create(TARGET_FILE_PATH, targetClassName);
+            ICopyTargetBaseInfoCreator creator = new CopyTargetBaseInfoCreatorCs();
+            CopyTargetBaseInfo actual = creator.Create(TARGET_FILE_PATH, targetClassName);
 
             List<string> expectNameList = new List<string>();
             expectNameList.Add("CopyGenTest.Gen." + targetClassName);
@@ -73,7 +77,7 @@ namespace CopyGenTest.Gen
             System.Console.WriteLine(expectNames);
 
             Assert.That(actual.SourceTypeFullNames, Is.EqualTo(expectNames));
-            Assert.That(actual.TargetTypeFullNames, Is.EqualTo(expectNames));
+            Assert.That(actual.DestTypeFullNames, Is.EqualTo(expectNames));
         }
 
         /// <summary>
@@ -83,10 +87,11 @@ namespace CopyGenTest.Gen
         public void TestCreate_OneClassName_WithNameSpace()
         {
             string targetClassName = "CopyGenTest.Gen." + typeof(HogeClass).Name;
-            CopyTypeNameInfo actual = CopyTypeNameInfo.Create(TARGET_FILE_PATH, targetClassName);
+            ICopyTargetBaseInfoCreator creator = new CopyTargetBaseInfoCreatorCs();
+            CopyTargetBaseInfo actual = creator.Create(TARGET_FILE_PATH, targetClassName);
 
             Assert.That(actual.SourceTypeFullNames, Is.EqualTo(targetClassName));
-            Assert.That(actual.TargetTypeFullNames, Is.EqualTo(targetClassName));
+            Assert.That(actual.DestTypeFullNames, Is.EqualTo(targetClassName));
         }
 
         /// <summary>
@@ -96,7 +101,8 @@ namespace CopyGenTest.Gen
         public void TestCreate_SourceDefault_NoNameSpace()
         {
             string sourceClassName = typeof(HogeClass).Name;
-            CopyTypeNameInfo actual = CopyTypeNameInfo.Create(TARGET_FILE_PATH, sourceClassName + ",");
+            ICopyTargetBaseInfoCreator creator = new CopyTargetBaseInfoCreatorCs();
+            CopyTargetBaseInfo actual = creator.Create(TARGET_FILE_PATH, sourceClassName + ",");
 
             List<string> expectNameList = new List<string>();
             expectNameList.Add("CopyGenTest.Gen." + sourceClassName);
@@ -109,7 +115,7 @@ namespace CopyGenTest.Gen
             System.Console.WriteLine(expectSourceNames);
 
             Assert.That(actual.SourceTypeFullNames, Is.EqualTo(expectSourceNames));
-            Assert.That(actual.TargetTypeFullNames, Is.EqualTo(EXPECT_DEFAULT_TYPE_NAME));
+            Assert.That(actual.DestTypeFullNames, Is.EqualTo(EXPECT_DEFAULT_TYPE_NAME));
         }
 
         /// <summary>
@@ -119,10 +125,11 @@ namespace CopyGenTest.Gen
         public void TestCreate_SourceDefault_WithNameSpace()
         {
             string sourceClassName = "CopyGenTest.Gen." + typeof(HogeClass).Name;
-            CopyTypeNameInfo actual = CopyTypeNameInfo.Create(TARGET_FILE_PATH, sourceClassName + ",");
+            ICopyTargetBaseInfoCreator creator = new CopyTargetBaseInfoCreatorCs();
+            CopyTargetBaseInfo actual = creator.Create(TARGET_FILE_PATH, sourceClassName + ",");
 
             Assert.That(actual.SourceTypeFullNames, Is.EqualTo(sourceClassName));
-            Assert.That(actual.TargetTypeFullNames, Is.EqualTo(EXPECT_DEFAULT_TYPE_NAME));
+            Assert.That(actual.DestTypeFullNames, Is.EqualTo(EXPECT_DEFAULT_TYPE_NAME));
         }
 
         /// <summary>
@@ -132,7 +139,8 @@ namespace CopyGenTest.Gen
         public void TestCreate_DefaultTarget_NoNameSpace()
         {
             string targetClassName = typeof(HogeClass).Name;
-            CopyTypeNameInfo actual = CopyTypeNameInfo.Create(TARGET_FILE_PATH, "," + targetClassName);
+            ICopyTargetBaseInfoCreator creator = new CopyTargetBaseInfoCreatorCs();
+            CopyTargetBaseInfo actual = creator.Create(TARGET_FILE_PATH, "," + targetClassName);
 
             List<string> expectNameList = new List<string>();
             expectNameList.Add("CopyGenTest.Gen." + targetClassName);
@@ -145,7 +153,7 @@ namespace CopyGenTest.Gen
             System.Console.WriteLine(expectTargetNames);
 
             Assert.That(actual.SourceTypeFullNames, Is.EqualTo(EXPECT_DEFAULT_TYPE_NAME));
-            Assert.That(actual.TargetTypeFullNames, Is.EqualTo(expectTargetNames));
+            Assert.That(actual.DestTypeFullNames, Is.EqualTo(expectTargetNames));
         }
 
         /// <summary>
@@ -155,10 +163,11 @@ namespace CopyGenTest.Gen
         public void TestCreate_DefaultTarget_WithNameSpace()
         {
             string targetClassName = "System.Collections.Generic." + typeof(HogeClass).Name;
-            CopyTypeNameInfo actual = CopyTypeNameInfo.Create(TARGET_FILE_PATH, "," + targetClassName);
+            ICopyTargetBaseInfoCreator creator = new CopyTargetBaseInfoCreatorCs();
+            CopyTargetBaseInfo actual = creator.Create(TARGET_FILE_PATH, "," + targetClassName);
 
             Assert.That(actual.SourceTypeFullNames, Is.EqualTo(EXPECT_DEFAULT_TYPE_NAME));
-            Assert.That(actual.TargetTypeFullNames, Is.EqualTo(targetClassName));
+            Assert.That(actual.DestTypeFullNames, Is.EqualTo(targetClassName));
         }
 
         /// <summary>
@@ -169,7 +178,9 @@ namespace CopyGenTest.Gen
         {
             string sourceClassName = typeof(HugaClass).Name;
             string targetClassName = typeof(HogeClass).Name;
-            CopyTypeNameInfo actual = CopyTypeNameInfo.Create(TARGET_FILE_PATH, sourceClassName + "," + targetClassName);
+
+            ICopyTargetBaseInfoCreator creator = new CopyTargetBaseInfoCreatorCs();
+            CopyTargetBaseInfo actual = creator.Create(TARGET_FILE_PATH, sourceClassName + "," + targetClassName);
 
             List<string> expectSourceNameList = new List<string>();
             expectSourceNameList.Add("CopyGenTest.Gen." + sourceClassName);
@@ -192,7 +203,7 @@ namespace CopyGenTest.Gen
             System.Console.WriteLine(expectTargetNames);
 
             Assert.That(actual.SourceTypeFullNames, Is.EqualTo(expectSourceNames));
-            Assert.That(actual.TargetTypeFullNames, Is.EqualTo(expectTargetNames));
+            Assert.That(actual.DestTypeFullNames, Is.EqualTo(expectTargetNames));
         }
 
         /// <summary>
@@ -203,10 +214,12 @@ namespace CopyGenTest.Gen
         {
             string sourceClassName = "CopyGen.Gen." + typeof(HugaClass).Name;
             string targetClassName = "NUnit.Framework.SyntaxHelpers." + typeof(HogeClass).Name;
-            CopyTypeNameInfo actual = CopyTypeNameInfo.Create(TARGET_FILE_PATH, sourceClassName + "," + targetClassName);
+
+            ICopyTargetBaseInfoCreator creator = new CopyTargetBaseInfoCreatorCs();
+            CopyTargetBaseInfo actual = creator.Create(TARGET_FILE_PATH, sourceClassName + "," + targetClassName);
 
             Assert.That(actual.SourceTypeFullNames, Is.EqualTo(sourceClassName));
-            Assert.That(actual.TargetTypeFullNames, Is.EqualTo(targetClassName));
+            Assert.That(actual.DestTypeFullNames, Is.EqualTo(targetClassName));
         }
 
         /// <summary>
@@ -217,7 +230,9 @@ namespace CopyGenTest.Gen
         {
             string sourceClassName = typeof(HugaClass).Name;
             string targetClassName = "CopyGenTest.Gen." + typeof(HogeClass).Name;
-            CopyTypeNameInfo actual = CopyTypeNameInfo.Create(TARGET_FILE_PATH, sourceClassName + "," + targetClassName);
+
+            ICopyTargetBaseInfoCreator creator = new CopyTargetBaseInfoCreatorCs();
+            CopyTargetBaseInfo actual = creator.Create(TARGET_FILE_PATH, sourceClassName + "," + targetClassName);
 
             List<string> expectSourceNameList = new List<string>();
             expectSourceNameList.Add("CopyGenTest.Gen." + sourceClassName);
@@ -230,7 +245,7 @@ namespace CopyGenTest.Gen
             System.Console.WriteLine(expectSourceNames);
 
             Assert.That(actual.SourceTypeFullNames, Is.EqualTo(expectSourceNames));
-            Assert.That(actual.TargetTypeFullNames, Is.EqualTo(targetClassName));
+            Assert.That(actual.DestTypeFullNames, Is.EqualTo(targetClassName));
         }
 
         /// <summary>
@@ -241,7 +256,9 @@ namespace CopyGenTest.Gen
         {
             string sourceClassName = "CopyGenTest.Gen." + typeof(HugaClass).Name;
             string targetClassName = typeof(HogeClass).Name;
-            CopyTypeNameInfo actual = CopyTypeNameInfo.Create(TARGET_FILE_PATH, sourceClassName + "," + targetClassName);
+
+            ICopyTargetBaseInfoCreator creator = new CopyTargetBaseInfoCreatorCs();
+            CopyTargetBaseInfo actual = creator.Create(TARGET_FILE_PATH, sourceClassName + "," + targetClassName);
 
             List<string> expectTargetNameList = new List<string>();
             expectTargetNameList.Add("CopyGenTest.Gen." + targetClassName);
@@ -254,7 +271,7 @@ namespace CopyGenTest.Gen
             System.Console.WriteLine(expectTargetNames);
 
             Assert.That(actual.SourceTypeFullNames, Is.EqualTo(sourceClassName));
-            Assert.That(actual.TargetTypeFullNames, Is.EqualTo(expectTargetNames));
+            Assert.That(actual.DestTypeFullNames, Is.EqualTo(expectTargetNames));
         }
     }
 

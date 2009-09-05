@@ -16,15 +16,33 @@
  */
 #endregion
 
-using AddInCommon.Exception;
+using System.Text;
 
-namespace CopyGen.Exception
+namespace CodeGeneratorCore.Impl.Vb
 {
     /// <summary>
-    /// 設定が見つからないときに投げられる例外
+    /// 行コメント生成クラス
     /// </summary>
-    public class ConfigNotFoundException : KoropokkurException
+    public class LineCommentGeneratorVb : LineGeneratorVb
     {
+        public override string GenerateCode(string startIndent)
+        {
+            StringBuilder builder = new StringBuilder();
+            if(Items.Count > 0)
+            {
+                if(startIndent != null)
+                {
+                    builder.Append(startIndent);
+                }
+                builder.Append("'");
+            }
 
+            foreach (string item in Items)
+            {
+                builder.Append(" ").Append(item);
+            }
+
+            return builder.ToString();
+        }
     }
 }

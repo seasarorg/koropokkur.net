@@ -23,7 +23,10 @@ using System.Reflection;
 using AddInCommon.Util;
 using CodeGeneratorCore;
 using CodeGeneratorCore.Impl;
+using CodeGeneratorCore.Impl.Cs;
 using CopyGen.Gen;
+using CopyGen.Gen.Impl.Cs;
+using CopyGen.Util;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 
@@ -32,171 +35,45 @@ namespace CopyGenTest.Gen
     [TestFixture]
     public class CopyBuilderTest
     {
-        private const string TARGET_ASSEMBLY = "CopyGenTest4Test.dll";
-        private const string TARGET_METHOD_ExtractPropertyInfo = "ExtractPropertyInfo";
+        private const string TARGET_ASSEMBLY = "CopyGenTest.dll";
+        //private const string TARGET_ASSEMBLY = "CopyGenTest4Test.dll";
+
         private const string TARGET_METHOD_CreateCopyLinesGenerator = "CreateCopyLinesGenerator";
         private const string TARGET_METHOD_CreateCopyMethodGenerator = "CreateCopyMethodGenerator";
-
-        private const string TARGET_METHOD_ReadPropertyInfo = "ReadPropertyInfo";
-
-        /// /// <summary>
-        /// プロパティ情報ファイル名（コピー元）
-        /// </summary>
-        private const string FILE_NAME_SOURCE_PROPERTY_INFO = "source_props.txt";
-        /// <summary>
-        /// プロパティ情報ファイル名（コピー先）
-        /// </summary>
-        private const string FILE_NAME_TARGET_PROPERTY_INFO = "target_props.txt";
-        
         private const string TARGET_CLASS = "CopyGenTest.Gen.TestResources.TestClass";
-
-        #region ExtractPropertyInfo
-        [Test]
-        public void TestExtractPropertyInfo()
-        {
-            CopyBuilder copyBuilder = new CopyBuilder(new CopyInfo());
-            MethodInfo targetMethod = copyBuilder.GetType().GetMethod(
-                TARGET_METHOD_ExtractPropertyInfo, BindingFlags.Instance | BindingFlags.NonPublic);
-            Assert.That(targetMethod, Is.Not.Null);
-
-            if(File.Exists(TARGET_ASSEMBLY))
-            {
-                File.Delete(TARGET_ASSEMBLY);
-            }
-            File.Copy("CopyGenTest.dll", TARGET_ASSEMBLY);
-
-            targetMethod.Invoke(copyBuilder, new object[]
-                                                 {
-                                                     PathUtils.GetFolderPath(
-                                                         AssemblyUtils.GetExecutingAssemblyPath())
-                                                     + TARGET_ASSEMBLY,
-                                                     FILE_NAME_SOURCE_PROPERTY_INFO,
-                                                     FILE_NAME_TARGET_PROPERTY_INFO,
-                                                     TARGET_CLASS,
-                                                     TARGET_CLASS
-                                                 });
-
-            MethodInfo confirmMethod = copyBuilder.GetType().GetMethod(
-                TARGET_METHOD_ReadPropertyInfo, BindingFlags.Instance | BindingFlags.NonPublic);
-            Assert.That(confirmMethod, Is.Not.Null);
-            string temp = "";
-            IList<string> resultList = (IList<string>)confirmMethod.Invoke(copyBuilder,
-                                                            new object[] {FILE_NAME_SOURCE_PROPERTY_INFO, temp});
-            Assert.That(resultList, Is.Not.Null);
-
-            //  出力されているはずのプロパティ名
-            List<string> expectList = new List<string>();
-            expectList.Add("NormalProperty1");
-            expectList.Add("NormalProperty2");
-
-            Assert.That(resultList.Count, Is.EqualTo(expectList.Count));
-            foreach (string s in resultList)
-            {
-                Assert.That(expectList.Contains(s), Is.True, s);
-                expectList.Remove(s);
-            }
-        }
-
-        [Test]
-        public void TestExtractPropertyInfo_NoProperty()
-        {
-            const string NO_PUBLIC_PROPERTY_CLASS = "CopyGenTest.Gen.TestResources.NoPublicPropertyClass";
-            CopyBuilder copyBuilder = new CopyBuilder(new CopyInfo());
-            MethodInfo targetMethod = copyBuilder.GetType().GetMethod(
-                TARGET_METHOD_ExtractPropertyInfo, BindingFlags.Instance | BindingFlags.NonPublic);
-            Assert.That(targetMethod, Is.Not.Null);
-
-            if (File.Exists(TARGET_ASSEMBLY))
-            {
-                File.Delete(TARGET_ASSEMBLY);
-            }
-            File.Copy("CopyGenTest.dll", TARGET_ASSEMBLY);
-            targetMethod.Invoke(copyBuilder, new object[]
-                                                 {
-                                                     PathUtils.GetFolderPath(
-                                                         AssemblyUtils.GetExecutingAssemblyPath())
-                                                     + TARGET_ASSEMBLY,
-                                                     FILE_NAME_SOURCE_PROPERTY_INFO,
-                                                     FILE_NAME_TARGET_PROPERTY_INFO,
-                                                     NO_PUBLIC_PROPERTY_CLASS,
-                                                     NO_PUBLIC_PROPERTY_CLASS
-                                                 });
-            MethodInfo confirmMethod = copyBuilder.GetType().GetMethod(
-                TARGET_METHOD_ReadPropertyInfo, BindingFlags.Instance | BindingFlags.NonPublic);
-            Assert.That(confirmMethod, Is.Not.Null);
-            string temp = "";
-            IList<string> resultList = (IList<string>)confirmMethod.Invoke(copyBuilder,
-                                                            new object[] { FILE_NAME_SOURCE_PROPERTY_INFO, temp });
-            Assert.That(resultList, Is.Not.Null);
-            Assert.That(resultList.Count, Is.EqualTo(0));
-        }
-
-        [Test]
-        public void TestExtractPropertyInfo_NotExists()
-        {
-            const string NOT_EXIST_ASSEMBLY = "NotExists";
-            CopyBuilder copyBuilder = new CopyBuilder(new CopyInfo());
-            MethodInfo targetMethod = copyBuilder.GetType().GetMethod(
-                TARGET_METHOD_ExtractPropertyInfo, BindingFlags.Instance | BindingFlags.NonPublic);
-            Assert.That(targetMethod, Is.Not.Null);
-
-            if (File.Exists(NOT_EXIST_ASSEMBLY))
-            {
-                File.Delete(NOT_EXIST_ASSEMBLY);
-            }
-
-            targetMethod.Invoke(copyBuilder, new object[]
-                                                 {
-                                                     PathUtils.GetFolderPath(
-                                                         AssemblyUtils.GetExecutingAssemblyPath())
-                                                     + NOT_EXIST_ASSEMBLY,
-                                                     FILE_NAME_SOURCE_PROPERTY_INFO,
-                                                     FILE_NAME_TARGET_PROPERTY_INFO,
-                                                     TARGET_CLASS,
-                                                     TARGET_CLASS
-                                                 });
-            MethodInfo confirmMethod = copyBuilder.GetType().GetMethod(
-                TARGET_METHOD_ReadPropertyInfo, BindingFlags.Instance | BindingFlags.NonPublic);
-            Assert.That(confirmMethod, Is.Not.Null);
-            string temp = "";
-            object result = confirmMethod.Invoke(copyBuilder,
-                                                 new object[] {FILE_NAME_SOURCE_PROPERTY_INFO, temp});
-            Assert.That(result, Is.Null);
-        }
-        #endregion
 
         #region CreateCopyLinesGenerator
 
         [Test]
         public void TestCreateCopyLinesGenerator_PropertyNames_Null()
         {
-            MethodInfo targetMethod = typeof(CopyBuilder).GetMethod(
-                TARGET_METHOD_CreateCopyLinesGenerator, BindingFlags.Instance | BindingFlags.NonPublic);
+            MethodInfo targetMethod = typeof(CopyCodeGeneratorCreatorCs).GetMethod(
+                TARGET_METHOD_CreateCopyLinesGenerator, BindingFlags.Instance | BindingFlags.Public);
             {
-                CopyInfo copyInfo = new CopyInfo();
-                Assert.That(copyInfo.SourcePropertyNames, Is.Null);
-                Assert.That(copyInfo.TargetPropertyNames, Is.Null);
-                CopyBuilder copyBuilder = new CopyBuilder(copyInfo);
+                PropertyCodeInfo propertyCodeInfo = new PropertyCodeInfo();
+                Assert.That(propertyCodeInfo.SourcePropertyNames, Is.Null);
+                Assert.That(propertyCodeInfo.TargetPropertyNames, Is.Null);
+                ICopyCodeGeneratorCreator copyBuilder = new CopyCodeGeneratorCreatorCs();
 
-                object result = targetMethod.Invoke(copyBuilder, new object[] { });
+                object result = targetMethod.Invoke(copyBuilder, new object[] { new CopyInfo(), propertyCodeInfo });
                 Assert.That(result, Is.Null);
             }
             {
-                CopyInfo copyInfo = new CopyInfo();
-                copyInfo.SourcePropertyNames = new List<string>();
-                Assert.That(copyInfo.TargetPropertyNames, Is.Null);
-                CopyBuilder copyBuilder = new CopyBuilder(copyInfo);
+                PropertyCodeInfo propertyCodeInfo = new PropertyCodeInfo();
+                propertyCodeInfo.SourcePropertyNames = new List<string>();
+                Assert.That(propertyCodeInfo.TargetPropertyNames, Is.Null);
+                ICopyCodeGeneratorCreator copyBuilder = new CopyCodeGeneratorCreatorCs();
 
-                object result = targetMethod.Invoke(copyBuilder, new object[] { });
+                object result = targetMethod.Invoke(copyBuilder, new object[] { new CopyInfo(), propertyCodeInfo });
                 Assert.That(result, Is.Null);
             }
             {
-                CopyInfo copyInfo = new CopyInfo();
-                Assert.That(copyInfo.SourcePropertyNames, Is.Null);
-                copyInfo.TargetPropertyNames = new List<string>();
-                CopyBuilder copyBuilder = new CopyBuilder(copyInfo);
+                PropertyCodeInfo propertyCodeInfo = new PropertyCodeInfo();
+                Assert.That(propertyCodeInfo.SourcePropertyNames, Is.Null);
+                propertyCodeInfo.TargetPropertyNames = new List<string>();
+                ICopyCodeGeneratorCreator copyBuilder = new CopyCodeGeneratorCreatorCs();
 
-                object result = targetMethod.Invoke(copyBuilder, new object[] { });
+                object result = targetMethod.Invoke(copyBuilder, new object[] { new CopyInfo(), propertyCodeInfo });
                 Assert.That(result, Is.Null);
             }
         }
@@ -204,39 +81,39 @@ namespace CopyGenTest.Gen
         [Test]
         public void TestCreateCopyLinesGenerator_PropertyNames_Zero()
         {
-            MethodInfo targetMethod = typeof(CopyBuilder).GetMethod(
-                TARGET_METHOD_CreateCopyLinesGenerator, BindingFlags.Instance | BindingFlags.NonPublic);
+            MethodInfo targetMethod = typeof(CopyCodeGeneratorCreatorCs).GetMethod(
+                TARGET_METHOD_CreateCopyLinesGenerator, BindingFlags.Instance | BindingFlags.Public);
             {
-                CopyInfo copyInfo = new CopyInfo();
-                copyInfo.SourcePropertyNames = new List<string>();
-                copyInfo.TargetPropertyNames = new List<string>();
-                CopyBuilder copyBuilder = new CopyBuilder(copyInfo);
+                PropertyCodeInfo propertyCodeInfo = new PropertyCodeInfo();
+                propertyCodeInfo.SourcePropertyNames = new List<string>();
+                propertyCodeInfo.TargetPropertyNames = new List<string>();
+                ICopyCodeGeneratorCreator copyBuilder = new CopyCodeGeneratorCreatorCs();
 
-                object result = targetMethod.Invoke(copyBuilder, new object[] { });
+                object result = targetMethod.Invoke(copyBuilder, new object[] { new CopyInfo(), propertyCodeInfo });
                 ICodeGenerator generator = result as ICodeGenerator;
                 Assert.That(generator, Is.Not.Null);
                 Assert.That(generator.GenerateCode("\t"), Is.EqualTo(""));
             }
             {
-                CopyInfo copyInfo = new CopyInfo();
-                copyInfo.SourcePropertyNames = new List<string>();
-                copyInfo.SourcePropertyNames.Add("Test");
-                copyInfo.TargetPropertyNames = new List<string>();
-                CopyBuilder copyBuilder = new CopyBuilder(copyInfo);
+                PropertyCodeInfo propertyCodeInfo = new PropertyCodeInfo();
+                propertyCodeInfo.SourcePropertyNames = new List<string>();
+                propertyCodeInfo.SourcePropertyNames.Add("Test");
+                propertyCodeInfo.TargetPropertyNames = new List<string>();
+                ICopyCodeGeneratorCreator copyBuilder = new CopyCodeGeneratorCreatorCs();
 
-                object result = targetMethod.Invoke(copyBuilder, new object[] { });
+                object result = targetMethod.Invoke(copyBuilder, new object[] { new CopyInfo(), propertyCodeInfo });
                 ICodeGenerator generator = result as ICodeGenerator;
                 Assert.That(generator, Is.Not.Null);
                 Assert.That(generator.GenerateCode("\t"), Is.EqualTo(""));
             }
             {
-                CopyInfo copyInfo = new CopyInfo();
-                copyInfo.SourcePropertyNames = new List<string>();
-                copyInfo.TargetPropertyNames = new List<string>();
-                copyInfo.TargetPropertyNames.Add("Test");
-                CopyBuilder copyBuilder = new CopyBuilder(copyInfo);
+                PropertyCodeInfo propertyCodeInfo = new PropertyCodeInfo();
+                propertyCodeInfo.SourcePropertyNames = new List<string>();
+                propertyCodeInfo.TargetPropertyNames = new List<string>();
+                propertyCodeInfo.TargetPropertyNames.Add("Test");
+                ICopyCodeGeneratorCreator copyBuilder = new CopyCodeGeneratorCreatorCs();
 
-                object result = targetMethod.Invoke(copyBuilder, new object[] { });
+                object result = targetMethod.Invoke(copyBuilder, new object[] { new CopyInfo(), propertyCodeInfo });
                 ICodeGenerator generator = result as ICodeGenerator;
                 Assert.That(generator, Is.Not.Null);
                 Assert.That(generator.GenerateCode("\t"), Is.EqualTo(""));
@@ -250,22 +127,25 @@ namespace CopyGenTest.Gen
             const string TARGET_PROPERTY_NAME2 = "NormalProperty2";
             const string DIFFERENT_PROPERTY_NAME1 = "DiffProp1";
             const string DIFFERENT_PROPERTY_NAME2 = "DiffProp2";
-            MethodInfo targetMethod = typeof(CopyBuilder).GetMethod(
-                TARGET_METHOD_CreateCopyLinesGenerator, BindingFlags.Instance | BindingFlags.NonPublic);
+
+            MethodInfo targetMethod = typeof(CopyCodeGeneratorCreatorCs).GetMethod(
+                TARGET_METHOD_CreateCopyLinesGenerator, BindingFlags.Instance | BindingFlags.Public);
             {
                 CopyInfo copyInfo = new CopyInfo();
                 copyInfo.CopySource = EnumCopySource.AsArgument;
-                copyInfo.SourcePropertyNames = new List<string>();
-                copyInfo.SourcePropertyNames.Add(TARGET_PROPERTY_NAME1);
-                copyInfo.SourcePropertyNames.Add(TARGET_PROPERTY_NAME2);
-                copyInfo.SourcePropertyNames.Add(DIFFERENT_PROPERTY_NAME1);
-                copyInfo.TargetPropertyNames = new List<string>();
-                copyInfo.TargetPropertyNames.Add(TARGET_PROPERTY_NAME1);
-                copyInfo.TargetPropertyNames.Add(TARGET_PROPERTY_NAME2);
-                copyInfo.TargetPropertyNames.Add(DIFFERENT_PROPERTY_NAME2);
-                CopyBuilder copyBuilder = new CopyBuilder(copyInfo);
 
-                object result = targetMethod.Invoke(copyBuilder, new object[] { });
+                PropertyCodeInfo propertyCodeInfo = new PropertyCodeInfo();
+                propertyCodeInfo.SourcePropertyNames = new List<string>();
+                propertyCodeInfo.SourcePropertyNames.Add(TARGET_PROPERTY_NAME1);
+                propertyCodeInfo.SourcePropertyNames.Add(TARGET_PROPERTY_NAME2);
+                propertyCodeInfo.SourcePropertyNames.Add(DIFFERENT_PROPERTY_NAME1);
+                propertyCodeInfo.TargetPropertyNames = new List<string>();
+                propertyCodeInfo.TargetPropertyNames.Add(TARGET_PROPERTY_NAME1);
+                propertyCodeInfo.TargetPropertyNames.Add(TARGET_PROPERTY_NAME2);
+                propertyCodeInfo.TargetPropertyNames.Add(DIFFERENT_PROPERTY_NAME2);
+                ICopyCodeGeneratorCreator copyBuilder = new CopyCodeGeneratorCreatorCs();
+
+                object result = targetMethod.Invoke(copyBuilder, new object[] { copyInfo, propertyCodeInfo });
                 ICodeGenerator generator = result as ICodeGenerator;
                 Assert.That(generator, Is.Not.Null);
                 Assert.That(generator.GenerateCode("\t"), Is.EqualTo(
@@ -281,22 +161,24 @@ namespace CopyGenTest.Gen
             const string TARGET_PROPERTY_NAME2 = "NormalProperty2";
             const string DIFFERENT_PROPERTY_NAME1 = "DiffProp1";
             const string DIFFERENT_PROPERTY_NAME2 = "DiffProp2";
-            MethodInfo targetMethod = typeof(CopyBuilder).GetMethod(
-                TARGET_METHOD_CreateCopyLinesGenerator, BindingFlags.Instance | BindingFlags.NonPublic);
+            MethodInfo targetMethod = typeof(CopyCodeGeneratorCreatorCs).GetMethod(
+                TARGET_METHOD_CreateCopyLinesGenerator, BindingFlags.Instance | BindingFlags.Public);
             {
                 CopyInfo copyInfo = new CopyInfo();
                 copyInfo.CopySource = EnumCopySource.This;
-                copyInfo.SourcePropertyNames = new List<string>();
-                copyInfo.SourcePropertyNames.Add(TARGET_PROPERTY_NAME1);
-                copyInfo.SourcePropertyNames.Add(TARGET_PROPERTY_NAME2);
-                copyInfo.SourcePropertyNames.Add(DIFFERENT_PROPERTY_NAME1);
-                copyInfo.TargetPropertyNames = new List<string>();
-                copyInfo.TargetPropertyNames.Add(TARGET_PROPERTY_NAME1);
-                copyInfo.TargetPropertyNames.Add(TARGET_PROPERTY_NAME2);
-                copyInfo.TargetPropertyNames.Add(DIFFERENT_PROPERTY_NAME2);
-                CopyBuilder copyBuilder = new CopyBuilder(copyInfo);
 
-                object result = targetMethod.Invoke(copyBuilder, new object[] { });
+                PropertyCodeInfo propertyCodeInfo = new PropertyCodeInfo();
+                propertyCodeInfo.SourcePropertyNames = new List<string>();
+                propertyCodeInfo.SourcePropertyNames.Add(TARGET_PROPERTY_NAME1);
+                propertyCodeInfo.SourcePropertyNames.Add(TARGET_PROPERTY_NAME2);
+                propertyCodeInfo.SourcePropertyNames.Add(DIFFERENT_PROPERTY_NAME1);
+                propertyCodeInfo.TargetPropertyNames = new List<string>();
+                propertyCodeInfo.TargetPropertyNames.Add(TARGET_PROPERTY_NAME1);
+                propertyCodeInfo.TargetPropertyNames.Add(TARGET_PROPERTY_NAME2);
+                propertyCodeInfo.TargetPropertyNames.Add(DIFFERENT_PROPERTY_NAME2);
+                ICopyCodeGeneratorCreator copyBuilder = new CopyCodeGeneratorCreatorCs();
+
+                object result = targetMethod.Invoke(copyBuilder, new object[] { copyInfo, propertyCodeInfo });
                 ICodeGenerator generator = result as ICodeGenerator;
                 Assert.That(generator, Is.Not.Null);
                 Assert.That(generator.GenerateCode("\t"), Is.EqualTo(
@@ -312,16 +194,18 @@ namespace CopyGenTest.Gen
         [Test]
         public void TestCreateCopyMethodGenerator_HasSourceArgument()
         {
-            MethodInfo targetMethod = typeof(CopyBuilder).GetMethod(
-                TARGET_METHOD_CreateCopyMethodGenerator, BindingFlags.Instance | BindingFlags.NonPublic);
+            PropertyCodeInfo propertyCodeInfo = CodeInfoUtils.ReadPropertyInfo(TARGET_ASSEMBLY,
+                                                       TARGET_CLASS, TARGET_CLASS);
+            MethodInfo targetMethod = typeof(CopyCodeGeneratorCreatorCs).GetMethod(
+                TARGET_METHOD_CreateCopyMethodGenerator, BindingFlags.Instance | BindingFlags.Public);
             {
                 CopyInfo copyInfo = new CopyInfo();
                 copyInfo.CopySource = EnumCopySource.This;
                 copyInfo.CopyTarget = EnumCopyTarget.Return;
-                CopyBuilder copyBuilder = new CopyBuilder(copyInfo);
+                ICopyCodeGeneratorCreator copyBuilder = new CopyCodeGeneratorCreatorCs();
 
-                object result = targetMethod.Invoke(copyBuilder, new object[] {});
-                MethodGenerator generator = result as MethodGenerator;
+                object result = targetMethod.Invoke(copyBuilder, new object[] { copyInfo, propertyCodeInfo });
+                MethodGeneratorCs generator = result as MethodGeneratorCs;
                 Assert.That(generator, Is.Not.Null);
                 Assert.That(generator.Arguments.Count, Is.EqualTo(0));
             }
@@ -329,17 +213,18 @@ namespace CopyGenTest.Gen
                 CopyInfo copyInfo = new CopyInfo();
                 copyInfo.CopySource = EnumCopySource.AsArgument;
                 copyInfo.CopyTarget = EnumCopyTarget.Return;
-                copyInfo.SourceTypeName = "int";
+                propertyCodeInfo.SourceTypeName = "int";
                 copyInfo.SourceArgumentName = "source";
-                CopyBuilder copyBuilder = new CopyBuilder(copyInfo);
+                ICopyCodeGeneratorCreator copyBuilder = new CopyCodeGeneratorCreatorCs();
 
-                object result = targetMethod.Invoke(copyBuilder, new object[] { });
-                MethodGenerator generator = result as MethodGenerator;
+                object result = targetMethod.Invoke(copyBuilder, new object[] { copyInfo, propertyCodeInfo });
+
+                MethodGeneratorCs generator = result as MethodGeneratorCs;
                 Assert.That(generator, Is.Not.Null);
                 Assert.That(generator.Arguments.Count, Is.EqualTo(1));
-                ArgumentGenerator argumentGenerator = generator.Arguments[0];
+                ArgumentGeneratorCs argumentGenerator = generator.Arguments[0];
                 Assert.That(argumentGenerator.Comment, Is.EqualTo("コピー元"));
-                Assert.That(argumentGenerator.ArgumentTypeName, Is.EqualTo(copyInfo.SourceTypeName));
+                Assert.That(argumentGenerator.ArgumentTypeName, Is.EqualTo(propertyCodeInfo.SourceTypeName));
                 Assert.That(argumentGenerator.ArgumentName, Is.EqualTo(copyInfo.SourceArgumentName));
             }
         }
@@ -347,17 +232,19 @@ namespace CopyGenTest.Gen
         [Test]
         public void TestCreateCopyMethodGenerator_IsReturn()
         {
-            MethodInfo targetMethod = typeof(CopyBuilder).GetMethod(
-                TARGET_METHOD_CreateCopyMethodGenerator, BindingFlags.Instance | BindingFlags.NonPublic);
+            MethodInfo targetMethod = typeof(CopyCodeGeneratorCreatorCs).GetMethod(
+                TARGET_METHOD_CreateCopyMethodGenerator, BindingFlags.Instance | BindingFlags.Public);
             {
+                PropertyCodeInfo propertyCodeInfo = new PropertyCodeInfo();
+
                 CopyInfo copyInfo = new CopyInfo();
                 copyInfo.CopySource = EnumCopySource.This;
                 copyInfo.CopyTarget = EnumCopyTarget.Return;
-                copyInfo.TargetTypeName = "TestClass";
-                CopyBuilder copyBuilder = new CopyBuilder(copyInfo);
+                propertyCodeInfo.TargetTypeName = "TestClass";
+                ICopyCodeGeneratorCreator copyBuilder = new CopyCodeGeneratorCreatorCs();
 
-                object result = targetMethod.Invoke(copyBuilder, new object[] { });
-                MethodGenerator generator = result as MethodGenerator;
+                object result = targetMethod.Invoke(copyBuilder, new object[] { copyInfo, propertyCodeInfo });
+                MethodGeneratorCs generator = result as MethodGeneratorCs;
                 Assert.That(generator, Is.Not.Null);
                 Assert.That(generator.Arguments.Count, Is.EqualTo(0));
 
@@ -370,19 +257,21 @@ namespace CopyGenTest.Gen
                     "\t\treturn target;"));
             }
             {
+                PropertyCodeInfo propertyCodeInfo = new PropertyCodeInfo();
+
                 CopyInfo copyInfo = new CopyInfo();
                 copyInfo.CopySource = EnumCopySource.This;
                 copyInfo.CopyTarget = EnumCopyTarget.AsArgument;
-                copyInfo.TargetTypeName = "TestClass";
+                propertyCodeInfo.TargetTypeName = "TestClass";
                 copyInfo.TargetArgumentName = "target";
-                CopyBuilder copyBuilder = new CopyBuilder(copyInfo);
+                ICopyCodeGeneratorCreator copyBuilder = new CopyCodeGeneratorCreatorCs();
 
-                object result = targetMethod.Invoke(copyBuilder, new object[] { });
-                MethodGenerator generator = result as MethodGenerator;
+                object result = targetMethod.Invoke(copyBuilder, new object[] { copyInfo, propertyCodeInfo });
+                MethodGeneratorCs generator = result as MethodGeneratorCs;
                 Assert.That(generator, Is.Not.Null);
                 Assert.That(generator.Arguments.Count, Is.EqualTo(1));
                 Assert.That(generator.Arguments[0].ArgumentName, Is.EqualTo(copyInfo.TargetArgumentName));
-                Assert.That(generator.Arguments[0].ArgumentTypeName, Is.EqualTo(copyInfo.TargetTypeName));
+                Assert.That(generator.Arguments[0].ArgumentTypeName, Is.EqualTo(propertyCodeInfo.TargetTypeName));
 
                 Assert.That(generator.Lines.Count, Is.EqualTo(1));
                 Assert.That(generator.Lines.MoveNext(), Is.True);
@@ -399,15 +288,18 @@ namespace CopyGenTest.Gen
         {
             {
                 CopyInfo copyInfo = new CopyInfo();
+                PropertyCodeInfo propertyCodeInfo =
+                    CodeInfoUtils.ReadPropertyInfo(TARGET_ASSEMBLY,
+                                                       TARGET_CLASS, TARGET_CLASS);
                 copyInfo.IsOutputMethod = false;
-                copyInfo.SourcePropertyNames = new List<string>(new string[] { "NormalProperty1", "NormalProperty2" });
-                copyInfo.SourcePropertyNames = new List<string>(new string[] { "NormalProperty1", "NormalProperty2" });
+                propertyCodeInfo.SourcePropertyNames = new List<string>(new string[] { "NormalProperty1", "NormalProperty2" });
+                propertyCodeInfo.TargetPropertyNames = new List<string>(new string[] { "NormalProperty1", "NormalProperty2" });
                 copyInfo.CopyTarget = EnumCopyTarget.Return;
                 copyInfo.CopySource = EnumCopySource.This;
                 copyInfo.MethodName = "Hoge";
-                CopyBuilder copyBuilder = new CopyBuilder(copyInfo);
+                CopyCodeGeneratorCreationFacade copyBuilder = new CopyCodeGeneratorCreationFacade(new CopyCodeGeneratorCreatorCs(), copyInfo, propertyCodeInfo);
 
-                ICodeGenerator generator = copyBuilder.CreateCodeGenerator(TARGET_ASSEMBLY, TARGET_CLASS, TARGET_CLASS);
+                ICodeGenerator generator = copyBuilder.CreateCodeGenerator();
                 GeneratorColleciton generatorColleciton = generator as GeneratorColleciton;
                 Assert.That(generatorColleciton, Is.Not.Null);
                 Assert.That(generator.GenerateCode(null), Is.EqualTo(
@@ -416,16 +308,19 @@ namespace CopyGenTest.Gen
             }
             {
                 CopyInfo copyInfo = new CopyInfo();
+                PropertyCodeInfo propertyCodeInfo =
+                    CodeInfoUtils.ReadPropertyInfo(TARGET_ASSEMBLY,
+                                                       TARGET_CLASS, TARGET_CLASS);
                 copyInfo.IsOutputMethod = true;
-                copyInfo.SourcePropertyNames = new List<string>(new string[] { "NormalProperty1", "NormalProperty2" });
-                copyInfo.SourcePropertyNames = new List<string>(new string[] { "NormalProperty1", "NormalProperty2" });
+                propertyCodeInfo.SourcePropertyNames = new List<string>(new string[] { "NormalProperty1", "NormalProperty2" });
+                propertyCodeInfo.SourcePropertyNames = new List<string>(new string[] { "NormalProperty1", "NormalProperty2" });
                 copyInfo.CopyTarget = EnumCopyTarget.AsArgument;
                 copyInfo.CopySource = EnumCopySource.AsArgument;
                 copyInfo.MethodName = "Hoge";
-                CopyBuilder copyBuilder = new CopyBuilder(copyInfo);
+                CopyCodeGeneratorCreationFacade copyBuilder = new CopyCodeGeneratorCreationFacade(new CopyCodeGeneratorCreatorCs(), copyInfo, propertyCodeInfo);
 
-                ICodeGenerator generator = copyBuilder.CreateCodeGenerator(TARGET_ASSEMBLY, TARGET_CLASS, TARGET_CLASS);
-                MethodGenerator methodGenerator = generator as MethodGenerator;
+                ICodeGenerator generator = copyBuilder.CreateCodeGenerator();
+                MethodGeneratorCs methodGenerator = generator as MethodGeneratorCs;
                 Assert.That(methodGenerator, Is.Not.Null);
                 Assert.That(methodGenerator.Arguments.Count, Is.EqualTo(2));
                 Assert.That(methodGenerator.Lines.Count, Is.EqualTo(2));
@@ -436,16 +331,18 @@ namespace CopyGenTest.Gen
         [Test]
         public void TestCreateCodeGenerator_NotExistAssembly()
         {
-            CopyBuilder copyBuilder = new CopyBuilder(new CopyInfo());
-            object result = copyBuilder.CreateCodeGenerator("NotExists", "Hoge", "Huga");
+            PropertyCodeInfo propertyCodeInfo = CodeInfoUtils.ReadPropertyInfo("NotExists", "Hoge", "Huga");
+            CopyCodeGeneratorCreationFacade copyBuilder = new CopyCodeGeneratorCreationFacade(new CopyCodeGeneratorCreatorCs(), new CopyInfo(), propertyCodeInfo);
+            object result = copyBuilder.CreateCodeGenerator();
             Assert.That(result, Is.Null);
         }
 
         [Test]
         public void TestCreateCodeGenerator_NotExistType()
         {
-            CopyBuilder copyBuilder = new CopyBuilder(new CopyInfo());
-            object result = copyBuilder.CreateCodeGenerator(TARGET_ASSEMBLY, "Hoge", "Huga");
+            PropertyCodeInfo propertyCodeInfo = CodeInfoUtils.ReadPropertyInfo(TARGET_ASSEMBLY, "Hoge", "Huga");
+            CopyCodeGeneratorCreationFacade copyBuilder = new CopyCodeGeneratorCreationFacade(new CopyCodeGeneratorCreatorCs(), new CopyInfo(), propertyCodeInfo);
+            object result = copyBuilder.CreateCodeGenerator();
             Assert.That(result, Is.Null);
         }
 

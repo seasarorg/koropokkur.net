@@ -52,7 +52,7 @@ namespace CopyGen.Control.Window
                 string configPath = PathUtils.GetConfigPath();
                 if (File.Exists(configPath))
                 {
-                    return CopyInfoFileManager.ReadConfig(configPath);
+                    return CopyConfigFileManager.ReadConfig(configPath);
                 }
             }
             catch (System.Exception ex)
@@ -259,7 +259,7 @@ namespace CopyGen.Control.Window
         private void SaveCopyInfo()
         {
             CopyInfo copyInfo = CreateCopyInfo();
-            CopyInfoFileManager.WriteConfig(PathUtils.GetConfigPath(), copyInfo);
+            CopyConfigFileManager.WriteConfig(PathUtils.GetConfigPath(), copyInfo);
         }
 
         /// <summary>

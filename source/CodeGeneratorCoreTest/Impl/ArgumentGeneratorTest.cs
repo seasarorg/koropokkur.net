@@ -17,7 +17,7 @@
 #endregion
 
 using CodeGeneratorCore.Enum;
-using CodeGeneratorCore.Impl;
+using CodeGeneratorCore.Impl.Cs;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 
@@ -31,7 +31,7 @@ namespace CodeGeneratorCoreTest.Impl
         {
             const string EXPECT_CODE = "params object[] hoges";
 
-            ArgumentGenerator generator = new ArgumentGenerator();
+            ArgumentGeneratorCs generator = new ArgumentGeneratorCs();
             generator.Reference = EnumArgumentReference.Params;
             generator.ArgumentName = "hoges";
 
@@ -44,7 +44,7 @@ namespace CodeGeneratorCoreTest.Impl
         {
             const string EXPECT_CODE = "ref int huge";
 
-            ArgumentGenerator generator = new ArgumentGenerator();
+            ArgumentGeneratorCs generator = new ArgumentGeneratorCs();
             generator.Reference = EnumArgumentReference.Ref;
             generator.ArgumentName = "huge";
             generator.ArgumentTypeName = "int";
@@ -58,7 +58,7 @@ namespace CodeGeneratorCoreTest.Impl
         {
             const string EXPECT_CODE = "out long huga";
 
-            ArgumentGenerator generator = new ArgumentGenerator();
+            ArgumentGeneratorCs generator = new ArgumentGeneratorCs();
             generator.Reference = EnumArgumentReference.Out;
             generator.ArgumentName = "huga";
             generator.ArgumentTypeName = "long";

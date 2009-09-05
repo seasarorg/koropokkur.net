@@ -17,7 +17,7 @@
 #endregion
 
 using System.Text;
-using CodeGeneratorCore.Impl;
+using CodeGeneratorCore.Impl.Cs;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using CodeGeneratorCore.Enum;
@@ -25,7 +25,7 @@ using CodeGeneratorCore.Enum;
 namespace CodeGeneratorCoreTest.Impl
 {
     [TestFixture]
-    public class MethodGeneratorTest : MethodGenerator
+    public class MethodGeneratorTest : MethodGeneratorCs
     {
         [SetUp]
         public void Setup()
@@ -54,7 +54,7 @@ namespace CodeGeneratorCoreTest.Impl
             ReturnTypeName = "int";
             ReturnComment = "戻り値のコメントです。";
 
-            ArgumentGenerator argumentGenerator = new ArgumentGenerator();
+            ArgumentGeneratorCs argumentGenerator = new ArgumentGeneratorCs();
             argumentGenerator.ArgumentName = "hoge";
             argumentGenerator.ArgumentTypeName = "string";
             argumentGenerator.Comment = "引数のコメントです。";
@@ -90,7 +90,7 @@ namespace CodeGeneratorCoreTest.Impl
             ReturnTypeName = "int";
             MethodName = "Hoge";
 
-            ArgumentGenerator argumentGenerator = new ArgumentGenerator();
+            ArgumentGeneratorCs argumentGenerator = new ArgumentGeneratorCs();
             argumentGenerator.Reference = EnumArgumentReference.Params;
             argumentGenerator.ArgumentName = "args";
             Arguments.Add(argumentGenerator);
@@ -109,7 +109,7 @@ namespace CodeGeneratorCoreTest.Impl
             ReturnTypeName = "int";
             MethodName = "Hoge";
 
-            ArgumentGenerator argumentGenerator = new ArgumentGenerator();
+            ArgumentGeneratorCs argumentGenerator = new ArgumentGeneratorCs();
             argumentGenerator.Reference = EnumArgumentReference.Params;
             argumentGenerator.ArgumentName = "args";
             Arguments.Add(argumentGenerator);
@@ -128,7 +128,7 @@ namespace CodeGeneratorCoreTest.Impl
             ReturnTypeName = "int";
             MethodName = "Hoge";
 
-            ArgumentGenerator argumentGenerator = new ArgumentGenerator();
+            ArgumentGeneratorCs argumentGenerator = new ArgumentGeneratorCs();
             argumentGenerator.Reference = EnumArgumentReference.Params;
             argumentGenerator.ArgumentName = "args";
             Arguments.Add(argumentGenerator);
@@ -147,13 +147,13 @@ namespace CodeGeneratorCoreTest.Impl
             ReturnTypeName = "int";
             MethodName = "Hoge";
 
-            ArgumentGenerator argumentGenerator1 = new ArgumentGenerator();
+            ArgumentGeneratorCs argumentGenerator1 = new ArgumentGeneratorCs();
             argumentGenerator1.Reference = EnumArgumentReference.Normal;
             argumentGenerator1.ArgumentTypeName = "string";
             argumentGenerator1.ArgumentName = "s";
             Arguments.Add(argumentGenerator1);
 
-            ArgumentGenerator argumentGenerator2 = new ArgumentGenerator();
+            ArgumentGeneratorCs argumentGenerator2 = new ArgumentGeneratorCs();
             argumentGenerator2.Reference = EnumArgumentReference.Params;
             argumentGenerator2.ArgumentName = "args";
             Arguments.Add(argumentGenerator2);
@@ -172,7 +172,7 @@ namespace CodeGeneratorCoreTest.Impl
             ReturnTypeName = "int";
             MethodName = "Hoge";
 
-            ArgumentGenerator argumentGenerator = new ArgumentGenerator();
+            ArgumentGeneratorCs argumentGenerator = new ArgumentGeneratorCs();
             argumentGenerator.Reference = EnumArgumentReference.Params;
             argumentGenerator.ArgumentName = "args";
             Arguments.Add(argumentGenerator);

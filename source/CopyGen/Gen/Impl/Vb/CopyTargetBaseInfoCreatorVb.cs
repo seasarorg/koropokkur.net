@@ -16,15 +16,16 @@
  */
 #endregion
 
-using AddInCommon.Exception;
-
-namespace CopyGen.Exception
+namespace CopyGen.Gen.Impl.Vb
 {
     /// <summary>
-    /// 設定が見つからないときに投げられる例外
+    /// コピー処理生成対象情報生成ロジック（VB.NET)
     /// </summary>
-    public class ConfigNotFoundException : KoropokkurException
+    public class CopyTargetBaseInfoCreatorVb : AbstractCopyTargetBaseInfoCreator
     {
-
+        protected override CopyTargetBaseInfo CreateTargetBaseInfo(string editingFilePath, string sourceTypeName, string targetTypeName)
+        {
+            return new CopyTargetBaseInfo(sourceTypeName, targetTypeName);
+        }
     }
 }

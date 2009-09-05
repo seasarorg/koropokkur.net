@@ -21,10 +21,9 @@ using AddInCommon.Exception;
 namespace CopyGen.Exception
 {
     /// <summary>
-    /// 設定が見つからないときに投げられる例外
+    /// 対応していない言語が使われたときに投げられる例外
     /// </summary>
-    public class ConfigNotFoundException : KoropokkurException
+    public class NotSupportLanguageException : KoropokkurException
     {
-
     }
 }

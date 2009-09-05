@@ -19,6 +19,7 @@
 using System.Text;
 using CodeGeneratorCore;
 using CodeGeneratorCore.Impl;
+using CodeGeneratorCore.Impl.Cs;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 
@@ -36,18 +37,18 @@ namespace CodeGeneratorCoreTest.Impl
             expectBuilder.AppendLine("\treturn a;");
 
             GeneratorColleciton generatorColleciton = new GeneratorColleciton();
-            LineCommentGenerator commentGenerator = new LineCommentGenerator();
+            LineCommentGeneratorCs commentGenerator = new LineCommentGeneratorCs();
             commentGenerator.Items.Add("TestComment");
             generatorColleciton.Add(commentGenerator);
 
-            LineGenerator lineGenerator = new LineGenerator();
+            LineGeneratorCs lineGenerator = new LineGeneratorCs();
             lineGenerator.Items.Add("int");
             lineGenerator.Items.Add("a");
             lineGenerator.Items.Add("=");
             lineGenerator.Items.Add("this.Hoge()");
             generatorColleciton.Add(lineGenerator);
 
-            LineReturnGenerator returnGenerator = new LineReturnGenerator();
+            LineReturnGeneratorCs returnGenerator = new LineReturnGeneratorCs();
             returnGenerator.Items.Add("a");
             generatorColleciton.Add(returnGenerator);
 
@@ -61,18 +62,18 @@ namespace CodeGeneratorCoreTest.Impl
             string[] expectStrings = new string[] { "\t// TestComment", "\tint a = this.Hoge();", "\treturn a;" };
 
             GeneratorColleciton generatorColleciton = new GeneratorColleciton();
-            LineCommentGenerator commentGenerator = new LineCommentGenerator();
+            LineCommentGeneratorCs commentGenerator = new LineCommentGeneratorCs();
             commentGenerator.Items.Add("TestComment");
             generatorColleciton.Add(commentGenerator);
 
-            LineGenerator lineGenerator = new LineGenerator();
+            LineGeneratorCs lineGenerator = new LineGeneratorCs();
             lineGenerator.Items.Add("int");
             lineGenerator.Items.Add("a");
             lineGenerator.Items.Add("=");
             lineGenerator.Items.Add("this.Hoge()");
             generatorColleciton.Add(lineGenerator);
 
-            LineReturnGenerator returnGenerator = new LineReturnGenerator();
+            LineReturnGeneratorCs returnGenerator = new LineReturnGeneratorCs();
             returnGenerator.Items.Add("a");
             generatorColleciton.Add(returnGenerator);
 

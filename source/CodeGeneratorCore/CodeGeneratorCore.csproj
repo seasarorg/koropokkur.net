@@ -38,14 +38,19 @@
   <ItemGroup>
     <Compile Include="Enum\EnumArgumentReference.cs" />
     <Compile Include="Enum\EnumMethodOption.cs" />
-    <Compile Include="Impl\ArgumentGenerator.cs" />
+    <Compile Include="Impl\Cs\ArgumentGeneratorCs.cs" />
     <Compile Include="Enum\EnumVisibility.cs" />
     <Compile Include="ICodeGenerator.cs" />
-    <Compile Include="Impl\LineCommentGenerator.cs" />
-    <Compile Include="Impl\LineGenerator.cs" />
+    <Compile Include="Impl\Cs\LineCommentGeneratorCs.cs" />
+    <Compile Include="Impl\Cs\LineGeneratorCs.cs" />
     <Compile Include="Impl\GeneratorColleciton.cs" />
-    <Compile Include="Impl\LineReturnGenerator.cs" />
-    <Compile Include="Impl\MethodGenerator.cs" />
+    <Compile Include="Impl\Cs\LineReturnGeneratorCs.cs" />
+    <Compile Include="Impl\Cs\MethodGeneratorCs.cs" />
+    <Compile Include="Impl\Vb\ArgumentGeneratorVb.cs" />
+    <Compile Include="Impl\Vb\LineCommentGeneratorVb.cs" />
+    <Compile Include="Impl\Vb\LineGeneratorVb.cs" />
+    <Compile Include="Impl\Vb\LineReturnGeneratorVb.cs" />
+    <Compile Include="Impl\Vb\MethodGeneratorVb.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

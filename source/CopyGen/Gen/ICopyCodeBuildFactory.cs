@@ -16,34 +16,31 @@
  */
 #endregion
 
-using System.Text;
 
-namespace CodeGeneratorCore.Impl
+namespace CopyGen.Gen
 {
     /// <summary>
-    /// 戻り値行生成クラス
+    /// 言語依存のロジック生成ファクトリ
     /// </summary>
-    public class LineReturnGenerator : LineGenerator
+    public interface ICopyCodeBuildFactory
     {
         /// <summary>
-        /// 戻り値行を生成
+        /// コピー処理コード出力クラス生成ロジックの取得
         /// </summary>
         /// <returns></returns>
-        public override string GenerateCode(string startIndent)
-        {
-            StringBuilder builder = new StringBuilder();
-            if(startIndent != null)
-            {
-                builder.Append(startIndent);
-            }
-            builder.Append("return");
-            if(Items.Count > 0)
-            {
-                builder.Append(" ").Append(base.GenerateCode(string.Empty));
-                return builder.ToString();
-            }
-            builder.Append(";");
-            return builder.ToString();
-        }
+        ICopyCodeGeneratorCreator CreateCopyCodeGeneratorCreator();
+
+        /// <summary>
+        /// コピー処理対象情報生成ロジックの取得
+        /// </summary>
+        /// <returns></returns>
+        ICopyTargetBaseInfoCreator CreateCopyTargetBaseInfoCreator();
+
+        /// <summary>
+        /// コード生成の起点となるインデントの取得
+        /// </summary>
+        /// <param name="input">インデント位置を取得するための解析対象文字列</param>
+        /// <returns></returns>
+        string GetIndent(string input);
     }
 }

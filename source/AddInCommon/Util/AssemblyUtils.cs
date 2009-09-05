@@ -67,7 +67,12 @@ namespace AddInCommon.Util
         public static string GetTypeName(string documentPath)
         {
             string ns = GetNamespace(documentPath);
-            return ns + "." + Path.GetFileNameWithoutExtension(documentPath);
+            string className = Path.GetFileNameWithoutExtension(documentPath);
+            if(string.IsNullOrEmpty(ns))
+            {
+                return className;
+            }
+            return ns + "." + className;
         }
 
         /// <summary>
