@@ -56,6 +56,7 @@ namespace CopyGen.Control
             {
                 config.ShowDialog();
             }
+
         }
         #endregion
     }

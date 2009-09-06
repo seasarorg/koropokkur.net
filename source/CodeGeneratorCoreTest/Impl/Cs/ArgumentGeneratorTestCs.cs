@@ -21,10 +21,10 @@ using CodeGeneratorCore.Impl.Cs;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 
-namespace CodeGeneratorCoreTest.Impl
+namespace CodeGeneratorCoreTest.Impl.Cs
 {
     [TestFixture]
-    public class ArgumentGeneratorTest
+    public class ArgumentGeneratorTestCs
     {
         [Test]
         public void TestGenerateCode_Params()

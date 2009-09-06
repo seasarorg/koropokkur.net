@@ -69,6 +69,18 @@ namespace CopyGen.Control
             return refreshSolutuinButton;
         }
 
+        /// <summary>
+        /// コピー設定の再読み込みを行う
+        /// </summary>
+        private void RefreshCopyInfo()
+        {
+            string configPath = PathUtils.GetConfigPath();
+            if (File.Exists(configPath))
+            {
+                _copyInfo = CopyConfigFileManager.ReadConfig(configPath);
+            }
+        }
+
         #region イベント
 
         /// <summary>
@@ -89,6 +101,7 @@ namespace CopyGen.Control
             
             try
             {
+                RefreshCopyInfo();
                 //  毎回設定しなおす場合
                 if(_copyInfo.IsEverytimeConfirm)
                 {
@@ -99,6 +112,7 @@ namespace CopyGen.Control
                             return;
                         }
                     }
+                    RefreshCopyInfo();
                 }
 
                 //  言語依存のロジック生成ファクトリを取得
@@ -112,8 +126,8 @@ namespace CopyGen.Control
                 string indent = factory.GetIndent(selection.Text);
 
                 //  コピー生成対象の情報を生成
-                ICopyTargetBaseInfoCreator targetBaseInfoCreator = factory.CreateCopyTargetBaseInfoCreator();
-                CopyTargetBaseInfo targetBaseInfo = targetBaseInfoCreator.Create(document.FullName, selection.Text);
+                ICopyTargetBaseInfoCreator destBaseInfoCreator = factory.CreateCopyTargetBaseInfoCreator();
+                CopyTargetBaseInfo targetBaseInfo = destBaseInfoCreator.Create(document.FullName, selection.Text);
 
                 //  参照先アセンブリパスを取得
                 string referencePaths = AssemblyUtils.GetReferencePath(document);
@@ -122,11 +136,7 @@ namespace CopyGen.Control
                     CodeInfoUtils.ReadPropertyInfo(referencePaths,
                                                        targetBaseInfo.SourceTypeFullNames,
                                                        targetBaseInfo.DestTypeFullNames);
-                string configPath = PathUtils.GetConfigPath();
-                if (File.Exists(configPath))
-                {
-                    _copyInfo = CopyConfigFileManager.ReadConfig(configPath);
-                }
+                
                 CopyCodeGeneratorCreationFacade facade = new CopyCodeGeneratorCreationFacade(
                     factory.CreateCopyCodeGeneratorCreator(), _copyInfo, propertyCodeInfo);
                 ICodeGenerator generator = facade.CreateCodeGenerator();

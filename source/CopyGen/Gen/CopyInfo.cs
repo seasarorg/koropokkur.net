@@ -16,7 +16,6 @@
  */
 #endregion
 
-using System.Collections.Generic;
 using System.Reflection;
 using CodeGeneratorCore.Enum;
 
@@ -36,7 +35,7 @@ namespace CopyGen.Gen
     /// <summary>
     /// コピー先取得方法列挙体
     /// </summary>
-    public enum EnumCopyTarget
+    public enum EnumCopyDest
     {
         This = 0,
         PropertyOnly,
@@ -51,23 +50,9 @@ namespace CopyGen.Gen
     public class CopyInfo
     {
         protected const string DEFAULT_COPY_SOURCE_NAME = "source";
-        protected const string DEFAULT_COPY_TARGET_NAME = "target";
+        protected const string DEFAULT_COPY_DEST_NAME = "dest";
 
         #region プロパティ
-
-        //private IList<string> _sourcePropertyNames;
-        //public IList<string> SourcePropertyNames
-        //{
-        //    get { return _sourcePropertyNames; }
-        //    set { _sourcePropertyNames = value; }
-        //}
-
-        //private IList<string> _targetPropertyNames;
-        //public IList<string> TargetPropertyNames
-        //{
-        //    get { return _targetPropertyNames; }
-        //    set { _targetPropertyNames = value; }
-        //}
 
         private bool _isOutputMethod;
         /// <summary>
@@ -133,16 +118,6 @@ namespace CopyGen.Gen
             set { _copySourceName = value; }
         }
 
-        //private string _sourceTypeName;
-        ///// <summary>
-        ///// コピー元の型名
-        ///// </summary>
-        //public string SourceTypeName
-        //{
-        //    get { return _sourceTypeName; }
-        //    set { _sourceTypeName = value; }
-        //}
-
         private bool _isNotNullSource;
         /// <summary>
         /// Nullチェックを生成するか
@@ -155,47 +130,37 @@ namespace CopyGen.Gen
         #endregion
 
         #region コピー先情報
-        private EnumCopyTarget _copyTarget;
+        private EnumCopyDest _copyDest;
         /// <summary>
         /// コピー先の取得元
         /// </summary>
-        public EnumCopyTarget CopyTarget
+        public EnumCopyDest CopyDest
         {
-            get { return _copyTarget; }
-            set { _copyTarget = value; }
+            get { return _copyDest; }
+            set { _copyDest = value; }
         }
 
-        private string _copyTargetName;
+        private string _copyDestName;
         /// <summary>
         /// コピー先引数名
         /// </summary>
-        public string TargetArgumentName
+        public string DestArgumentName
         {
             get
             {
-                return string.IsNullOrEmpty(_copyTargetName) ? DEFAULT_COPY_TARGET_NAME : _copyTargetName;
+                return string.IsNullOrEmpty(_copyDestName) ? DEFAULT_COPY_DEST_NAME : _copyDestName;
             }
-            set { _copyTargetName = value; }
+            set { _copyDestName = value; }
         }
 
-        //private string _targetTypeName;
-        ///// <summary>
-        ///// コピー先の型名
-        ///// </summary>
-        //public string TargetTypeName
-        //{
-        //    get { return _targetTypeName; }
-        //    set { _targetTypeName = value; }
-        //}
-
-        private bool _isNotNullTarget;
+        private bool _isNotNullDest;
         /// <summary>
         /// Nullチェックを生成するか
         /// </summary>
-        public bool IsNotNullTarget
+        public bool IsNotNullDest
         {
-            get { return _isNotNullTarget; }
-            set { _isNotNullTarget = value; }
+            get { return _isNotNullDest; }
+            set { _isNotNullDest = value; }
         }
         #endregion
 
@@ -217,7 +182,7 @@ namespace CopyGen.Gen
         {
             IsEverytimeConfirm = true;
             SourceArgumentName = "source";
-            TargetArgumentName = "target";
+            DestArgumentName = "dest";
         }
 
         /// <summary>
@@ -233,5 +198,7 @@ namespace CopyGen.Gen
             }
             return false;
         }
+
+
     }
 }

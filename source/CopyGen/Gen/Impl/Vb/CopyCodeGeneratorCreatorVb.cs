@@ -55,39 +55,40 @@ namespace CopyGen.Gen.Impl.Vb
 
             LineReturnGeneratorVb returnGenerator = null;
             //  コピー先の設定
-            methodGenerator.IsVoid = (copyInfo.CopyTarget != EnumCopyTarget.Return);
+            methodGenerator.ReturnTypeName = propertyCodeInfo.DestTypeName;
+            methodGenerator.IsVoid = (copyInfo.CopyDest != EnumCopyDest.Return);
             if (!methodGenerator.IsVoid)
             {
-                methodGenerator.ReturnTypeName = propertyCodeInfo.TargetTypeName;
+                methodGenerator.ReturnTypeName = propertyCodeInfo.DestTypeName;
                 //  TODO:メッセージ管理方法を考える
                 methodGenerator.ReturnComment = "コピー先";
 
                 //  戻り値のインスタンスを生成する
                 LineGeneratorVb returnInstanceGenerator = new LineGeneratorVb();
                 returnInstanceGenerator.Items.Add("Dim");
-                returnInstanceGenerator.Items.Add(copyInfo.TargetArgumentName);
+                returnInstanceGenerator.Items.Add(copyInfo.DestArgumentName);
                 returnInstanceGenerator.Items.Add("As");
-                returnInstanceGenerator.Items.Add(propertyCodeInfo.TargetTypeName);
+                returnInstanceGenerator.Items.Add(propertyCodeInfo.DestTypeName);
                 returnInstanceGenerator.Items.Add("= New");
-                returnInstanceGenerator.Items.Add(propertyCodeInfo.TargetTypeName + "()");
+                returnInstanceGenerator.Items.Add(propertyCodeInfo.DestTypeName + "()");
                 methodGenerator.Lines.Add(returnInstanceGenerator);
 
                 //  return文の生成設定
                 returnGenerator = new LineReturnGeneratorVb();
-                returnGenerator.Items.Add(copyInfo.TargetArgumentName);
+                returnGenerator.Items.Add(copyInfo.DestArgumentName);
             }
             else
             {
                 methodGenerator.ReturnTypeName = null;
 
-                if (copyInfo.CopyTarget == EnumCopyTarget.AsArgument)
+                if (copyInfo.CopyDest == EnumCopyDest.AsArgument)
                 {
-                    ArgumentGeneratorVb targetArgument = new ArgumentGeneratorVb();
-                    targetArgument.ArgumentTypeName = propertyCodeInfo.TargetTypeName;
-                    targetArgument.ArgumentName = copyInfo.TargetArgumentName;
-                    targetArgument.Comment = "コピー先";
-                    targetArgument.IsNotNull = copyInfo.IsNotNullTarget;
-                    methodGenerator.Arguments.Add(targetArgument);
+                    ArgumentGeneratorVb destArgument = new ArgumentGeneratorVb();
+                    destArgument.ArgumentTypeName = propertyCodeInfo.DestTypeName;
+                    destArgument.ArgumentName = copyInfo.DestArgumentName;
+                    destArgument.Comment = "コピー先";
+                    destArgument.IsNotNull = copyInfo.IsNotNullDest;
+                    methodGenerator.Arguments.Add(destArgument);
                 }
             }
 
@@ -119,7 +120,7 @@ namespace CopyGen.Gen.Impl.Vb
         public virtual ICodeGenerator CreateCopyLinesGenerator(CopyInfo copyInfo, PropertyCodeInfo propertyCodeInfo)
         {
             if (propertyCodeInfo.SourcePropertyNames == null ||
-                propertyCodeInfo.TargetPropertyNames == null)
+                propertyCodeInfo.DestPropertyNames == null)
             {
                 return null;
             }
@@ -128,10 +129,10 @@ namespace CopyGen.Gen.Impl.Vb
 
             foreach (string propertyName in propertyCodeInfo.SourcePropertyNames)
             {
-                if (propertyCodeInfo.TargetPropertyNames.Contains(propertyName))
+                if (propertyCodeInfo.DestPropertyNames.Contains(propertyName))
                 {
                     LineGeneratorVb lineGenerator = new LineGeneratorVb();
-                    lineGenerator.Items.Add(GetCopyTargetString(copyInfo, propertyName));
+                    lineGenerator.Items.Add(GetCopyDestString(copyInfo, propertyName));
                     lineGenerator.Items.Add("=");
                     lineGenerator.Items.Add(GetCopySourceString(copyInfo, propertyName));
 
@@ -169,15 +170,15 @@ namespace CopyGen.Gen.Impl.Vb
         /// <param name="copyInfo"></param>
         /// <param name="propertyName"></param>
         /// <returns></returns>
-        public virtual string GetCopyTargetString(CopyInfo copyInfo, string propertyName)
+        public virtual string GetCopyDestString(CopyInfo copyInfo, string propertyName)
         {
-            if ((copyInfo.CopyTarget == EnumCopyTarget.AsArgument || copyInfo.CopyTarget == EnumCopyTarget.Return)
-                && !string.IsNullOrEmpty(copyInfo.TargetArgumentName))
+            if ((copyInfo.CopyDest == EnumCopyDest.AsArgument || copyInfo.CopyDest == EnumCopyDest.Return)
+                && !string.IsNullOrEmpty(copyInfo.DestArgumentName))
             {
-                return string.Format("{0}.{1}", copyInfo.TargetArgumentName, propertyName);
+                return string.Format("{0}.{1}", copyInfo.DestArgumentName, propertyName);
             }
 
-            if (copyInfo.CopyTarget == EnumCopyTarget.This)
+            if (copyInfo.CopyDest == EnumCopyDest.This)
             {
                 return string.Format("Me.{0}", propertyName);
             }

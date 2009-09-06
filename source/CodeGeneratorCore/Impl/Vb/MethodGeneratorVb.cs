@@ -116,14 +116,19 @@ namespace CodeGeneratorCore.Impl.Vb
             get { return _lines; }
         }
 
-        private bool _isVoid = false;
         /// <summary>
         /// 戻り値有無フラグ（MethodGeneratorVb専用プロパティ）
         /// </summary>
         public bool IsVoid
         {
-            get { return _isVoid; }
-            set { _isVoid = value; }
+            get { return (string.IsNullOrEmpty(ReturnTypeName) || ReturnTypeName == "void"); }
+            set
+            {
+                if (value)
+                {
+                    ReturnTypeName = string.Empty;
+                }
+            }
         }
         #endregion
 

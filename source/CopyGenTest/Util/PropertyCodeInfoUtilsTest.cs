@@ -18,15 +18,12 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Reflection;
-using System.Text;
 using AddInCommon.Util;
-using CopyGen.Gen.Impl;
+using CopyGen.Gen;
+using CopyGen.Util;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
-using CopyGen.Util;
-using CopyGen.Gen;
 
 namespace CopyGenTest.Util
 {
@@ -34,18 +31,6 @@ namespace CopyGenTest.Util
     public class PropertyCodeInfoUtilsTest
     {
         private const string TARGET_ASSEMBLY = "CopyGenTest.dll";
-        private const string TARGET_METHOD_ExtractPropertyInfo = "ExtractPropertyInfo";
-        private const string TARGET_METHOD_ReadPropertyInfo = "ReadPropertyInfo";
-
-        /// /// <summary>
-        /// プロパティ情報ファイル名（コピー元）
-        /// </summary>
-        private const string FILE_NAME_SOURCE_PROPERTY_INFO = "source_props.txt";
-        /// <summary>
-        /// プロパティ情報ファイル名（コピー先）
-        /// </summary>
-        private const string FILE_NAME_TARGET_PROPERTY_INFO = "target_props.txt";
-        
         private const string TARGET_CLASS = "CopyGenTest.Gen.TestResources.TestClass";
 
         #region ExtractPropertyInfo

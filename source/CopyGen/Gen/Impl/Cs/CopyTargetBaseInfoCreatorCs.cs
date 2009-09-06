@@ -36,7 +36,7 @@ namespace CopyGen.Gen.Impl.Cs
         /// </remarks>
         protected static readonly string default_SPRIT_STR = new string(new char[] { DEFAULT_SPRIT_CHAR });
 
-        protected override CopyTargetBaseInfo CreateTargetBaseInfo(string editingFilePath, string sourceTypeName, string targetTypeName)
+        protected override CopyTargetBaseInfo CreateTargetBaseInfo(string editingFilePath, string sourceTypeName, string destTypeName)
         {
             IList<string> usingNamespaces = GetUsingNamespaces(editingFilePath);
 
@@ -47,13 +47,13 @@ namespace CopyGen.Gen.Impl.Cs
                 sourceTypeFullNames = GetTypeNames(sourceTypeName, usingNamespaces);
             }
 
-            string targetTypeFullNames = targetTypeName;
-            if (!targetTypeName.Contains("."))
+            string destTypeFullNames = destTypeName;
+            if (!destTypeName.Contains("."))
             {
-                targetTypeFullNames = GetTypeNames(targetTypeName, usingNamespaces);
+                destTypeFullNames = GetTypeNames(destTypeName, usingNamespaces);
             }
 
-            return new CopyTargetBaseInfo(sourceTypeFullNames, targetTypeFullNames);
+            return new CopyTargetBaseInfo(sourceTypeFullNames, destTypeFullNames);
         }
 
         /// <summary>

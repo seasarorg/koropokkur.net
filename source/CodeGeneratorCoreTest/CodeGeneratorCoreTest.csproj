@@ -42,12 +42,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Impl\ArgumentGeneratorTest.cs" />
-    <Compile Include="Impl\GenerateCollectionTest.cs" />
-    <Compile Include="Impl\LineCommentGeneratorTest.cs" />
-    <Compile Include="Impl\LineGeneratorTest.cs" />
-    <Compile Include="Impl\LineReturnGeneratorTest.cs" />
-    <Compile Include="Impl\MethodGeneratorTest.cs" />
+    <Compile Include="Impl\Cs\ArgumentGeneratorTestCs.cs" />
+    <Compile Include="Impl\Cs\GenerateCollectionTestCs.cs" />
+    <Compile Include="Impl\Cs\LineCommentGeneratorTestCs.cs" />
+    <Compile Include="Impl\Cs\LineGeneratorTestCs.cs" />
+    <Compile Include="Impl\Cs\LineReturnGeneratorTestCs.cs" />
+    <Compile Include="Impl\Cs\MethodGeneratorTestCs.cs" />
+    <Compile Include="Impl\Vb\ArgumentGeneratorTestVb.cs" />
+    <Compile Include="Impl\Vb\GenerateCollectionTestVb.cs" />
+    <Compile Include="Impl\Vb\LineCommentGeneratorTestVb.cs" />
+    <Compile Include="Impl\Vb\LineGeneratorTestVb.cs" />
+    <Compile Include="Impl\Vb\LineReturnGeneratorTestVb.cs" />
+    <Compile Include="Impl\Vb\MethodGeneratorTestVb.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

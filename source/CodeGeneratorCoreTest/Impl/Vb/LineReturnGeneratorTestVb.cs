@@ -16,22 +16,22 @@
  */
 #endregion
 
-using CodeGeneratorCore.Impl.Cs;
+using CodeGeneratorCore.Impl.Vb;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 
-namespace CodeGeneratorCoreTest.Impl
+namespace CodeGeneratorCoreTest.Impl.Vb
 {
     [TestFixture]
-    public class LineReturnGeneratorTest
+    public class LineReturnGeneratorTestVb
     {
         [Test]
         public void TestGenerateCode()
         {
-            const string EXPECT_CODE = "\t\treturn new Hoge();";
+            const string EXPECT_CODE = "\t\tReturn New Hoge()";
 
-            LineReturnGeneratorCs generator = new LineReturnGeneratorCs();
-            generator.Items.Add("new");
+            LineReturnGeneratorVb generator = new LineReturnGeneratorVb();
+            generator.Items.Add("New");
             generator.Items.Add("Hoge()");
 
             string actual = generator.GenerateCode("\t\t");
@@ -41,9 +41,9 @@ namespace CodeGeneratorCoreTest.Impl
         [Test]
         public void TestGenerateCode_NoItem()
         {
-            const string EXPECT_CODE = "return;";
+            const string EXPECT_CODE = "Return";
 
-            LineReturnGeneratorCs generator = new LineReturnGeneratorCs();
+            LineReturnGeneratorVb generator = new LineReturnGeneratorVb();
 
             string actual = generator.GenerateCode(null);
             Assert.That(actual, Is.EqualTo(EXPECT_CODE));

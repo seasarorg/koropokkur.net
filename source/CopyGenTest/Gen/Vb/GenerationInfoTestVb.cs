@@ -18,125 +18,117 @@
 
 using System.IO;
 using CopyGen.Gen;
+using CopyGen.Gen.Impl.Vb;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
-using CopyGen.Gen.Impl.Cs;
 
-namespace CopyGenTest.Gen
+namespace CopyGenTest.Gen.Vb
 {
     [TestFixture]
-    public class GenerationInfoTest
+    public class GenerationInfoTestVb
     {
         [Test]
         public void TestCreate_異なるクラス名()
         {
-            const string TARGET_PATH = "Gen/GenerationInfoTest.cs";
+            const string TARGET_PATH = "Gen/Vb/GenerationInfoTestVb.cs";
             Assert.That(File.Exists(TARGET_PATH), Is.True);
 
-            ICopyTargetBaseInfoCreator creator = new CopyTargetBaseInfoCreatorCs();
+            ICopyTargetBaseInfoCreator creator = new CopyTargetBaseInfoCreatorVb();
             CopyTargetBaseInfo actual = creator.Create(TARGET_PATH, "Hoge,Huga");
 
             Assert.That(actual, Is.Not.Null);
-            Assert.That(actual.SourceTypeFullNames, Is.EqualTo(
-                "CopyGenTest.Gen.Hoge,System.IO.Hoge,CopyGen.Gen.Hoge,NUnit.Framework.Hoge,NUnit.Framework.SyntaxHelpers.Hoge"));
-            Assert.That(actual.DestTypeFullNames, Is.EqualTo(
-                "CopyGenTest.Gen.Huga,System.IO.Huga,CopyGen.Gen.Huga,NUnit.Framework.Huga,NUnit.Framework.SyntaxHelpers.Huga"));
+            Assert.That(actual.SourceTypeFullNames, Is.EqualTo("Hoge"));
+            Assert.That(actual.DestTypeFullNames, Is.EqualTo("Huga"));
         }
 
         [Test]
         public void TestCreate_異なるクラス名三つ()
         {
-            const string TARGET_PATH = "Gen/GenerationInfoTest.cs";
+            const string TARGET_PATH = "Gen/Vb/GenerationInfoTestVb.cs";
             Assert.That(File.Exists(TARGET_PATH), Is.True);
 
-            ICopyTargetBaseInfoCreator creator = new CopyTargetBaseInfoCreatorCs();
+            ICopyTargetBaseInfoCreator creator = new CopyTargetBaseInfoCreatorVb();
             CopyTargetBaseInfo actual = creator.Create(TARGET_PATH, "Hoge,Huga,Wao");
 
             Assert.That(actual, Is.Not.Null);
-            Assert.That(actual.SourceTypeFullNames, Is.EqualTo(
-                "CopyGenTest.Gen.Hoge,System.IO.Hoge,CopyGen.Gen.Hoge,NUnit.Framework.Hoge,NUnit.Framework.SyntaxHelpers.Hoge"));
-            Assert.That(actual.DestTypeFullNames, Is.EqualTo(
-                "CopyGenTest.Gen.Huga,System.IO.Huga,CopyGen.Gen.Huga,NUnit.Framework.Huga,NUnit.Framework.SyntaxHelpers.Huga"));
+            Assert.That(actual.SourceTypeFullNames, Is.EqualTo("Hoge"));
+            Assert.That(actual.DestTypeFullNames, Is.EqualTo("Huga"));
         }
 
         [Test]
         public void TestCreate_異なるクラス名_コピー元デフォルト()
         {
-            const string TARGET_PATH = "Gen/GenerationInfoTest.cs";
+            const string TARGET_PATH = "Gen/Vb/GenerationInfoTestVb.cs";
             Assert.That(File.Exists(TARGET_PATH), Is.True);
 
-            ICopyTargetBaseInfoCreator creator = new CopyTargetBaseInfoCreatorCs();
+            ICopyTargetBaseInfoCreator creator = new CopyTargetBaseInfoCreatorVb();
             CopyTargetBaseInfo actual = creator.Create(TARGET_PATH, ",Huga");
 
             Assert.That(actual, Is.Not.Null);
             Assert.That(actual.SourceTypeFullNames, Is.EqualTo(
-                "CopyGenTest.Gen.GenerationInfoTest"));
-            Assert.That(actual.DestTypeFullNames, Is.EqualTo(
-                "CopyGenTest.Gen.Huga,System.IO.Huga,CopyGen.Gen.Huga,NUnit.Framework.Huga,NUnit.Framework.SyntaxHelpers.Huga"));
+                                                        "CopyGenTest.Gen.Vb.GenerationInfoTestVb"));
+            Assert.That(actual.DestTypeFullNames, Is.EqualTo("Huga"));
         }
 
         [Test]
         public void TestCreate_異なるクラス名_コピー先デフォルト()
         {
-            const string TARGET_PATH = "Gen/GenerationInfoTest.cs";
+            const string TARGET_PATH = "Gen/Vb/GenerationInfoTestVb.cs";
             Assert.That(File.Exists(TARGET_PATH), Is.True);
 
-            ICopyTargetBaseInfoCreator creator = new CopyTargetBaseInfoCreatorCs();
+            ICopyTargetBaseInfoCreator creator = new CopyTargetBaseInfoCreatorVb();
             CopyTargetBaseInfo actual = creator.Create(TARGET_PATH, "Hoge,");
 
             Assert.That(actual, Is.Not.Null);
-            Assert.That(actual.SourceTypeFullNames, Is.EqualTo(
-                "CopyGenTest.Gen.Hoge,System.IO.Hoge,CopyGen.Gen.Hoge,NUnit.Framework.Hoge,NUnit.Framework.SyntaxHelpers.Hoge"));
+            Assert.That(actual.SourceTypeFullNames, Is.EqualTo("Hoge"));
             Assert.That(actual.DestTypeFullNames, Is.EqualTo(
-                "CopyGenTest.Gen.GenerationInfoTest"));
+                                                      "CopyGenTest.Gen.Vb.GenerationInfoTestVb"));
         }
 
         [Test]
         public void TestCreate_異なるクラス名_両方デフォルト()
         {
-            const string TARGET_PATH = "Gen/GenerationInfoTest.cs";
+            const string TARGET_PATH = "Gen/Vb/GenerationInfoTestVb.cs";
             Assert.That(File.Exists(TARGET_PATH), Is.True);
 
-            ICopyTargetBaseInfoCreator creator = new CopyTargetBaseInfoCreatorCs();
+            ICopyTargetBaseInfoCreator creator = new CopyTargetBaseInfoCreatorVb();
             CopyTargetBaseInfo actual = creator.Create(TARGET_PATH, ",");
 
             Assert.That(actual, Is.Not.Null);
             Assert.That(actual.SourceTypeFullNames, Is.EqualTo(
-                "CopyGenTest.Gen.GenerationInfoTest"));
+                                                        "CopyGenTest.Gen.Vb.GenerationInfoTestVb"));
             Assert.That(actual.DestTypeFullNames, Is.EqualTo(
-                "CopyGenTest.Gen.GenerationInfoTest"));
+                                                      "CopyGenTest.Gen.Vb.GenerationInfoTestVb"));
         }
 
         [Test]
         public void TestCreate_異なるクラス名_クラス名指定一つ()
         {
-            const string TARGET_PATH = "Gen/GenerationInfoTest.cs";
+            const string TARGET_PATH = "Gen/Vb/GenerationInfoTestVb.cs";
             Assert.That(File.Exists(TARGET_PATH), Is.True);
 
-            ICopyTargetBaseInfoCreator creator = new CopyTargetBaseInfoCreatorCs();
+            ICopyTargetBaseInfoCreator creator = new CopyTargetBaseInfoCreatorVb();
             CopyTargetBaseInfo actual = creator.Create(TARGET_PATH, "Hoge");
 
             Assert.That(actual, Is.Not.Null);
-            Assert.That(actual.SourceTypeFullNames, Is.EqualTo(
-                "CopyGenTest.Gen.Hoge,System.IO.Hoge,CopyGen.Gen.Hoge,NUnit.Framework.Hoge,NUnit.Framework.SyntaxHelpers.Hoge"));
-            Assert.That(actual.DestTypeFullNames, Is.EqualTo(
-                "CopyGenTest.Gen.Hoge,System.IO.Hoge,CopyGen.Gen.Hoge,NUnit.Framework.Hoge,NUnit.Framework.SyntaxHelpers.Hoge"));
+            Assert.That(actual.SourceTypeFullNames, Is.EqualTo("Hoge"));
+            Assert.That(actual.DestTypeFullNames, Is.EqualTo("Hoge"));
         }
 
         [Test]
         public void TestCreate_異なるクラス名_デフォルト一つ()
         {
-            const string TARGET_PATH = "Gen/GenerationInfoTest.cs";
+            const string TARGET_PATH = "Gen/Vb/GenerationInfoTestVb.cs";
             Assert.That(File.Exists(TARGET_PATH), Is.True);
 
-            ICopyTargetBaseInfoCreator creator = new CopyTargetBaseInfoCreatorCs();
+            ICopyTargetBaseInfoCreator creator = new CopyTargetBaseInfoCreatorVb();
             CopyTargetBaseInfo actual = creator.Create(TARGET_PATH, " ");
 
             Assert.That(actual, Is.Not.Null);
             Assert.That(actual.SourceTypeFullNames, Is.EqualTo(
-                "CopyGenTest.Gen.GenerationInfoTest"));
+                                                        "CopyGenTest.Gen.Vb.GenerationInfoTestVb"));
             Assert.That(actual.DestTypeFullNames, Is.EqualTo(
-                "CopyGenTest.Gen.GenerationInfoTest"));
+                                                      "CopyGenTest.Gen.Vb.GenerationInfoTestVb"));
         }
     }
 }

@@ -22,13 +22,13 @@ using CopyGen.Gen.Impl.Cs;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 
-namespace CopyGenTest.Gen
+namespace CopyGenTest.Gen.Cs
 {
     [TestFixture]
-    public class CopyTypeNameInfoTest
+    public class CopyTypeNameInfoTestCs
     {
-        private const string TARGET_FILE_PATH = "Gen/CopyTypeNameInfoTest.cs";
-        private const string EXPECT_DEFAULT_TYPE_NAME = "CopyGenTest.Gen.CopyTypeNameInfoTest";
+        private const string TARGET_FILE_PATH = "Gen/Cs/CopyTypeNameInfoTestCs.cs";
+        private const string EXPECT_DEFAULT_TYPE_NAME = "CopyGenTest.Gen.Cs.CopyTypeNameInfoTestCs";
 
         /// <summary>
         /// 空文字列を指定した場合
@@ -67,9 +67,11 @@ namespace CopyGenTest.Gen
             CopyTargetBaseInfo actual = creator.Create(TARGET_FILE_PATH, targetClassName);
 
             List<string> expectNameList = new List<string>();
-            expectNameList.Add("CopyGenTest.Gen." + targetClassName);
+            expectNameList.Add(targetClassName);
+            expectNameList.Add("CopyGenTest.Gen.Cs." + targetClassName);
             expectNameList.Add("System.Collections.Generic." + targetClassName);
             expectNameList.Add("CopyGen.Gen." + targetClassName);
+            expectNameList.Add("CopyGen.Gen.Impl.Cs." + targetClassName);
             expectNameList.Add("NUnit.Framework." + targetClassName);
             expectNameList.Add("NUnit.Framework.SyntaxHelpers." + targetClassName);
 
@@ -105,9 +107,11 @@ namespace CopyGenTest.Gen
             CopyTargetBaseInfo actual = creator.Create(TARGET_FILE_PATH, sourceClassName + ",");
 
             List<string> expectNameList = new List<string>();
-            expectNameList.Add("CopyGenTest.Gen." + sourceClassName);
+            expectNameList.Add(sourceClassName);
+            expectNameList.Add("CopyGenTest.Gen.Cs." + sourceClassName);
             expectNameList.Add("System.Collections.Generic." + sourceClassName);
             expectNameList.Add("CopyGen.Gen." + sourceClassName);
+            expectNameList.Add("CopyGen.Gen.Impl.Cs." + sourceClassName);
             expectNameList.Add("NUnit.Framework." + sourceClassName);
             expectNameList.Add("NUnit.Framework.SyntaxHelpers." + sourceClassName);
 
@@ -143,9 +147,11 @@ namespace CopyGenTest.Gen
             CopyTargetBaseInfo actual = creator.Create(TARGET_FILE_PATH, "," + targetClassName);
 
             List<string> expectNameList = new List<string>();
-            expectNameList.Add("CopyGenTest.Gen." + targetClassName);
+            expectNameList.Add(targetClassName);
+            expectNameList.Add("CopyGenTest.Gen.Cs." + targetClassName);
             expectNameList.Add("System.Collections.Generic." + targetClassName);
             expectNameList.Add("CopyGen.Gen." + targetClassName);
+            expectNameList.Add("CopyGen.Gen.Impl.Cs." + targetClassName);
             expectNameList.Add("NUnit.Framework." + targetClassName);
             expectNameList.Add("NUnit.Framework.SyntaxHelpers." + targetClassName);
 
@@ -183,9 +189,11 @@ namespace CopyGenTest.Gen
             CopyTargetBaseInfo actual = creator.Create(TARGET_FILE_PATH, sourceClassName + "," + targetClassName);
 
             List<string> expectSourceNameList = new List<string>();
-            expectSourceNameList.Add("CopyGenTest.Gen." + sourceClassName);
+            expectSourceNameList.Add(sourceClassName);
+            expectSourceNameList.Add("CopyGenTest.Gen.Cs." + sourceClassName);
             expectSourceNameList.Add("System.Collections.Generic." + sourceClassName);
             expectSourceNameList.Add("CopyGen.Gen." + sourceClassName);
+            expectSourceNameList.Add("CopyGen.Gen.Impl.Cs." + sourceClassName);
             expectSourceNameList.Add("NUnit.Framework." + sourceClassName);
             expectSourceNameList.Add("NUnit.Framework.SyntaxHelpers." + sourceClassName);
 
@@ -193,9 +201,11 @@ namespace CopyGenTest.Gen
             System.Console.WriteLine(expectSourceNames);
 
             List<string> expectTargetNameList = new List<string>();
-            expectTargetNameList.Add("CopyGenTest.Gen." + targetClassName);
+            expectTargetNameList.Add(targetClassName);
+            expectTargetNameList.Add("CopyGenTest.Gen.Cs." + targetClassName);
             expectTargetNameList.Add("System.Collections.Generic." + targetClassName);
             expectTargetNameList.Add("CopyGen.Gen." + targetClassName);
+            expectTargetNameList.Add("CopyGen.Gen.Impl.Cs." + targetClassName);
             expectTargetNameList.Add("NUnit.Framework." + targetClassName);
             expectTargetNameList.Add("NUnit.Framework.SyntaxHelpers." + targetClassName);
 
@@ -235,9 +245,11 @@ namespace CopyGenTest.Gen
             CopyTargetBaseInfo actual = creator.Create(TARGET_FILE_PATH, sourceClassName + "," + targetClassName);
 
             List<string> expectSourceNameList = new List<string>();
-            expectSourceNameList.Add("CopyGenTest.Gen." + sourceClassName);
+            expectSourceNameList.Add(sourceClassName);
+            expectSourceNameList.Add("CopyGenTest.Gen.Cs." + sourceClassName);
             expectSourceNameList.Add("System.Collections.Generic." + sourceClassName);
             expectSourceNameList.Add("CopyGen.Gen." + sourceClassName);
+            expectSourceNameList.Add("CopyGen.Gen.Impl.Cs." + sourceClassName);
             expectSourceNameList.Add("NUnit.Framework." + sourceClassName);
             expectSourceNameList.Add("NUnit.Framework.SyntaxHelpers." + sourceClassName);
 
@@ -261,9 +273,11 @@ namespace CopyGenTest.Gen
             CopyTargetBaseInfo actual = creator.Create(TARGET_FILE_PATH, sourceClassName + "," + targetClassName);
 
             List<string> expectTargetNameList = new List<string>();
-            expectTargetNameList.Add("CopyGenTest.Gen." + targetClassName);
+            expectTargetNameList.Add(targetClassName);
+            expectTargetNameList.Add("CopyGenTest.Gen.Cs." + targetClassName);
             expectTargetNameList.Add("System.Collections.Generic." + targetClassName);
             expectTargetNameList.Add("CopyGen.Gen." + targetClassName);
+            expectTargetNameList.Add("CopyGen.Gen.Impl.Cs." + targetClassName);
             expectTargetNameList.Add("NUnit.Framework." + targetClassName);
             expectTargetNameList.Add("NUnit.Framework.SyntaxHelpers." + targetClassName);
 
