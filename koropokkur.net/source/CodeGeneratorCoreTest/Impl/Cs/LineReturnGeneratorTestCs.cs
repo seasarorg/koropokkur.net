@@ -20,35 +20,33 @@ using CodeGeneratorCore.Impl.Cs;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 
-namespace CodeGeneratorCoreTest.Impl
+namespace CodeGeneratorCoreTest.Impl.Cs
 {
     [TestFixture]
-    public class LineCommentGeneratorTest
+    public class LineReturnGeneratorTestCs
     {
         [Test]
         public void TestGenerateCode()
         {
-            const string EXPECT_CODE = "\t// １行コメントが生成されました !! ???";
-    
-            LineCommentGeneratorCs generator = new LineCommentGeneratorCs();
-            generator.Items.Add("１行コメントが生成されました");
-            generator.Items.Add("!!");
-            generator.Items.Add("???");
+            const string EXPECT_CODE = "\t\treturn new Hoge();";
 
-            string actual = generator.GenerateCode("\t");
+            LineReturnGeneratorCs generator = new LineReturnGeneratorCs();
+            generator.Items.Add("new");
+            generator.Items.Add("Hoge()");
+
+            string actual = generator.GenerateCode("\t\t");
             Assert.That(actual, Is.EqualTo(EXPECT_CODE));
         }
 
         [Test]
         public void TestGenerateCode_NoItem()
         {
-            const string EXPECT_CODE = "";
+            const string EXPECT_CODE = "return;";
 
-            LineCommentGeneratorCs generator = new LineCommentGeneratorCs();
+            LineReturnGeneratorCs generator = new LineReturnGeneratorCs();
 
             string actual = generator.GenerateCode(null);
             Assert.That(actual, Is.EqualTo(EXPECT_CODE));
         }
-       
     }
 }

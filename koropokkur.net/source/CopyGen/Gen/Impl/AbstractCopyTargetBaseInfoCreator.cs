@@ -16,9 +16,6 @@
  */
 #endregion
 
-using System;
-using System.Collections.Generic;
-using System.Text;
 using AddInCommon.Util;
 
 namespace CopyGen.Gen.Impl
@@ -41,10 +38,10 @@ namespace CopyGen.Gen.Impl
         /// </summary>
         /// <param name="editingFilePath"></param>
         /// <param name="sourceTypeName"></param>
-        /// <param name="targetTypeName"></param>
+        /// <param name="destTypeName"></param>
         /// <returns></returns>
         protected abstract CopyTargetBaseInfo CreateTargetBaseInfo(
-            string editingFilePath, string sourceTypeName, string targetTypeName);
+            string editingFilePath, string sourceTypeName, string destTypeName);
 
         #region ICopyTargetBaseInfoCreator メンバ
 
@@ -64,13 +61,13 @@ namespace CopyGen.Gen.Impl
             }
 
             //  「,」で区切られていなかった場合は同じ型同士でのコピーとなる
-            string targetTypeName = copyTypeNames.Length > 1 ? copyTypeNames[1].Trim() : sourceTypeName;
-            if (targetTypeName.Length == 0)
+            string destTypeName = copyTypeNames.Length > 1 ? copyTypeNames[1].Trim() : sourceTypeName;
+            if (destTypeName.Length == 0)
             {
-                targetTypeName = defaultTypeName;
+                destTypeName = defaultTypeName;
             }
 
-            return CreateTargetBaseInfo(editingFilePath, sourceTypeName, targetTypeName);
+            return CreateTargetBaseInfo(editingFilePath, sourceTypeName, destTypeName);
         }
         #endregion
     }

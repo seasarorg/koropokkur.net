@@ -17,15 +17,15 @@
 #endregion
 
 using System.Text;
-using CodeGeneratorCore.Impl.Cs;
+using CodeGeneratorCore.Enum;
+using CodeGeneratorCore.Impl.Vb;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
-using CodeGeneratorCore.Enum;
 
-namespace CodeGeneratorCoreTest.Impl
+namespace CodeGeneratorCoreTest.Impl.Vb
 {
     [TestFixture]
-    public class MethodGeneratorTest : MethodGeneratorCs
+    public class MethodGeneratorTestVb : MethodGeneratorVb
     {
         [SetUp]
         public void Setup()
@@ -44,19 +44,19 @@ namespace CodeGeneratorCoreTest.Impl
         public void TestGenerateHeaderString()
         {
             StringBuilder expectBuilder = new StringBuilder();
-            expectBuilder.AppendLine("/// <summary>");
-            expectBuilder.AppendLine("\t/// メソッドコメントのテストです。");
-            expectBuilder.AppendLine("\t/// </summary>");
-            expectBuilder.AppendLine("\t/// <param name=\"hoge\">引数のコメントです。</param>");
-            expectBuilder.Append("\t/// <returns>戻り値のコメントです。</returns>");
+            expectBuilder.AppendLine("''' <summary>");
+            expectBuilder.AppendLine("\t''' メソッドコメントのテストです。");
+            expectBuilder.AppendLine("\t''' </summary>");
+            expectBuilder.AppendLine("\t''' <param name=\"hoge\">引数のコメントです。</param>");
+            expectBuilder.Append("\t''' <returns>戻り値のコメントです。</returns>");
 
             MethodComment = "メソッドコメントのテストです。";
-            ReturnTypeName = "int";
+            ReturnTypeName = "Integer";
             ReturnComment = "戻り値のコメントです。";
 
-            ArgumentGeneratorCs argumentGenerator = new ArgumentGeneratorCs();
+            ArgumentGeneratorVb argumentGenerator = new ArgumentGeneratorVb();
             argumentGenerator.ArgumentName = "hoge";
-            argumentGenerator.ArgumentTypeName = "string";
+            argumentGenerator.ArgumentTypeName = "String";
             argumentGenerator.Comment = "引数のコメントです。";
             Arguments.Add(argumentGenerator);
 
@@ -68,12 +68,12 @@ namespace CodeGeneratorCoreTest.Impl
         public void TestGenerateHeaderString_Void()
         {
             StringBuilder expectBuilder = new StringBuilder();
-            expectBuilder.AppendLine("/// <summary>");
-            expectBuilder.AppendLine("/// メソッドコメントのテストです。");
-            expectBuilder.Append("/// </summary>");
+            expectBuilder.AppendLine("''' <summary>");
+            expectBuilder.AppendLine("''' メソッドコメントのテストです。");
+            expectBuilder.Append("''' </summary>");
 
             MethodComment = "メソッドコメントのテストです。";
-            ReturnTypeName = "void";
+            ReturnTypeName = "";
             ReturnComment = "戻り値のコメントです。";
 
             string actual = GenerateHeaderString(null);
@@ -83,14 +83,14 @@ namespace CodeGeneratorCoreTest.Impl
         [Test]
         public void TestGenerateMethodDefinition_PublicStatic()
         {
-            const string EXPECT_CODE = "public static int Hoge(params object[] args)";
+            const string EXPECT_CODE = "Public Shared Function Hoge(Optional args As Object = Nothing) As Integer";
 
             Visibility = EnumVisibility.Public;
             MethodOption = EnumMethodOption.Static;
-            ReturnTypeName = "int";
+            ReturnTypeName = "Integer";
             MethodName = "Hoge";
 
-            ArgumentGeneratorCs argumentGenerator = new ArgumentGeneratorCs();
+            ArgumentGeneratorVb argumentGenerator = new ArgumentGeneratorVb();
             argumentGenerator.Reference = EnumArgumentReference.Params;
             argumentGenerator.ArgumentName = "args";
             Arguments.Add(argumentGenerator);
@@ -102,14 +102,14 @@ namespace CodeGeneratorCoreTest.Impl
         [Test]
         public void TestGenerateMethodDefinition_IntarnalAbstract()
         {
-            const string EXPECT_CODE = "internal abstract int Hoge(params object[] args)";
+            const string EXPECT_CODE = "Friend MustInherit Function Hoge(Optional args As Object = Nothing) As Integer";
 
             Visibility = EnumVisibility.Internal;
             MethodOption = EnumMethodOption.Abstract;
-            ReturnTypeName = "int";
+            ReturnTypeName = "Integer";
             MethodName = "Hoge";
 
-            ArgumentGeneratorCs argumentGenerator = new ArgumentGeneratorCs();
+            ArgumentGeneratorVb argumentGenerator = new ArgumentGeneratorVb();
             argumentGenerator.Reference = EnumArgumentReference.Params;
             argumentGenerator.ArgumentName = "args";
             Arguments.Add(argumentGenerator);
@@ -121,14 +121,14 @@ namespace CodeGeneratorCoreTest.Impl
         [Test]
         public void TestGenerateMethodDefinition_ProtectedOverride()
         {
-            const string EXPECT_CODE = "protected override int Hoge(params object[] args)";
+            const string EXPECT_CODE = "Protected Overrides Function Hoge(Optional args As Object = Nothing) As Integer";
 
             Visibility = EnumVisibility.Protected;
             MethodOption = EnumMethodOption.Override;
-            ReturnTypeName = "int";
+            ReturnTypeName = "Integer";
             MethodName = "Hoge";
 
-            ArgumentGeneratorCs argumentGenerator = new ArgumentGeneratorCs();
+            ArgumentGeneratorVb argumentGenerator = new ArgumentGeneratorVb();
             argumentGenerator.Reference = EnumArgumentReference.Params;
             argumentGenerator.ArgumentName = "args";
             Arguments.Add(argumentGenerator);
@@ -140,20 +140,20 @@ namespace CodeGeneratorCoreTest.Impl
         [Test]
         public void TestGenerateMethodDefinition_ProtectedVirtual()
         {
-            const string EXPECT_CODE = "protected virtual int Hoge(string s, params object[] args)";
+            const string EXPECT_CODE = "Protected Overridable Function Hoge(s As String, Optional args As Object = Nothing) As Integer";
 
             Visibility = EnumVisibility.Protected;
             MethodOption = EnumMethodOption.Virtual;
-            ReturnTypeName = "int";
+            ReturnTypeName = "Integer";
             MethodName = "Hoge";
 
-            ArgumentGeneratorCs argumentGenerator1 = new ArgumentGeneratorCs();
+            ArgumentGeneratorVb argumentGenerator1 = new ArgumentGeneratorVb();
             argumentGenerator1.Reference = EnumArgumentReference.Normal;
-            argumentGenerator1.ArgumentTypeName = "string";
+            argumentGenerator1.ArgumentTypeName = "String";
             argumentGenerator1.ArgumentName = "s";
             Arguments.Add(argumentGenerator1);
 
-            ArgumentGeneratorCs argumentGenerator2 = new ArgumentGeneratorCs();
+            ArgumentGeneratorVb argumentGenerator2 = new ArgumentGeneratorVb();
             argumentGenerator2.Reference = EnumArgumentReference.Params;
             argumentGenerator2.ArgumentName = "args";
             Arguments.Add(argumentGenerator2);
@@ -165,14 +165,14 @@ namespace CodeGeneratorCoreTest.Impl
         [Test]
         public void TestGenerateMethodDefinition_PrivateNone()
         {
-            const string EXPECT_CODE = "private int Hoge(params object[] args)";
+            const string EXPECT_CODE = "Private Function Hoge(Optional args As Object = Nothing) As Integer";
 
             Visibility = EnumVisibility.Private;
             MethodOption = EnumMethodOption.None;
-            ReturnTypeName = "int";
+            ReturnTypeName = "Integer";
             MethodName = "Hoge";
 
-            ArgumentGeneratorCs argumentGenerator = new ArgumentGeneratorCs();
+            ArgumentGeneratorVb argumentGenerator = new ArgumentGeneratorVb();
             argumentGenerator.Reference = EnumArgumentReference.Params;
             argumentGenerator.ArgumentName = "args";
             Arguments.Add(argumentGenerator);
@@ -184,11 +184,25 @@ namespace CodeGeneratorCoreTest.Impl
         [Test]
         public void TestGenerateMethodDefinition_NoArguments()
         {
-            const string EXPECT_CODE = "private int Hoge()";
+            const string EXPECT_CODE = "Private Function Hoge() As Integer";
 
             Visibility = EnumVisibility.Private;
             MethodOption = EnumMethodOption.None;
-            ReturnTypeName = "int";
+            ReturnTypeName = "Integer";
+            MethodName = "Hoge";
+
+            string actual = GenerateMethodDefinition();
+            Assert.That(actual, Is.EqualTo(EXPECT_CODE));
+        }
+
+        [Test]
+        public void TestGenerateMethodDefinition_NoReturn()
+        {
+            const string EXPECT_CODE = "Private Sub Hoge()";
+
+            Visibility = EnumVisibility.Private;
+            MethodOption = EnumMethodOption.None;
+            ReturnTypeName = null;
             MethodName = "Hoge";
 
             string actual = GenerateMethodDefinition();

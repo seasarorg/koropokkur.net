@@ -34,11 +34,11 @@ namespace CopyGen.Gen
             set { _sourcePropertyNames = value; }
         }
 
-        private IList<string> _targetPropertyNames;
-        public IList<string> TargetPropertyNames
+        private IList<string> _destPropertyNames;
+        public IList<string> DestPropertyNames
         {
-            get { return _targetPropertyNames; }
-            set { _targetPropertyNames = value; }
+            get { return _destPropertyNames; }
+            set { _destPropertyNames = value; }
         }
 
         private string _sourceTypeName;
@@ -51,14 +51,14 @@ namespace CopyGen.Gen
             set { _sourceTypeName = value; }
         }
 
-        private string _targetTypeName;
+        private string _destTypeName;
         /// <summary>
         /// コピー先の型名
         /// </summary>
-        public string TargetTypeName
+        public string DestTypeName
         {
-            get { return _targetTypeName; }
-            set { _targetTypeName = value; }
+            get { return _destTypeName; }
+            set { _destTypeName = value; }
         }
 
         /// <summary>
@@ -69,7 +69,7 @@ namespace CopyGen.Gen
             get
             {
                 return (!string.IsNullOrEmpty(SourceTypeName) 
-                    && !string.IsNullOrEmpty(TargetTypeName));
+                    && !string.IsNullOrEmpty(DestTypeName));
             }
         }
     }

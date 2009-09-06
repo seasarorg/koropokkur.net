@@ -45,11 +45,11 @@ namespace CopyGen.Gen
         /// コンストラクタ
         /// </summary>
         /// <param name="sourceTypeFullNames"></param>
-        /// <param name="targetTypeFullNames"></param>
-        public CopyTargetBaseInfo(string sourceTypeFullNames, string targetTypeFullNames)
+        /// <param name="destTypeFullNames"></param>
+        public CopyTargetBaseInfo(string sourceTypeFullNames, string destTypeFullNames)
         {
             _sourceTypeFullNames = sourceTypeFullNames;
-            _destTypeFullNames = targetTypeFullNames;
+            _destTypeFullNames = destTypeFullNames;
         }  
     }
 }

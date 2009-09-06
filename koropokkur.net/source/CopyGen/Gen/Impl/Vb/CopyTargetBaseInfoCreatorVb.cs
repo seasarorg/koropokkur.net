@@ -23,9 +23,9 @@ namespace CopyGen.Gen.Impl.Vb
     /// </summary>
     public class CopyTargetBaseInfoCreatorVb : AbstractCopyTargetBaseInfoCreator
     {
-        protected override CopyTargetBaseInfo CreateTargetBaseInfo(string editingFilePath, string sourceTypeName, string targetTypeName)
+        protected override CopyTargetBaseInfo CreateTargetBaseInfo(string editingFilePath, string sourceTypeName, string destTypeName)
         {
-            return new CopyTargetBaseInfo(sourceTypeName, targetTypeName);
+            return new CopyTargetBaseInfo(sourceTypeName, destTypeName);
         }
     }
 }

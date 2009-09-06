@@ -55,6 +55,6 @@ namespace CopyGen.Gen
         /// <param name="copyInfo"></param>
         /// <param name="propertyName"></param>
         /// <returns></returns>
-        string GetCopyTargetString(CopyInfo copyInfo, string propertyName);
+        string GetCopyDestString(CopyInfo copyInfo, string propertyName);
     }
 }

@@ -82,7 +82,7 @@ namespace CopyGen.Control.Window
             txtNameInput.Text = copyInfo.MethodName;
 
             SetupViewCopySource(copyInfo);
-            SetupViewCopyTarget(copyInfo);
+            SetupViewCopyDest(copyInfo);
 
             chkEverytimeConfirm.Checked = copyInfo.IsEverytimeConfirm;
 
@@ -177,44 +177,44 @@ namespace CopyGen.Control.Window
         /// コピー先設定を画面へ反映させる
         /// </summary>
         /// <param name="copyInfo"></param>
-        private void SetupViewCopyTarget(CopyInfo copyInfo)
+        private void SetupViewCopyDest(CopyInfo copyInfo)
         {
-            switch (copyInfo.CopyTarget)
+            switch (copyInfo.CopyDest)
             {
-                case EnumCopyTarget.Return:
-                    rdoTargetReturn.Checked = true;
-                    rdoTargetArgument.Checked = false;
-                    rdoTargetThis.Checked = false;
-                    rdoTargetProperty.Checked = false;
+                case EnumCopyDest.Return:
+                    rdoDestReturn.Checked = true;
+                    rdoDestArgument.Checked = false;
+                    rdoDestThis.Checked = false;
+                    rdoDestProperty.Checked = false;
                     break;
-                case EnumCopyTarget.AsArgument:
-                    rdoTargetReturn.Checked = false;
-                    rdoTargetArgument.Checked = true;
-                    rdoTargetThis.Checked = false;
-                    rdoTargetProperty.Checked = false;
+                case EnumCopyDest.AsArgument:
+                    rdoDestReturn.Checked = false;
+                    rdoDestArgument.Checked = true;
+                    rdoDestThis.Checked = false;
+                    rdoDestProperty.Checked = false;
                     break;
-                case EnumCopyTarget.This:
-                    rdoTargetReturn.Checked = false;
-                    rdoTargetArgument.Checked = false;
-                    rdoTargetThis.Checked = true;
-                    rdoTargetProperty.Checked = false;
+                case EnumCopyDest.This:
+                    rdoDestReturn.Checked = false;
+                    rdoDestArgument.Checked = false;
+                    rdoDestThis.Checked = true;
+                    rdoDestProperty.Checked = false;
                     break;
-                case EnumCopyTarget.PropertyOnly:
-                    rdoTargetReturn.Checked = false;
-                    rdoTargetArgument.Checked = false;
-                    rdoTargetThis.Checked = false;
-                    rdoTargetProperty.Checked = true;
+                case EnumCopyDest.PropertyOnly:
+                    rdoDestReturn.Checked = false;
+                    rdoDestArgument.Checked = false;
+                    rdoDestThis.Checked = false;
+                    rdoDestProperty.Checked = true;
                     break;
                 default:
-                    rdoTargetReturn.Checked = true;
-                    rdoTargetArgument.Checked = false;
-                    rdoTargetThis.Checked = false;
-                    rdoTargetProperty.Checked = false;
+                    rdoDestReturn.Checked = true;
+                    rdoDestArgument.Checked = false;
+                    rdoDestThis.Checked = false;
+                    rdoDestProperty.Checked = false;
                     break;
             }
 
-            txtTargetArgumentName.Text = copyInfo.TargetArgumentName;
-            chkTargetIfNullCheck.Checked = copyInfo.IsNotNullTarget;
+            txtDestArgumentName.Text = copyInfo.DestArgumentName;
+            chkDestIfNullCheck.Checked = copyInfo.IsNotNullDest;
         }
 
         /// <summary>
@@ -277,7 +277,7 @@ namespace CopyGen.Control.Window
             copyInfo.MethodName = txtNameInput.Text;
 
             SetupCopySource(copyInfo);
-            SetupCopyTarget(copyInfo);
+            SetupCopyDest(copyInfo);
             
             copyInfo.IsEverytimeConfirm = chkEverytimeConfirm.Checked;
 
@@ -337,26 +337,26 @@ namespace CopyGen.Control.Window
         /// コピー先取得方法の設定
         /// </summary>
         /// <param name="copyInfo"></param>
-        private void SetupCopyTarget(CopyInfo copyInfo)
+        private void SetupCopyDest(CopyInfo copyInfo)
         {
-            if (rdoTargetReturn.Checked)
+            if (rdoDestReturn.Checked)
             {
-                copyInfo.CopyTarget = EnumCopyTarget.Return;
+                copyInfo.CopyDest = EnumCopyDest.Return;
             }
-            else if (rdoTargetArgument.Checked)
+            else if (rdoDestArgument.Checked)
             {
-                copyInfo.CopyTarget = EnumCopyTarget.AsArgument;
+                copyInfo.CopyDest = EnumCopyDest.AsArgument;
             }
-            else if (rdoTargetThis.Checked)
+            else if (rdoDestThis.Checked)
             {
-                copyInfo.CopyTarget = EnumCopyTarget.This;
+                copyInfo.CopyDest = EnumCopyDest.This;
             }
-            else if (rdoTargetProperty.Checked)
+            else if (rdoDestProperty.Checked)
             {
-                copyInfo.CopyTarget = EnumCopyTarget.PropertyOnly;
+                copyInfo.CopyDest = EnumCopyDest.PropertyOnly;
             }
-            copyInfo.TargetArgumentName = txtTargetArgumentName.Text;
-            copyInfo.IsNotNullTarget = chkTargetIfNullCheck.Checked;
+            copyInfo.DestArgumentName = txtDestArgumentName.Text;
+            copyInfo.IsNotNullDest = chkDestIfNullCheck.Checked;
         }
 
         /// <summary>
@@ -392,6 +392,11 @@ namespace CopyGen.Control.Window
                 //  staticメソッドの場合は自分自身のプロパティを
                 //  参照することはできないため、コピー元は必ず引数として取得
                 rdoSourceHasArgument.Checked = true;
+
+                if(rdoDestThis.Checked || rdoDestProperty.Checked)
+                {
+                    rdoDestArgument.Checked = true;
+                }
             }
 
             //  コピー処理のみ出力する場合はコピー先、コピー元を特定する
@@ -399,20 +404,20 @@ namespace CopyGen.Control.Window
             if(rdoAsCopyOnly.Checked)
             {
                 rdoSourceHasArgument.Checked = true;
-                rdoTargetArgument.Checked = true;
+                rdoDestArgument.Checked = true;
             }
-            rdoSourceThis.Enabled = rdoAsMethod.Checked;
-            rdoSourceProperty.Enabled = rdoAsMethod.Checked;
+            rdoSourceThis.Enabled = (rdoAsMethod.Checked && !rdoOptionStatic.Checked);
+            rdoSourceProperty.Enabled = (rdoAsMethod.Checked && !rdoOptionStatic.Checked);
             
-            rdoTargetReturn.Enabled = rdoAsMethod.Checked;
-            rdoTargetThis.Enabled = rdoAsMethod.Checked;
-            rdoTargetProperty.Enabled = rdoAsMethod.Checked;
+            rdoDestReturn.Enabled = rdoAsMethod.Checked;
+            rdoDestThis.Enabled = (rdoAsMethod.Checked && !rdoOptionStatic.Checked);
+            rdoDestProperty.Enabled = (rdoAsMethod.Checked && !rdoOptionStatic.Checked);
 
             //  引数がないときは引数名は入力しない
             txtSourceArgumentName.Enabled = rdoSourceHasArgument.Checked;
             chkSouceIfNullCheck.Enabled = (rdoSourceHasArgument.Checked && rdoAsMethod.Checked);
-            txtTargetArgumentName.Enabled = rdoTargetArgument.Checked;
-            chkTargetIfNullCheck.Enabled = (rdoTargetArgument.Checked && rdoAsMethod.Checked);
+            txtDestArgumentName.Enabled = rdoDestArgument.Checked;
+            chkDestIfNullCheck.Enabled = (rdoDestArgument.Checked && rdoAsMethod.Checked);
 
             //  privateのときはvirtual,overrideは使えない
             if(rdoPrivate.Checked)

@@ -56,15 +56,22 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Gen\CopyBuilderTest.cs" />
-    <Compile Include="Gen\CopyTypeNameInfoTest.cs">
+    <Compile Include="Gen\Cs\CopyBuilderTestCs.cs" />
+    <Compile Include="Gen\Cs\CopyTypeNameInfoTestCs.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="Gen\GenerationInfoTest.cs">
+    <Compile Include="Gen\Cs\GenerationInfoTestCs.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Gen\TestResources\NoPublicPropertyClass.cs" />
     <Compile Include="Gen\TestResources\TestClass.cs" />
+    <Compile Include="Gen\Vb\CopyBuilderTestVb.cs" />
+    <Compile Include="Gen\Vb\CopyTypeNameInfoTestVb.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="Gen\Vb\GenerationInfoTestVb.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util\PropertyCodeInfoUtilsTest.cs" />
   </ItemGroup>

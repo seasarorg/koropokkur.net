@@ -44,14 +44,6 @@ namespace TypeInfoCollector
         /// </param>
         static void Main(string[] args)
         {
-            using (var errorWriter = new StreamWriter("c:\\TypeInfoCollector.error.log", true))
-            {
-                foreach (var s in args)
-                {
-                    errorWriter.WriteLine(s);
-                }
-            }
-
             string sourcePropOutputPath = args[0];
             string targetPropOutputPath = args[1];
             string assemblyPathSource = args[2];
@@ -114,8 +106,13 @@ namespace TypeInfoCollector
             }
             catch (Exception ex)
             {
-                using (var errorWriter = new StreamWriter(logFilePath, true))
+                //  ログファイルの肥大化は避けたいので毎回新規作成
+                using (var errorWriter = new StreamWriter(logFilePath, false))
                 {
+                    foreach(string arg in args)
+                    {
+                        errorWriter.WriteLine("引数：" + arg);
+                    }
                     errorWriter.WriteLine("{0} {1}\n{2}", DateTime.Now, ex.Message, ex.StackTrace);
                 }
             }
@@ -157,7 +154,8 @@ namespace TypeInfoCollector
             string sourceTypeName, string targetTypeName, string assemblyPathSource,
             string logFilePath)
         {
-            using (StreamWriter writer = new StreamWriter(string.Format(logFilePath, assemblyPathSource), true))
+            //  ログファイルの肥大化は避けたいので毎回新規作成
+            using (StreamWriter writer = new StreamWriter(string.Format(logFilePath, assemblyPathSource), false))
             {
                 if (sourceType == null)
                 {
@@ -182,6 +180,17 @@ namespace TypeInfoCollector
         private static Type GetType(Assembly assembly, IEnumerable<string> typeNames)
         {
             Type retType = null;
+            //  まずは型名を指定して型情報を取得
+            foreach(string typeName in typeNames)
+            {
+                retType = assembly.GetType(typeName);
+                if(retType != null)
+                {
+                    return retType;
+                }
+            }
+
+            //  なければアセンブリの全型情報から名称が一致するものがないか探す
             IDictionary<string, Type> typeMap = new Dictionary<string, Type>();
             foreach (Type type in assembly.GetTypes())
             {

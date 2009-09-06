@@ -45,7 +45,7 @@ namespace CopyGen.Util
         /// <summary>
         /// プロパティ情報ファイル名（コピー先）
         /// </summary>
-        private const string FILE_NAME_TARGET_PROPERTY_INFO = "target_props.txt";
+        private const string FILE_NAME_DEST_PROPERTY_INFO = "dest_props.txt";
 
         /// <summary>
         /// インデントの取得
@@ -68,17 +68,17 @@ namespace CopyGen.Util
         /// </summary>
         /// <param name="assemblyPaths"></param>
         /// <param name="sourceTypeNames"></param>
-        /// <param name="targetTypeNames"></param>
+        /// <param name="destTypeNames"></param>
         /// <returns></returns>
-        public static PropertyCodeInfo ReadPropertyInfo(string assemblyPaths, string sourceTypeNames, string targetTypeNames)
+        public static PropertyCodeInfo ReadPropertyInfo(string assemblyPaths, string sourceTypeNames, string destTypeNames)
         {
             string path = PathUtils.GetFolderPath(AssemblyUtils.GetExecutingAssemblyPath());
 
             string sourcePropInfoPath = string.Format("{0}{1}", path, FILE_NAME_SOURCE_PROPERTY_INFO);
-            string targetPropInfoPath = string.Format("{0}{1}", path, FILE_NAME_TARGET_PROPERTY_INFO);
+            string destPropInfoPath = string.Format("{0}{1}", path, FILE_NAME_DEST_PROPERTY_INFO);
 
             //  型情報を出力
-            ExtractPropertyInfo(assemblyPaths, sourcePropInfoPath, targetPropInfoPath, sourceTypeNames, targetTypeNames);
+            ExtractPropertyInfo(assemblyPaths, sourcePropInfoPath, destPropInfoPath, sourceTypeNames, destTypeNames);
 
             PropertyCodeInfo propertyCodeInfo = new PropertyCodeInfo();
 
@@ -87,10 +87,10 @@ namespace CopyGen.Util
             propertyCodeInfo.SourcePropertyNames = sourcePropList;
             propertyCodeInfo.SourceTypeName = useSourceTypeName;
 
-            string useTargetTypeName = null;
-            IList<string> targetPropList = ReadPropertyInfo(targetPropInfoPath, ref useTargetTypeName);
-            propertyCodeInfo.TargetPropertyNames = targetPropList;
-            propertyCodeInfo.TargetTypeName = useTargetTypeName;
+            string useDestTypeName = null;
+            IList<string> destPropList = ReadPropertyInfo(destPropInfoPath, ref useDestTypeName);
+            propertyCodeInfo.DestPropertyNames = destPropList;
+            propertyCodeInfo.DestTypeName = useDestTypeName;
 
             return propertyCodeInfo;
         }
@@ -99,22 +99,22 @@ namespace CopyGen.Util
         /// <summary>
         /// プロパティ情報を収集＆ファイル出力
         /// </summary>
-        /// <param name="targetAssemblyPath">アセンブリ候補</param>
+        /// <param name="destAssemblyPath">アセンブリ候補</param>
         /// <param name="sourcePropInfoPath">コピー元プロパティ情報出力先パス</param>
-        /// <param name="targetPropInfoPath">コピー先プロパティ情報出力先パス</param>
+        /// <param name="destPropInfoPath">コピー先プロパティ情報出力先パス</param>
         /// <param name="proposedSourceTypeNames">コピー元型候補</param>
-        /// <param name="proposedTargetTypeNames">コピー先型候補</param>
-        private static void ExtractPropertyInfo(string targetAssemblyPath,
-            string sourcePropInfoPath, string targetPropInfoPath,
-            string proposedSourceTypeNames, string proposedTargetTypeNames )
+        /// <param name="proposedDestTypeNames">コピー先型候補</param>
+        private static void ExtractPropertyInfo(string destAssemblyPath,
+            string sourcePropInfoPath, string destPropInfoPath,
+            string proposedSourceTypeNames, string proposedDestTypeNames )
         {
             string path = PathUtils.GetFolderPath(AssemblyUtils.GetExecutingAssemblyPath());
             string logFilePath = path + "TypeInfoCollector.log";
             ProcessUtils.StartProcessWithoutWindow(
                 string.Format("{0}{1}", path, FILE_NAME_PROPERTY_INFO_COLLECTOR),
                 string.Format("\"{0}\" \"{1}\" \"{2}\" \"{3}\" \"{4}\" \"{5}\"",
-                    sourcePropInfoPath, targetPropInfoPath, targetAssemblyPath, 
-                    proposedSourceTypeNames, proposedTargetTypeNames, logFilePath));
+                    sourcePropInfoPath, destPropInfoPath, destAssemblyPath, 
+                    proposedSourceTypeNames, proposedDestTypeNames, logFilePath));
         }
 
         /// <summary>

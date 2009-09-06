@@ -16,27 +16,26 @@
  */
 #endregion
 
-using CodeGeneratorCore.Impl.Cs;
+using CodeGeneratorCore.Impl.Vb;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 
-namespace CodeGeneratorCoreTest.Impl
+namespace CodeGeneratorCoreTest.Impl.Vb
 {
     [TestFixture]
-    public class LineGeneratorTest
+    public class LineCommentGeneratorTestVb
     {
         [Test]
         public void TestGenerateCode()
         {
-            const string EXPECT_CODE = "\t\tint a = 999;";
+            const string EXPECT_CODE = "\t' １行コメントが生成されました !! ???";
+    
+            LineCommentGeneratorVb generator = new LineCommentGeneratorVb();
+            generator.Items.Add("１行コメントが生成されました");
+            generator.Items.Add("!!");
+            generator.Items.Add("???");
 
-            LineGeneratorCs generator = new LineGeneratorCs();
-            generator.Items.Add("int");
-            generator.Items.Add("a");
-            generator.Items.Add("=");
-            generator.Items.Add("999");
-
-            string actual = generator.GenerateCode("\t\t");
+            string actual = generator.GenerateCode("\t");
             Assert.That(actual, Is.EqualTo(EXPECT_CODE));
         }
 
@@ -45,10 +44,11 @@ namespace CodeGeneratorCoreTest.Impl
         {
             const string EXPECT_CODE = "";
 
-            LineGeneratorCs generator = new LineGeneratorCs();
+            LineCommentGeneratorVb generator = new LineCommentGeneratorVb();
 
             string actual = generator.GenerateCode(null);
             Assert.That(actual, Is.EqualTo(EXPECT_CODE));
         }
+       
     }
 }

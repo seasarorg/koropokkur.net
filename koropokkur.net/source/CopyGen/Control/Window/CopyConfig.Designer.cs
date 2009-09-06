@@ -39,16 +39,18 @@
             this.rdoOptionStatic = new System.Windows.Forms.RadioButton();
             this.rdoOptionNone = new System.Windows.Forms.RadioButton();
             this.grpCopySource = new System.Windows.Forms.GroupBox();
+            this.chkSouceIfNullCheck = new System.Windows.Forms.CheckBox();
             this.rdoSourceProperty = new System.Windows.Forms.RadioButton();
             this.rdoSourceHasArgument = new System.Windows.Forms.RadioButton();
             this.rdoSourceThis = new System.Windows.Forms.RadioButton();
             this.txtSourceArgumentName = new System.Windows.Forms.TextBox();
-            this.grpCopyTarget = new System.Windows.Forms.GroupBox();
-            this.rdoTargetProperty = new System.Windows.Forms.RadioButton();
-            this.rdoTargetThis = new System.Windows.Forms.RadioButton();
-            this.rdoTargetArgument = new System.Windows.Forms.RadioButton();
-            this.rdoTargetReturn = new System.Windows.Forms.RadioButton();
-            this.txtTargetArgumentName = new System.Windows.Forms.TextBox();
+            this.grpCopyDest = new System.Windows.Forms.GroupBox();
+            this.chkDestIfNullCheck = new System.Windows.Forms.CheckBox();
+            this.rdoDestProperty = new System.Windows.Forms.RadioButton();
+            this.rdoDestThis = new System.Windows.Forms.RadioButton();
+            this.rdoDestArgument = new System.Windows.Forms.RadioButton();
+            this.rdoDestReturn = new System.Windows.Forms.RadioButton();
+            this.txtDestArgumentName = new System.Windows.Forms.TextBox();
             this.chkEverytimeConfirm = new System.Windows.Forms.CheckBox();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnOK = new System.Windows.Forms.Button();
@@ -60,12 +62,10 @@
             this.rdoAsMethod = new System.Windows.Forms.RadioButton();
             this.btnReload = new System.Windows.Forms.Button();
             this.btnApply = new System.Windows.Forms.Button();
-            this.chkSouceIfNullCheck = new System.Windows.Forms.CheckBox();
-            this.chkTargetIfNullCheck = new System.Windows.Forms.CheckBox();
             this.grpVisibility.SuspendLayout();
             this.ｇrpOption.SuspendLayout();
             this.grpCopySource.SuspendLayout();
-            this.grpCopyTarget.SuspendLayout();
+            this.grpCopyDest.SuspendLayout();
             this.groupBox8.SuspendLayout();
             this.grpMethodConfig.SuspendLayout();
             this.grpOutputRange.SuspendLayout();
@@ -201,6 +201,18 @@
             this.grpCopySource.TabStop = false;
             this.grpCopySource.Text = "コピー元(&S)";
             // 
+            // chkSouceIfNullCheck
+            // 
+            this.chkSouceIfNullCheck.AutoSize = true;
+            this.chkSouceIfNullCheck.Checked = true;
+            this.chkSouceIfNullCheck.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkSouceIfNullCheck.Location = new System.Drawing.Point(358, 46);
+            this.chkSouceIfNullCheck.Name = "chkSouceIfNullCheck";
+            this.chkSouceIfNullCheck.Size = new System.Drawing.Size(80, 19);
+            this.chkSouceIfNullCheck.TabIndex = 316;
+            this.chkSouceIfNullCheck.Text = "Null禁止";
+            this.chkSouceIfNullCheck.UseVisualStyleBackColor = true;
+            // 
             // rdoSourceProperty
             // 
             this.rdoSourceProperty.AutoSize = true;
@@ -244,75 +256,87 @@
             this.txtSourceArgumentName.TabIndex = 201;
             this.txtSourceArgumentName.Text = "source";
             // 
-            // grpCopyTarget
+            // grpCopyDest
             // 
-            this.grpCopyTarget.Controls.Add(this.chkTargetIfNullCheck);
-            this.grpCopyTarget.Controls.Add(this.rdoTargetProperty);
-            this.grpCopyTarget.Controls.Add(this.rdoTargetThis);
-            this.grpCopyTarget.Controls.Add(this.rdoTargetArgument);
-            this.grpCopyTarget.Controls.Add(this.rdoTargetReturn);
-            this.grpCopyTarget.Controls.Add(this.txtTargetArgumentName);
-            this.grpCopyTarget.Font = new System.Drawing.Font("MS UI Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.grpCopyTarget.Location = new System.Drawing.Point(11, 342);
-            this.grpCopyTarget.Name = "grpCopyTarget";
-            this.grpCopyTarget.Size = new System.Drawing.Size(451, 82);
-            this.grpCopyTarget.TabIndex = 300;
-            this.grpCopyTarget.TabStop = false;
-            this.grpCopyTarget.Text = "コピー先(&T)";
+            this.grpCopyDest.Controls.Add(this.chkDestIfNullCheck);
+            this.grpCopyDest.Controls.Add(this.rdoDestProperty);
+            this.grpCopyDest.Controls.Add(this.rdoDestThis);
+            this.grpCopyDest.Controls.Add(this.rdoDestArgument);
+            this.grpCopyDest.Controls.Add(this.rdoDestReturn);
+            this.grpCopyDest.Controls.Add(this.txtDestArgumentName);
+            this.grpCopyDest.Font = new System.Drawing.Font("MS UI Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.grpCopyDest.Location = new System.Drawing.Point(11, 342);
+            this.grpCopyDest.Name = "grpCopyDest";
+            this.grpCopyDest.Size = new System.Drawing.Size(451, 82);
+            this.grpCopyDest.TabIndex = 300;
+            this.grpCopyDest.TabStop = false;
+            this.grpCopyDest.Text = "コピー先(&T)";
             // 
-            // rdoTargetProperty
+            // chkDestIfNullCheck
             // 
-            this.rdoTargetProperty.AutoSize = true;
-            this.rdoTargetProperty.Location = new System.Drawing.Point(148, 21);
-            this.rdoTargetProperty.Name = "rdoTargetProperty";
-            this.rdoTargetProperty.Size = new System.Drawing.Size(118, 19);
-            this.rdoTargetProperty.TabIndex = 319;
-            this.rdoTargetProperty.Text = "プロパティ名のみ";
-            this.rdoTargetProperty.UseVisualStyleBackColor = true;
-            this.rdoTargetProperty.CheckedChanged += new System.EventHandler(this.rdoTargetProperty_CheckedChanged);
+            this.chkDestIfNullCheck.AutoSize = true;
+            this.chkDestIfNullCheck.Checked = true;
+            this.chkDestIfNullCheck.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkDestIfNullCheck.Location = new System.Drawing.Point(359, 46);
+            this.chkDestIfNullCheck.Name = "chkDestIfNullCheck";
+            this.chkDestIfNullCheck.Size = new System.Drawing.Size(80, 19);
+            this.chkDestIfNullCheck.TabIndex = 317;
+            this.chkDestIfNullCheck.Text = "Null禁止";
+            this.chkDestIfNullCheck.UseVisualStyleBackColor = true;
             // 
-            // rdoTargetThis
+            // rdoDestProperty
             // 
-            this.rdoTargetThis.AutoSize = true;
-            this.rdoTargetThis.Location = new System.Drawing.Point(88, 21);
-            this.rdoTargetThis.Name = "rdoTargetThis";
-            this.rdoTargetThis.Size = new System.Drawing.Size(48, 19);
-            this.rdoTargetThis.TabIndex = 318;
-            this.rdoTargetThis.Text = "this";
-            this.rdoTargetThis.UseVisualStyleBackColor = true;
-            this.rdoTargetThis.CheckedChanged += new System.EventHandler(this.rdoTargetThis_CheckedChanged);
+            this.rdoDestProperty.AutoSize = true;
+            this.rdoDestProperty.Location = new System.Drawing.Point(148, 21);
+            this.rdoDestProperty.Name = "rdoDestProperty";
+            this.rdoDestProperty.Size = new System.Drawing.Size(118, 19);
+            this.rdoDestProperty.TabIndex = 319;
+            this.rdoDestProperty.Text = "プロパティ名のみ";
+            this.rdoDestProperty.UseVisualStyleBackColor = true;
+            this.rdoDestProperty.CheckedChanged += new System.EventHandler(this.rdoTargetProperty_CheckedChanged);
             // 
-            // rdoTargetArgument
+            // rdoDestThis
             // 
-            this.rdoTargetArgument.AutoSize = true;
-            this.rdoTargetArgument.Location = new System.Drawing.Point(14, 46);
-            this.rdoTargetArgument.Name = "rdoTargetArgument";
-            this.rdoTargetArgument.Size = new System.Drawing.Size(55, 19);
-            this.rdoTargetArgument.TabIndex = 317;
-            this.rdoTargetArgument.Text = "引数";
-            this.rdoTargetArgument.UseVisualStyleBackColor = true;
-            this.rdoTargetArgument.CheckedChanged += new System.EventHandler(this.rdoTargetArgument_CheckedChanged);
+            this.rdoDestThis.AutoSize = true;
+            this.rdoDestThis.Location = new System.Drawing.Point(88, 21);
+            this.rdoDestThis.Name = "rdoDestThis";
+            this.rdoDestThis.Size = new System.Drawing.Size(48, 19);
+            this.rdoDestThis.TabIndex = 318;
+            this.rdoDestThis.Text = "this";
+            this.rdoDestThis.UseVisualStyleBackColor = true;
+            this.rdoDestThis.CheckedChanged += new System.EventHandler(this.rdoTargetThis_CheckedChanged);
             // 
-            // rdoTargetReturn
+            // rdoDestArgument
             // 
-            this.rdoTargetReturn.AutoSize = true;
-            this.rdoTargetReturn.Checked = true;
-            this.rdoTargetReturn.Location = new System.Drawing.Point(13, 21);
-            this.rdoTargetReturn.Name = "rdoTargetReturn";
-            this.rdoTargetReturn.Size = new System.Drawing.Size(64, 19);
-            this.rdoTargetReturn.TabIndex = 316;
-            this.rdoTargetReturn.TabStop = true;
-            this.rdoTargetReturn.Text = "戻り値";
-            this.rdoTargetReturn.UseVisualStyleBackColor = true;
-            this.rdoTargetReturn.CheckedChanged += new System.EventHandler(this.rdoTargetReturn_CheckedChanged);
+            this.rdoDestArgument.AutoSize = true;
+            this.rdoDestArgument.Location = new System.Drawing.Point(14, 46);
+            this.rdoDestArgument.Name = "rdoDestArgument";
+            this.rdoDestArgument.Size = new System.Drawing.Size(55, 19);
+            this.rdoDestArgument.TabIndex = 317;
+            this.rdoDestArgument.Text = "引数";
+            this.rdoDestArgument.UseVisualStyleBackColor = true;
+            this.rdoDestArgument.CheckedChanged += new System.EventHandler(this.rdoTargetArgument_CheckedChanged);
             // 
-            // txtTargetArgumentName
+            // rdoDestReturn
             // 
-            this.txtTargetArgumentName.Location = new System.Drawing.Point(75, 45);
-            this.txtTargetArgumentName.Name = "txtTargetArgumentName";
-            this.txtTargetArgumentName.Size = new System.Drawing.Size(278, 22);
-            this.txtTargetArgumentName.TabIndex = 315;
-            this.txtTargetArgumentName.Text = "target";
+            this.rdoDestReturn.AutoSize = true;
+            this.rdoDestReturn.Checked = true;
+            this.rdoDestReturn.Location = new System.Drawing.Point(13, 21);
+            this.rdoDestReturn.Name = "rdoDestReturn";
+            this.rdoDestReturn.Size = new System.Drawing.Size(64, 19);
+            this.rdoDestReturn.TabIndex = 316;
+            this.rdoDestReturn.TabStop = true;
+            this.rdoDestReturn.Text = "戻り値";
+            this.rdoDestReturn.UseVisualStyleBackColor = true;
+            this.rdoDestReturn.CheckedChanged += new System.EventHandler(this.rdoTargetReturn_CheckedChanged);
+            // 
+            // txtDestArgumentName
+            // 
+            this.txtDestArgumentName.Location = new System.Drawing.Point(75, 45);
+            this.txtDestArgumentName.Name = "txtDestArgumentName";
+            this.txtDestArgumentName.Size = new System.Drawing.Size(278, 22);
+            this.txtDestArgumentName.TabIndex = 315;
+            this.txtDestArgumentName.Text = "target";
             // 
             // chkEverytimeConfirm
             // 
@@ -437,30 +461,6 @@
             this.btnApply.UseVisualStyleBackColor = true;
             this.btnApply.Click += new System.EventHandler(this.btnApply_Click);
             // 
-            // chkSouceIfNullCheck
-            // 
-            this.chkSouceIfNullCheck.AutoSize = true;
-            this.chkSouceIfNullCheck.Checked = true;
-            this.chkSouceIfNullCheck.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkSouceIfNullCheck.Location = new System.Drawing.Point(358, 46);
-            this.chkSouceIfNullCheck.Name = "chkSouceIfNullCheck";
-            this.chkSouceIfNullCheck.Size = new System.Drawing.Size(80, 19);
-            this.chkSouceIfNullCheck.TabIndex = 316;
-            this.chkSouceIfNullCheck.Text = "Null禁止";
-            this.chkSouceIfNullCheck.UseVisualStyleBackColor = true;
-            // 
-            // chkTargetIfNullCheck
-            // 
-            this.chkTargetIfNullCheck.AutoSize = true;
-            this.chkTargetIfNullCheck.Checked = true;
-            this.chkTargetIfNullCheck.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkTargetIfNullCheck.Location = new System.Drawing.Point(359, 46);
-            this.chkTargetIfNullCheck.Name = "chkTargetIfNullCheck";
-            this.chkTargetIfNullCheck.Size = new System.Drawing.Size(80, 19);
-            this.chkTargetIfNullCheck.TabIndex = 317;
-            this.chkTargetIfNullCheck.Text = "Null禁止";
-            this.chkTargetIfNullCheck.UseVisualStyleBackColor = true;
-            // 
             // CopyConfig
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -473,9 +473,10 @@
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.chkEverytimeConfirm);
-            this.Controls.Add(this.grpCopyTarget);
+            this.Controls.Add(this.grpCopyDest);
             this.Controls.Add(this.grpCopySource);
             this.Name = "CopyConfig";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "コピーメソッド設定";
             this.Load += new System.EventHandler(this.CopyConfig_Load);
             this.grpVisibility.ResumeLayout(false);
@@ -484,8 +485,8 @@
             this.ｇrpOption.PerformLayout();
             this.grpCopySource.ResumeLayout(false);
             this.grpCopySource.PerformLayout();
-            this.grpCopyTarget.ResumeLayout(false);
-            this.grpCopyTarget.PerformLayout();
+            this.grpCopyDest.ResumeLayout(false);
+            this.grpCopyDest.PerformLayout();
             this.groupBox8.ResumeLayout(false);
             this.groupBox8.PerformLayout();
             this.grpMethodConfig.ResumeLayout(false);
@@ -509,7 +510,7 @@
         private System.Windows.Forms.RadioButton rdoOptionOverride;
         private System.Windows.Forms.GroupBox grpCopySource;
         private System.Windows.Forms.TextBox txtSourceArgumentName;
-        private System.Windows.Forms.GroupBox grpCopyTarget;
+        private System.Windows.Forms.GroupBox grpCopyDest;
         private System.Windows.Forms.CheckBox chkEverytimeConfirm;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Button btnOK;
@@ -522,15 +523,15 @@
         private System.Windows.Forms.RadioButton rdoAsMethod;
         private System.Windows.Forms.RadioButton rdoSourceHasArgument;
         private System.Windows.Forms.RadioButton rdoSourceThis;
-        private System.Windows.Forms.RadioButton rdoTargetArgument;
-        private System.Windows.Forms.RadioButton rdoTargetReturn;
-        private System.Windows.Forms.TextBox txtTargetArgumentName;
+        private System.Windows.Forms.RadioButton rdoDestArgument;
+        private System.Windows.Forms.RadioButton rdoDestReturn;
+        private System.Windows.Forms.TextBox txtDestArgumentName;
         private System.Windows.Forms.Button btnReload;
         private System.Windows.Forms.Button btnApply;
         private System.Windows.Forms.RadioButton rdoSourceProperty;
-        private System.Windows.Forms.RadioButton rdoTargetProperty;
-        private System.Windows.Forms.RadioButton rdoTargetThis;
+        private System.Windows.Forms.RadioButton rdoDestProperty;
+        private System.Windows.Forms.RadioButton rdoDestThis;
         private System.Windows.Forms.CheckBox chkSouceIfNullCheck;
-        private System.Windows.Forms.CheckBox chkTargetIfNullCheck;
+        private System.Windows.Forms.CheckBox chkDestIfNullCheck;
     }
 }

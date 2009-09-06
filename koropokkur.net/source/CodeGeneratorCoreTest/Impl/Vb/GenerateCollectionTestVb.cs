@@ -19,36 +19,38 @@
 using System.Text;
 using CodeGeneratorCore;
 using CodeGeneratorCore.Impl;
-using CodeGeneratorCore.Impl.Cs;
+using CodeGeneratorCore.Impl.Vb;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 
-namespace CodeGeneratorCoreTest.Impl
+namespace CodeGeneratorCoreTest.Impl.Vb
 {
     [TestFixture]
-    public class GenerateCollectionTest
+    public class GenerateCollectionTestVb
     {
         [Test]
         public void TestGenerateCode()
         {
             StringBuilder expectBuilder = new StringBuilder();
-            expectBuilder.AppendLine("\t// TestComment");
-            expectBuilder.AppendLine("\tint a = this.Hoge();");
-            expectBuilder.AppendLine("\treturn a;");
+            expectBuilder.AppendLine("\t' TestComment");
+            expectBuilder.AppendLine("\tDim a As Integer = Me.Hoge()");
+            expectBuilder.AppendLine("\tReturn a");
 
             GeneratorColleciton generatorColleciton = new GeneratorColleciton();
-            LineCommentGeneratorCs commentGenerator = new LineCommentGeneratorCs();
+            LineCommentGeneratorVb commentGenerator = new LineCommentGeneratorVb();
             commentGenerator.Items.Add("TestComment");
             generatorColleciton.Add(commentGenerator);
 
-            LineGeneratorCs lineGenerator = new LineGeneratorCs();
-            lineGenerator.Items.Add("int");
+            LineGeneratorVb lineGenerator = new LineGeneratorVb();
+            lineGenerator.Items.Add("Dim");
             lineGenerator.Items.Add("a");
+            lineGenerator.Items.Add("As");
+            lineGenerator.Items.Add("Integer");
             lineGenerator.Items.Add("=");
-            lineGenerator.Items.Add("this.Hoge()");
+            lineGenerator.Items.Add("Me.Hoge()");
             generatorColleciton.Add(lineGenerator);
 
-            LineReturnGeneratorCs returnGenerator = new LineReturnGeneratorCs();
+            LineReturnGeneratorVb returnGenerator = new LineReturnGeneratorVb();
             returnGenerator.Items.Add("a");
             generatorColleciton.Add(returnGenerator);
 
@@ -59,21 +61,23 @@ namespace CodeGeneratorCoreTest.Impl
         [Test]
         public void TestEnumerable()
         {
-            string[] expectStrings = new string[] { "\t// TestComment", "\tint a = this.Hoge();", "\treturn a;" };
+            string[] expectStrings = new string[] { "\t' TestComment", "\tDim a As Integer = Me.Hoge()", "\tReturn a" };
 
             GeneratorColleciton generatorColleciton = new GeneratorColleciton();
-            LineCommentGeneratorCs commentGenerator = new LineCommentGeneratorCs();
+            LineCommentGeneratorVb commentGenerator = new LineCommentGeneratorVb();
             commentGenerator.Items.Add("TestComment");
             generatorColleciton.Add(commentGenerator);
 
-            LineGeneratorCs lineGenerator = new LineGeneratorCs();
-            lineGenerator.Items.Add("int");
+            LineGeneratorVb lineGenerator = new LineGeneratorVb();
+            lineGenerator.Items.Add("Dim");
             lineGenerator.Items.Add("a");
+            lineGenerator.Items.Add("As");
+            lineGenerator.Items.Add("Integer");
             lineGenerator.Items.Add("=");
-            lineGenerator.Items.Add("this.Hoge()");
+            lineGenerator.Items.Add("Me.Hoge()");
             generatorColleciton.Add(lineGenerator);
 
-            LineReturnGeneratorCs returnGenerator = new LineReturnGeneratorCs();
+            LineReturnGeneratorVb returnGenerator = new LineReturnGeneratorVb();
             returnGenerator.Items.Add("a");
             generatorColleciton.Add(returnGenerator);
 
