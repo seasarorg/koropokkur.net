@@ -17,6 +17,7 @@
 #endregion
 using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Xml;
 using System.IO;
 
@@ -31,6 +32,13 @@ namespace VSArrange.Config
         private const string SECTION_FILTER = "filter";
         private const string SUB_SECTION_FILE = "file";
         private const string SUB_SECTION_FOLDER = "folder";
+        private const string SUB_SECTION_COMPILE = "compile";
+        private const string SUB_SECTION_RESOURCE = "resource";
+        private const string SUB_SECTION_CONTENTS = "contents";
+        private const string SUB_SECTION_NO_ACTION = "no_action";
+        private const string SUB_SECTION_NO_COPY = "no_copy";
+        private const string SUB_SECTION_EVERYTIME_COPY = "everytime_copy";
+        private const string SUB_SECTION_COPY_IF_NEW = "copy_if_new";
         private const string ATTRIBUTE_FILTER_NAME = "name";
         private const string ATTRIBUTE_FILTER_ENABLE = "enable";
 
@@ -59,17 +67,17 @@ namespace VSArrange.Config
             XmlElement filtersElement = configDocument[SECTION_FILTERS];
             if (filtersElement != null)
             {
-                XmlElement fileFilterElement = filtersElement[SUB_SECTION_FILE];
-                if(fileFilterElement != null)
-                {
-                    configInfo.FilterFileStringList = ReadConfigFilter(fileFilterElement);
-                }
+                configInfo.FilterFileStringList = ReadConfigFilter(filtersElement, SUB_SECTION_FILE);
+                configInfo.FilterFolderStringList = ReadConfigFilter(filtersElement, SUB_SECTION_FOLDER);
 
-                XmlElement folderFilterElement = filtersElement[SUB_SECTION_FOLDER];
-                if (folderFilterElement != null)
-                {
-                    configInfo.FilterFolderStringList = ReadConfigFilter(folderFilterElement);
-                }
+                configInfo.FilterCompileStringList = ReadConfigFilter(filtersElement, SUB_SECTION_COMPILE);
+                configInfo.FilterResourceStringList = ReadConfigFilter(filtersElement, SUB_SECTION_RESOURCE);
+                configInfo.FilterContentsStringList = ReadConfigFilter(filtersElement, SUB_SECTION_CONTENTS);
+                configInfo.FilterNoActionStringList = ReadConfigFilter(filtersElement, SUB_SECTION_NO_ACTION);
+
+                configInfo.FilterNoCopyStringList = ReadConfigFilter(filtersElement, SUB_SECTION_NO_COPY);
+                configInfo.FilterEverytimeCopyStringList = ReadConfigFilter(filtersElement, SUB_SECTION_EVERYTIME_COPY);
+                configInfo.FilterCopyIfNewStringList = ReadConfigFilter(filtersElement, SUB_SECTION_COPY_IF_NEW);
             }
 
             return configInfo;
@@ -78,10 +86,18 @@ namespace VSArrange.Config
         /// <summary>
         /// 設定ファイルからフィルター情報を読み込む
         /// </summary>
-        /// <param name="filterElement"></param>
+        /// <param name="parentElement"></param>
+        /// <param name="subSectionName"></param>
         /// <returns></returns>
-        private static IList<ConfigInfoFilter> ReadConfigFilter(XmlElement filterElement)
+        private static IList<ConfigInfoFilter> ReadConfigFilter(XmlNode parentElement,
+            string subSectionName)
         {
+            XmlElement filterElement = parentElement[subSectionName];
+            if (filterElement == null)
+            {
+                return new List<ConfigInfoFilter>();
+            }
+
             IList<ConfigInfoFilter> returnFilterList = new List<ConfigInfoFilter>();
             XmlNodeList filterNodeList = filterElement.GetElementsByTagName(SECTION_FILTER);
             foreach (XmlNode filterNode in filterNodeList)
@@ -126,24 +142,36 @@ namespace VSArrange.Config
             XmlDocument configDocument = new XmlDocument();
             XmlElement filtersElement = configDocument.CreateElement(SECTION_FILTERS);
 
-            //  ファイル用フィルター
-            XmlElement fileFiltersElement = CreateFilterSectionElement(
-                SUB_SECTION_FILE, configDocument, configInfo.FilterFileStringList);
-            if (fileFiltersElement != null)
-            {
-                filtersElement.AppendChild(fileFiltersElement);
-            }
-
-            //  フォルダ用フィルター
-            XmlElement folderFiltersElement = CreateFilterSectionElement(
-                SUB_SECTION_FOLDER, configDocument, configInfo.FilterFolderStringList);
-            if (folderFiltersElement != null)
-            {
-                filtersElement.AppendChild(folderFiltersElement);
-            }
+            AddFilterElement(filtersElement, configDocument, SUB_SECTION_FILE, configInfo.FilterFileStringList);
+            AddFilterElement(filtersElement, configDocument, SUB_SECTION_FOLDER, configInfo.FilterFolderStringList);
+            AddFilterElement(filtersElement, configDocument, SUB_SECTION_COMPILE, configInfo.FilterCompileStringList);
+            AddFilterElement(filtersElement, configDocument, SUB_SECTION_RESOURCE, configInfo.FilterResourceStringList);
+            AddFilterElement(filtersElement, configDocument, SUB_SECTION_CONTENTS, configInfo.FilterContentsStringList);
+            AddFilterElement(filtersElement, configDocument, SUB_SECTION_NO_ACTION, configInfo.FilterNoActionStringList);
+            AddFilterElement(filtersElement, configDocument, SUB_SECTION_NO_COPY, configInfo.FilterNoCopyStringList);
+            AddFilterElement(filtersElement, configDocument, SUB_SECTION_EVERYTIME_COPY, configInfo.FilterEverytimeCopyStringList);
+            AddFilterElement(filtersElement, configDocument, SUB_SECTION_COPY_IF_NEW, configInfo.FilterCopyIfNewStringList);
 
             configDocument.AppendChild(filtersElement);
             configDocument.Save(path);
+        }
+
+        /// <summary>
+        /// フィルター設定を追加する
+        /// </summary>
+        /// <param name="filtersElement">追加対象のエレメント</param>
+        /// <param name="configDocument"></param>
+        /// <param name="subSectionName">フィルター名</param>
+        /// <param name="filterList">フィルター情報リスト</param>
+        private static void AddFilterElement(XmlNode filtersElement, XmlDocument configDocument,
+            string subSectionName, IEnumerable<ConfigInfoFilter> filterList)
+        {
+            XmlElement filtersChildElement = CreateFilterSectionElement(
+                subSectionName, configDocument, filterList);
+            if (filtersChildElement != null)
+            {
+                filtersElement.AppendChild(filtersChildElement);
+            }
         }
 
         /// <summary>

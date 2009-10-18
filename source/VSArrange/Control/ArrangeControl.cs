@@ -18,17 +18,13 @@
 
 using System.Collections.Generic;
 using System.IO;
-using System.Threading;
 using System.Windows.Forms;
 using AddInCommon.Util;
 using EnvDTE;
 using EnvDTE80;
 using Microsoft.VisualStudio.CommandBars;
+using VSArrange.Arrange;
 using VSArrange.Config;
-using StatusBar = EnvDTE.StatusBar;
-using VSArrange.Filter;
-using System.Text;
-using Thread=System.Threading.Thread;
 
 namespace VSArrange.Control
 {
@@ -41,34 +37,6 @@ namespace VSArrange.Control
         private const string REFRESH_BUTTON_NAME_PROJECT = "プロジェクト要素の整理";
 
         private readonly DTE2 _applicationObject;
-
-        /// <summary>
-        /// プロジェクト項目としないファイルを判別する正規表現
-        /// </summary>
-        private ItemAttachmentFilter _filterFile;
-
-        /// <summary>
-        /// ファイル登録除外フィルター
-        /// </summary>
-        public ItemAttachmentFilter FileterFile
-        {
-            set { _filterFile = value; }
-            get { return _filterFile; }
-        }
-
-        /// <summary>
-        /// プロジェクト項目としないフォルダを判別する正規表現
-        /// </summary>
-        private ItemAttachmentFilter _filterFolder;
-
-        /// <summary>
-        /// フォルダー登録除外フィルター
-        /// </summary>
-        public ItemAttachmentFilter FilterFolder
-        {
-            set { _filterFolder = value; }
-            get { return _filterFolder; }
-        }
         
         /// <summary>
         /// コンストラクタ
@@ -122,12 +90,12 @@ namespace VSArrange.Control
             //  設定が変更された時点で予め非同期で読んでおく方がより良いが
             //  パフォーマンス的に整理処理直前に読んでも問題がないと思われるため
             //  実装を単純にする＋漏れをなくすためここで呼び出し
-            RefreshConfigInfo();
+            ProjectArranger arranger = CreateArranger();
             try
             {
                 foreach (Project project in solution.Projects)
                 {
-                    ArrangeProject(project);
+                    arranger.ArrangeProject(project);
                 }
             }
             catch (System.Exception ex)
@@ -150,23 +118,24 @@ namespace VSArrange.Control
             IDictionary<string, Project> refreshedProjects = new Dictionary<string, Project>();
             SelectedItems items = _applicationObject.SelectedItems;
 
-            //  プロジェクト追加フィルタの更新
-            //  設定が変更された時点で予め非同期で読んでおく方がより良いが
-            //  パフォーマンス的に整理処理直前に読んでも問題がないと思われるため
-            //  実装を単純にする＋漏れをなくすためここで呼び出し
-            RefreshConfigInfo();
             try
             {
+                ProjectArranger arranger = CreateArranger();
+                //  選択されている要素は実質一つだけのはずだが
+                //  コレクションの形でしか取得できないためforeachでまわす
                 foreach (SelectedItem selectedItem in items)
                 {
                     Project currentProject = selectedItem.Project;
+
                     if (refreshedProjects.ContainsKey(currentProject.FullName))
                     {
                         //  更新済のプロジェクトは無視
                         continue;
                     }
+                    arranger.ArrangeProject(currentProject);
 
-                    ArrangeProject(currentProject);
+                    _applicationObject.StatusBar.Text = string.Format(
+                        "{0}の整理が終了しました。", currentProject.Name);
                     refreshedProjects[currentProject.FullName] = currentProject;
                 }
             }
@@ -183,239 +152,19 @@ namespace VSArrange.Control
 
         #endregion
 
-        #region リフレッシュ処理
-
-        /// <summary>
-        /// プロジェクトのリフレッシュ
-        /// </summary>
-        /// <param name="project"></param>
-        protected virtual void ArrangeProject(Project project)
-        {
-            if (string.IsNullOrEmpty(project.FullName))
-            {
-                //  プロジェクト名が入っていない要素は無視
-                return;    
-            }
-
-            string projectDirPath = Path.GetDirectoryName(project.FullName);
-            ProjectItems projectItems = project.ProjectItems;
-
-            string statusLabel = string.Format("プロジェクト[{0}]の要素を整理しています。", project.Name);
-            ArrangeDirectories(projectDirPath, projectItems);
-
-            _applicationObject.StatusBar.Text = string.Format("{0}の整理が終了しました。", project.Name);
-        }
-
-        /// <summary>
-        /// ディレクトリの整理
-        /// </summary>
-        /// <param name="dirPath"></param>
-        /// <param name="projectItems"></param>
-        protected virtual void ArrangeDirectories(string dirPath, ProjectItems projectItems)
-        {
-            _applicationObject.StatusBar.Text = string.Format("{0}を整理しています。", dirPath);
-            IDictionary<string, ProjectItem> fileItems = new Dictionary<string, ProjectItem>();
-            IDictionary<string, ProjectItem> folderItems = new Dictionary<string, ProjectItem>();
-            IList<ProjectItem> deleteTarget = new List<ProjectItem>();
-
-            string basePath = dirPath + Path.DirectorySeparatorChar;
-            //  ファイル、フォルダ、削除対象に振り分ける
-            foreach (ProjectItem projectItem in projectItems)
-            {
-                string currentPath = basePath + projectItem.Name;
-                if(Directory.Exists(currentPath))
-                {
-                    if(_filterFolder.IsPassFilter(projectItem.Name))
-                    {
-                        //  実際に存在していて且つプロジェクトにも登録済
-                        if(!folderItems.ContainsKey(currentPath))
-                        {
-                            folderItems.Add(currentPath, projectItem);
-                        }
-                    }
-                    else
-                    {
-                        deleteTarget.Add(projectItem);
-                    }
-                }
-                else if(File.Exists(currentPath))
-                {
-                    if(_filterFile.IsPassFilter(projectItem.Name))
-                    {
-                        if(!fileItems.ContainsKey(currentPath))
-                        {
-                            fileItems.Add(currentPath, projectItem);
-                        }
-                    }
-                    else
-                    {
-                        deleteTarget.Add(projectItem);
-                    }
-                }
-                else
-                {
-                    deleteTarget.Add(projectItem);
-                }
-            }
-
-            ////  ディレクトリ追加
-            //  ラストで行っている再起処理にも関係するので
-            //  ディレクトリ追加は新規スレッドでの実行は行わない
-            DirectoryAppender directoryAppender = new DirectoryAppender(
-                dirPath, _filterFolder, projectItems, folderItems);
-            directoryAppender.Execute();
-
-            ////  ファイル追加
-            FileAppender fileAppender = new FileAppender(
-                dirPath, _filterFile, projectItems, fileItems);
-            System.Threading.Thread fileThread = new Thread(
-                new ThreadStart(fileAppender.Execute));
-            fileThread.Start();
-
-            ////  不要な要素は削除
-            ProjectItemRemover projectItemRemover = new ProjectItemRemover(deleteTarget);
-            System.Threading.Thread removeThread = new Thread(
-                new ThreadStart(projectItemRemover.Execute));
-            removeThread.Start();
-
-            //  残ったフォルダに対して同様の処理を再帰的に実行
-            foreach (string projectDirPath in folderItems.Keys)
-            {
-                ArrangeDirectories(projectDirPath, folderItems[projectDirPath].ProjectItems);
-            }
-
-        }
-
-        #endregion
-
         /// <summary>
         /// 設定情報再読み込み
         /// </summary>
-        private void RefreshConfigInfo()
+        /// <remarks>
+        //  設定が変更された時点で予め非同期で読んでおく方がより良いが
+        //  パフォーマンス的に整理処理直前に読んでも問題がないと思われるため
+        //  実装を単純にする＋漏れをなくすためここで呼び出し
+        /// </remarks>
+        private ProjectArranger CreateArranger()
         {
             //  設定読み込み
             ConfigInfo configInfo = ConfigFileManager.ReadConfig(PathUtils.GetConfigPath());
-            if (configInfo != null)
-            {
-                //  プロジェクト要素追加除外フィルターを設定
-                if (configInfo.FilterFileStringList != null)
-                {
-                    _filterFile.Clear();
-                    _filterFile.AddFilters(configInfo.FilterFileStringList);
-                }
-
-                if (configInfo.FilterFolderStringList != null)
-                {
-                    _filterFolder.Clear();
-                    _filterFolder.AddFilters(configInfo.FilterFolderStringList);
-                }
-            }
+            return new ProjectArranger(configInfo);
         }
-
-        #region 内部クラス
-
-        /// <summary>
-        /// ディレクトリ追加クラス
-        /// </summary>
-        private class DirectoryAppender
-        {
-            private readonly string _dirPath;
-            private readonly ItemAttachmentFilter _filter;
-            private readonly ProjectItems _projectItems;
-            private readonly IDictionary<string, ProjectItem> _folderItems;
-
-            public DirectoryAppender(
-                string dirPath, ItemAttachmentFilter filter,
-                ProjectItems projectItems, IDictionary<string, ProjectItem> folderItems)
-            {
-                _dirPath = dirPath;
-                _filter = filter;
-                _projectItems = projectItems;
-                _folderItems = folderItems;
-            }
-
-            /// <summary>
-            /// ディレクトリ追加実行
-            /// </summary>
-            public void Execute()
-            {
-                string[] subDirPaths = Directory.GetDirectories(_dirPath);
-                foreach (string subDirPath in subDirPaths)
-                {
-                    string[] dirPathParts = subDirPath.Split('\\');
-                    string dirName = dirPathParts[dirPathParts.Length - 1];
-                    if (_filter.IsPassFilter(dirName) &&
-                        !_folderItems.ContainsKey(subDirPath))
-                    {
-                        //  まだ追加していないもののみ追加
-                        ProjectItem newItem = _projectItems.AddFromDirectory(subDirPath);
-                        _folderItems.Add(subDirPath, newItem);
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// ファイル追加クラス
-        /// </summary>
-        private class FileAppender
-        {
-            private readonly string _dirPath;
-            private readonly ItemAttachmentFilter _filter;
-            private readonly ProjectItems _projectItems;
-            private readonly IDictionary<string, ProjectItem> _fileItems;
-
-            public FileAppender(
-                string dirPath, ItemAttachmentFilter filter,
-                ProjectItems projectItems, IDictionary<string, ProjectItem> fileItems)
-            {
-                _dirPath = dirPath;
-                _filter = filter;
-                _projectItems = projectItems;
-                _fileItems = fileItems;
-            }
-
-            /// <summary>
-            /// ファイル追加実行
-            /// </summary>
-            public void Execute()
-            {
-                string[] subFilePaths = Directory.GetFiles(_dirPath);
-                foreach (string subFilePath in subFilePaths)
-                {
-                    string[] filePathParts = subFilePath.Split('\\');
-                    string fileName = filePathParts[filePathParts.Length - 1];
-                    if (_filter.IsPassFilter(fileName) &&
-                        !_fileItems.ContainsKey(subFilePath))
-                    {
-                        //  まだ追加していないもののみ追加
-                        _projectItems.AddFromFile(subFilePath);
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// プロジェクト要素削除クラス
-        /// </summary>
-        private class ProjectItemRemover
-        {
-            private readonly IList<ProjectItem> _deleteTarget;
-
-            public ProjectItemRemover(IList<ProjectItem> deleteTarget)
-            {
-                _deleteTarget = deleteTarget;
-            }
-
-            public void Execute()
-            {
-                foreach (ProjectItem projectItem in _deleteTarget)
-                {
-                    projectItem.Remove();
-                }
-            }
-        }
-
-        #endregion
     }
 }

@@ -53,8 +53,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Const\EnumCopyToOutputDirectory.cs" />
+    <Compile Include="Const\ProjectItemFileConst.cs" />
     <Compile Include="Exception\ClassNotFoundRuntimeException.cs" />
     <Compile Include="Exception\KoropokkurException.cs" />
+    <Compile Include="Invoke\IProjectItemAccessor.cs" />
     <Compile Include="Util\BindingFalgsUtils.cs" />
     <Compile Include="Util\AssemblyUtils.cs" />
     <Compile Include="Util\CommandBarUtils.cs" />
@@ -62,6 +65,7 @@
     <Compile Include="Util\MessageUtils.cs" />
     <Compile Include="Util\PathUtils.cs" />
     <Compile Include="Util\ProcessUtils.cs" />
+    <Compile Include="Util\ProjectItemUtils.cs" />
     <Compile Include="Util\ResourceUtils.cs" />
     <Compile Include="Util\StatusBarUtils.cs" />
   </ItemGroup>

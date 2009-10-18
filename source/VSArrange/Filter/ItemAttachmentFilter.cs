@@ -33,6 +33,24 @@ namespace VSArrange.Filter
         /// </summary>
         private readonly IList<Regex> _filterList;
 
+        /// <summary>
+        /// フィルター設定が存在するか？
+        /// </summary>
+        public bool HasFilter
+        {
+            get
+            {
+                if(_filterList != null && _filterList.Count > 0)
+                {
+                    return true;
+                }
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
         public ItemAttachmentFilter()
         {
             _filterList = new List<Regex>();
@@ -88,6 +106,11 @@ namespace VSArrange.Filter
         /// <returns></returns>
         public bool IsPassFilter(string target)
         {
+            if(!HasFilter)
+            {
+                return true;
+            }
+
             foreach (Regex regex in _filterList)
             {
                 if(regex.IsMatch(target))
@@ -97,6 +120,16 @@ namespace VSArrange.Filter
                 }
             }
             return true;
+        }
+
+        /// <summary>
+        /// 引数の文字列がフィルターのいずれかに該当するか判定
+        /// </summary>
+        /// <param name="target"></param>
+        /// <returns></returns>
+        public bool IsHitFilter(string target)
+        {
+            return !IsPassFilter(target);
         }
     }
 }

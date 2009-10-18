@@ -67,5 +67,82 @@ namespace VSArrange.Config
             set { _filterFolderStringList = value; }
             get { return _filterFolderStringList; }
         }
+
+        private IList<ConfigInfoFilter> _filterCompileStringList;
+
+        /// <summary>
+        /// ビルドアクション「コンパイル」用フィルター文字列リスト
+        /// </summary>
+        public IList<ConfigInfoFilter> FilterCompileStringList
+        {
+            set { _filterCompileStringList = value; }
+            get { return _filterCompileStringList; }
+        }
+
+        private IList<ConfigInfoFilter> _filterResourceStringList;
+
+        /// <summary>
+        /// ビルドアクション「埋め込みリソース」名用フィルター文字列リスト
+        /// </summary>
+        public IList<ConfigInfoFilter> FilterResourceStringList
+        {
+            set { _filterResourceStringList = value; }
+            get { return _filterResourceStringList; }
+        }
+
+        private IList<ConfigInfoFilter> _filterContentsStringList;
+
+        /// <summary>
+        /// ビルドアクション「コンテンツ」用フィルター文字列リスト
+        /// </summary>
+        public IList<ConfigInfoFilter> FilterContentsStringList
+        {
+            set { _filterContentsStringList = value; }
+            get { return _filterContentsStringList; }
+        }
+
+        private IList<ConfigInfoFilter> _filterNoActionStringList;
+
+        /// <summary>
+        /// ビルドアクション「なし」用フィルター文字列リスト
+        /// </summary>
+        public IList<ConfigInfoFilter> FilterNoActionStringList
+        {
+            set { _filterNoActionStringList = value; }
+            get { return _filterNoActionStringList; }
+        }
+
+        private IList<ConfigInfoFilter> _filterNoCopyStringList;
+
+        /// <summary>
+        /// ビルド後「コピーしない」用フィルター文字列リスト
+        /// </summary>
+        public IList<ConfigInfoFilter> FilterNoCopyStringList
+        {
+            set { _filterNoCopyStringList = value; }
+            get { return _filterNoCopyStringList; }
+        }
+
+        private IList<ConfigInfoFilter> _filterEverytimeCopyStringList;
+
+        /// <summary>
+        /// ビルド後「常にコピー」用フィルター文字列リスト
+        /// </summary>
+        public IList<ConfigInfoFilter> FilterEverytimeCopyStringList
+        {
+            set { _filterEverytimeCopyStringList = value; }
+            get { return _filterEverytimeCopyStringList; }
+        }
+
+        private IList<ConfigInfoFilter> _filterCopyIfNewStringList;
+
+        /// <summary>
+        /// ビルド後「新しい場合はコピー」用フィルター文字列リスト
+        /// </summary>
+        public IList<ConfigInfoFilter> FilterCopyIfNewStringList
+        {
+            set { _filterCopyIfNewStringList = value; }
+            get { return _filterCopyIfNewStringList; }
+        }
     }
 }
