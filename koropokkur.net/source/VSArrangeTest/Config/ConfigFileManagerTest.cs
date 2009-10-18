@@ -114,7 +114,8 @@ namespace VSArrangeTest.Config
             Assert.That(fileFilter2.IsEnable, Is.False);
             Assert.That(fileFilter2.FilterString, Is.EqualTo("テストA"));
 
-            Assert.That(configInfo.FilterFolderStringList, Is.Null);
+            Assert.That(configInfo.FilterFolderStringList == null || 
+                configInfo.FilterFolderStringList.Count == 0, Is.True);
         }
 
         [Test]
@@ -124,7 +125,8 @@ namespace VSArrangeTest.Config
             ConfigInfo configInfo = ConfigFileManager.ReadConfig(targetPath);
 
             Assert.That(configInfo, Is.Not.Null);
-            Assert.That(configInfo.FilterFileStringList, Is.Null);
+            Assert.That(configInfo.FilterFileStringList == null ||
+                configInfo.FilterFileStringList.Count == 0, Is.True);
 
             Assert.That(configInfo.FilterFolderStringList.Count, Is.GreaterThan(1));
 
@@ -210,44 +212,6 @@ namespace VSArrangeTest.Config
             return targetPath;
         }
 
-        [Test]
-        public void TestWriteConfig_Full()
-        {
-            //  ## Arrange ##
-            ConfigInfoFilter fileFilter1_1 = new ConfigInfoFilter();
-            fileFilter1_1.Name = "Subversion用フィルタ";
-            fileFilter1_1.IsEnable = true;
-            fileFilter1_1.FilterString = ".svn";
-
-            ConfigInfoFilter fileFilter1_2 = new ConfigInfoFilter();
-            fileFilter1_2.Name = "VisualStudioファイル用フィルタ";
-            fileFilter1_2.IsEnable = false;
-            fileFilter1_2.FilterString = ".csproj";
-
-            IList<ConfigInfoFilter> filterList1 = new List<ConfigInfoFilter>();
-            filterList1.Add(fileFilter1_1);
-            filterList1.Add(fileFilter1_2);
-
-            ConfigInfoFilter fileFilter2_1 = new ConfigInfoFilter();
-            fileFilter2_1.Name = "Re#用フィルタ";
-            fileFilter2_1.IsEnable = false;
-            fileFilter2_1.FilterString = "ReSharper";
-
-            ConfigInfoFilter fileFilter2_2 = new ConfigInfoFilter();
-            fileFilter2_2.Name = "VisualStudioフォルダ用フィルタ";
-            fileFilter2_2.IsEnable = true;
-            fileFilter2_2.FilterString = "(bin|obj)";
-
-            IList<ConfigInfoFilter> filterList2 = new List<ConfigInfoFilter>();
-            filterList2.Add(fileFilter2_1);
-            filterList2.Add(fileFilter2_2);
-
-            ConfigInfo configInfo = ConfigInfo.GetInstance();
-            configInfo.FilterFileStringList = filterList1;
-            configInfo.FilterFolderStringList = filterList2;
-
-            //  ## Act ##
-            ConfigFileManager.WriteConfig("c:\\temp\\VSArrange.config", configInfo);
-        }
+        
     }
 }

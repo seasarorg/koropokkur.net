@@ -17,10 +17,13 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
+using VSArrange.Config;
 
 namespace VSArrange.Control.Window
 {
+    #region delegate
     /// <summary>
     /// フィルターテスト実行イベントデリゲート
     /// </summary>
@@ -33,6 +36,32 @@ namespace VSArrange.Control.Window
     /// 再読み込みイベントデリゲート
     /// </summary>
     public delegate void ReloadExecutedEventHandler();
+    #endregion
+
+    #region enum
+
+    /// <summary>
+    /// フィルター設定DataGridの列番号列挙体
+    /// </summary>
+    public enum EnumFilterConfigColumnNo
+    {
+        /// <summary>
+        /// フィルター有効列
+        /// </summary>
+        IsEnable = 0,
+
+        /// <summary>
+        /// フィルター名列
+        /// </summary>
+        FilterName,
+
+        /// <summary>
+        /// フィルター文字列
+        /// </summary>
+        FilterString
+    }
+
+    #endregion
 
     /// <summary>
     /// フィルター設定コントロール
@@ -76,9 +105,35 @@ namespace VSArrange.Control.Window
         /// 入力されたフィルター一覧を取得
         /// </summary>
         /// <returns></returns>
-        public DataGridViewRowCollection GetFilterDefinitions()
+        public DataGridViewRowCollection GetFilterDefinitionsAsDataGridViewRowCollection()
         {
             return dgFilters.Rows;
+        }
+
+        /// <summary>
+        /// 入力されたフィルター一覧を取得
+        /// </summary>
+        /// <returns></returns>
+        public IList<ConfigInfoFilter> GetFilterDefinitions()
+        {
+            DataGridViewRowCollection rowCollection = GetFilterDefinitionsAsDataGridViewRowCollection();
+            IList<ConfigInfoFilter> filters = new List<ConfigInfoFilter>(rowCollection.Count);
+            foreach (DataGridViewRow row in rowCollection)
+            {
+                if (row == null ||
+                    row.Cells[(int)EnumFilterConfigColumnNo.FilterName].Value == null ||
+                    row.Cells[(int)EnumFilterConfigColumnNo.FilterString].Value == null)
+                {
+                    continue;
+                }
+                ConfigInfoFilter configInfoFilter = new ConfigInfoFilter();
+                configInfoFilter.IsEnable = row.Cells[(int)EnumFilterConfigColumnNo.IsEnable].Value == null ?
+                    false : (bool)row.Cells[(int)EnumFilterConfigColumnNo.IsEnable].Value;
+                configInfoFilter.Name = (string)row.Cells[(int)EnumFilterConfigColumnNo.FilterName].Value;
+                configInfoFilter.FilterString = (string)row.Cells[(int)EnumFilterConfigColumnNo.FilterString].Value;
+                filters.Add(configInfoFilter);
+            }
+            return filters;
         }
 
         /// <summary>
@@ -104,6 +159,11 @@ namespace VSArrange.Control.Window
             }
         }
 
+        /// <summary>
+        /// フィルターテスト文字列入力イベント
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void txtTestInput_KeyDown(object sender, System.Windows.Forms.KeyEventArgs e)
         {
             if(e.KeyCode == Keys.Enter)
@@ -131,11 +191,21 @@ namespace VSArrange.Control.Window
             }
         }
 
+        /// <summary>
+        /// フィルターテスト用テキストボックスLostFocusイベント
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void txtTestInput_LostFocus(object sender, System.EventArgs e)
         {
             CloseNoticeMessage();
         }
 
+        /// <summary>
+        /// 時限メッセージタイマーイベント
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void timerCloseMessage_Tick(object sender, EventArgs e)
         {
             CloseNoticeMessage();
@@ -146,7 +216,7 @@ namespace VSArrange.Control.Window
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void dgFileFilters_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private void dgFilters_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             RemoveRow(sender, e, "buttonRemoveFileFilter");
         }
@@ -182,10 +252,6 @@ namespace VSArrange.Control.Window
             }
         }
 
-        #endregion
-
-        
-
-        
+        #endregion        
     }
 }

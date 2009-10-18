@@ -37,6 +37,7 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="VSLangProj, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs">
@@ -112,6 +113,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Arrange\BuildActionArranger.cs" />
+    <Compile Include="Arrange\CopyToOutputDirectoryArranger.cs" />
+    <Compile Include="Arrange\Appender\DirectoryAppender.cs" />
+    <Compile Include="Arrange\Appender\FileAppender.cs" />
+    <Compile Include="Arrange\ProjectArranger.cs" />
+    <Compile Include="Arrange\Appender\ProjectItemRemover.cs" />
     <Compile Include="Config\ConfigFileManager.cs" />
     <Compile Include="Config\ConfigInfo.cs" />
     <Compile Include="Config\ConfigInfoFilter.cs" />
