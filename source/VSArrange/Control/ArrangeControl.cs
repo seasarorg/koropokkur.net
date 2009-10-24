@@ -17,14 +17,15 @@
 #endregion
 
 using System.Collections.Generic;
-using System.IO;
 using System.Windows.Forms;
+using AddInCommon.Background;
 using AddInCommon.Util;
 using EnvDTE;
 using EnvDTE80;
 using Microsoft.VisualStudio.CommandBars;
 using VSArrange.Arrange;
 using VSArrange.Config;
+using System;
 
 namespace VSArrange.Control
 {
@@ -86,15 +87,12 @@ namespace VSArrange.Control
         {
             Solution solution = _applicationObject.Solution;
 
-            //  プロジェクト追加フィルタの更新
-            //  設定が変更された時点で予め非同期で読んでおく方がより良いが
-            //  パフォーマンス的に整理処理直前に読んでも問題がないと思われるため
-            //  実装を単純にする＋漏れをなくすためここで呼び出し
-            ProjectArranger arranger = CreateArranger();
             try
             {
                 foreach (Project project in solution.Projects)
                 {
+                    //  プロジェクト追加フィルタの更新
+                    ProjectArranger arranger = CreateArranger();
                     arranger.ArrangeProject(project);
                 }
             }
@@ -118,9 +116,9 @@ namespace VSArrange.Control
             IDictionary<string, Project> refreshedProjects = new Dictionary<string, Project>();
             SelectedItems items = _applicationObject.SelectedItems;
 
+            
             try
             {
-                ProjectArranger arranger = CreateArranger();
                 //  選択されている要素は実質一つだけのはずだが
                 //  コレクションの形でしか取得できないためforeachでまわす
                 foreach (SelectedItem selectedItem in items)
@@ -132,6 +130,7 @@ namespace VSArrange.Control
                         //  更新済のプロジェクトは無視
                         continue;
                     }
+                    ProjectArranger arranger = CreateArranger();
                     arranger.ArrangeProject(currentProject);
 
                     _applicationObject.StatusBar.Text = string.Format(
@@ -141,7 +140,7 @@ namespace VSArrange.Control
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message + "\n" + ex.StackTrace);
+                MessageBox.Show(ex.Message + Environment.NewLine + ex.StackTrace);
             }
             finally
             {
@@ -163,8 +162,11 @@ namespace VSArrange.Control
         private ProjectArranger CreateArranger()
         {
             //  設定読み込み
+            //  設定が変更された時点で予め非同期で読んでおく方がより良いが
+            //  パフォーマンス的に整理処理直前に読んでも問題がないと思われるため
+            //  実装を単純にする＋漏れをなくすためここで呼び出し
             ConfigInfo configInfo = ConfigFileManager.ReadConfig(PathUtils.GetConfigPath());
-            return new ProjectArranger(configInfo);
+            return new ProjectArranger(configInfo, new AddInBackgroundWorker(_applicationObject));
         }
     }
 }
