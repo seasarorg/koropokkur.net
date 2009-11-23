@@ -60,6 +60,9 @@
       <DependentUpon>FilterList.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Control\Window\OutputResult.resx">
+      <DependentUpon>OutputResult.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="EnvDTE">
@@ -117,11 +120,13 @@
     <Compile Include="Arrange\CopyToOutputDirectoryArranger.cs" />
     <Compile Include="Arrange\Appender\DirectoryAppender.cs" />
     <Compile Include="Arrange\Appender\FileAppender.cs" />
+    <Compile Include="Arrange\OutputResultManager.cs" />
     <Compile Include="Arrange\ProjectArranger.cs" />
     <Compile Include="Arrange\Appender\ProjectItemRemover.cs" />
+    <Compile Include="Config\ConfigConst.cs" />
     <Compile Include="Config\ConfigFileManager.cs" />
     <Compile Include="Config\ConfigInfo.cs" />
-    <Compile Include="Config\ConfigInfoFilter.cs" />
+    <Compile Include="Config\ConfigInfoDetail.cs" />
     <Compile Include="Control\ConfigMenu.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -136,6 +141,12 @@
     </Compile>
     <Compile Include="Control\Window\FilterList.Designer.cs">
       <DependentUpon>FilterList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Control\Window\OutputResult.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Control\Window\OutputResult.Designer.cs">
+      <DependentUpon>OutputResult.cs</DependentUpon>
     </Compile>
     <Compile Include="Filter\ItemAttachmentFilter.cs" />
     <Compile Include="VSArrangeConst.cs" />

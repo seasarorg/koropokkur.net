@@ -57,17 +57,19 @@ namespace VSArrange.Control.Window
 
             try
             {
-                SetDataGridView(configInfo.FilterFileStringList, filterFile);
-                SetDataGridView(configInfo.FilterFolderStringList, filterFolder);
+                SetFilterFile(configInfo);
+                SetFilterFolder(configInfo);
 
-                SetDataGridView(configInfo.FilterCompileStringList, filterCompile);
-                SetDataGridView(configInfo.FilterResourceStringList, filterResource);
-                SetDataGridView(configInfo.FilterContentsStringList, filterContents);
-                SetDataGridView(configInfo.FilterNoActionStringList, filterNoAction);
+                SetFilterCompile(configInfo);
+                SetFilterResouce(configInfo);
+                SetFilterContents(configInfo);
+                SetFilterNoAction(configInfo);
 
-                SetDataGridView(configInfo.FilterNoCopyStringList, filterNoCopy);
-                SetDataGridView(configInfo.FilterEverytimeCopyStringList, filterEverytimeCopy);
-                SetDataGridView(configInfo.FilterCopyIfNewStringList, filterCopyIfNew);
+                SetFilterNoCopy(configInfo);
+                SetFilterEverytimeCopy(configInfo);
+                SetFilterCopyIfNew(configInfo);
+
+                SetOutputResult(configInfo);
             }
             catch(System.Exception ex)
             {
@@ -93,7 +95,7 @@ namespace VSArrange.Control.Window
             }
             catch (Exception ex)
             {
-                MessageBox.Show("設定の書き込みに失敗しました。\n" + ex.Message);
+                MessageUtils.ShowErrorMessage("設定の書き込みに失敗しました。\n" + ex.Message);
                 return;
             }
             Close();
@@ -133,21 +135,25 @@ namespace VSArrange.Control.Window
                 }
                 process.WaitForExit();
 
-                filterFile_ReloadExecuted();
-                filterFolder_ReloadExecuted();
+                ConfigInfo configInfo = GetConfigInfo();
 
-                filterCompile_ReloadExecuted();
-                filterResouce_ReloadExecuted();
-                filterContents_ReloadExecuted();
-                filterNoAction_ReloadExecuted();
+                SetFilterFile(configInfo);
+                SetFilterFolder(configInfo);
 
-                filterNoCopy_ReloadExecuted();
-                filterEverytimeCopy_ReloadExecuted();
-                filterCopyIfNew_ReloadExecuted();
+                SetFilterCompile(configInfo);
+                SetFilterResouce(configInfo);
+                SetFilterContents(configInfo);
+                SetFilterNoAction(configInfo);
+
+                SetFilterNoCopy(configInfo);
+                SetFilterEverytimeCopy(configInfo);
+                SetFilterCopyIfNew(configInfo);
+
+                SetOutputResult(configInfo);
             }
             catch(System.Exception ex)
             {
-                MessageBox.Show("エディタの起動、設定ファイルの読込に失敗しました。\n" +
+                MessageUtils.ShowErrorMessage("エディタの起動、設定ファイルの読込に失敗しました。\n" +
                                 PathUtils.GetConfigPath() + "\n" +
                                 ex.Message + "\n" + ex.StackTrace);
             }
@@ -170,13 +176,7 @@ namespace VSArrange.Control.Window
         /// </summary>
         private void filterFile_ReloadExecuted()
         {
-            ConfigInfo configInfo = GetConfigInfo();
-            if (configInfo == null)
-            {
-                return;
-            }
-            filterFile.Clear();
-            SetDataGridView(configInfo.FilterFileStringList, filterFile);
+            SetFilterFile(GetConfigInfo());
         }
 
         /// <summary>
@@ -184,13 +184,7 @@ namespace VSArrange.Control.Window
         /// </summary>
         private void filterFolder_ReloadExecuted()
         {
-            ConfigInfo configInfo = GetConfigInfo();
-            if (configInfo == null)
-            {
-                return;
-            }
-            filterFolder.Clear();
-            SetDataGridView(configInfo.FilterFolderStringList, filterFolder);
+            SetFilterFolder(GetConfigInfo());
         }
 
         /// <summary>
@@ -198,13 +192,7 @@ namespace VSArrange.Control.Window
         /// </summary>
         private void filterCompile_ReloadExecuted()
         {
-            ConfigInfo configInfo = GetConfigInfo();
-            if (configInfo == null)
-            {
-                return;
-            }
-            filterCompile.Clear();
-            SetDataGridView(configInfo.FilterCompileStringList, filterCompile);
+            SetFilterCompile(GetConfigInfo());
         }
 
         /// <summary>
@@ -212,13 +200,7 @@ namespace VSArrange.Control.Window
         /// </summary>
         private void filterResouce_ReloadExecuted()
         {
-            ConfigInfo configInfo = GetConfigInfo();
-            if (configInfo == null)
-            {
-                return;
-            }
-            filterResource.Clear();
-            SetDataGridView(configInfo.FilterResourceStringList, filterResource);
+            SetFilterResouce(GetConfigInfo());
         }
 
         /// <summary>
@@ -226,13 +208,7 @@ namespace VSArrange.Control.Window
         /// </summary>
         private void filterContents_ReloadExecuted()
         {
-            ConfigInfo configInfo = GetConfigInfo();
-            if (configInfo == null)
-            {
-                return;
-            }
-            filterContents.Clear();
-            SetDataGridView(configInfo.FilterContentsStringList, filterContents);
+            SetFilterContents(GetConfigInfo());
         }
 
         /// <summary>
@@ -240,13 +216,7 @@ namespace VSArrange.Control.Window
         /// </summary>
         private void filterNoAction_ReloadExecuted()
         {
-            ConfigInfo configInfo = GetConfigInfo();
-            if (configInfo == null)
-            {
-                return;
-            }
-            filterNoAction.Clear();
-            SetDataGridView(configInfo.FilterNoActionStringList, filterNoAction);
+            SetFilterNoAction(GetConfigInfo());
         }
 
         /// <summary>
@@ -254,13 +224,7 @@ namespace VSArrange.Control.Window
         /// </summary>
         private void filterNoCopy_ReloadExecuted()
         {
-            ConfigInfo configInfo = GetConfigInfo();
-            if (configInfo == null)
-            {
-                return;
-            }
-            filterNoCopy.Clear();
-            SetDataGridView(configInfo.FilterNoCopyStringList, filterNoCopy);
+            SetFilterNoCopy(GetConfigInfo());
         }
 
         /// <summary>
@@ -268,13 +232,7 @@ namespace VSArrange.Control.Window
         /// </summary>
         private void filterEverytimeCopy_ReloadExecuted()
         {
-            ConfigInfo configInfo = GetConfigInfo();
-            if (configInfo == null)
-            {
-                return;
-            }
-            filterEverytimeCopy.Clear();
-            SetDataGridView(configInfo.FilterEverytimeCopyStringList, filterEverytimeCopy);
+            SetFilterEverytimeCopy(GetConfigInfo());
         }
 
         /// <summary>
@@ -282,13 +240,7 @@ namespace VSArrange.Control.Window
         /// </summary>
         private void filterCopyIfNew_ReloadExecuted()
         {
-            ConfigInfo configInfo = GetConfigInfo();
-            if (configInfo == null)
-            {
-                return;
-            }
-            filterCopyIfNew.Clear();
-            SetDataGridView(configInfo.FilterCopyIfNewStringList, filterCopyIfNew);
+            SetFilterCopyIfNew(GetConfigInfo());
         }
         #endregion
 
@@ -338,6 +290,9 @@ namespace VSArrange.Control.Window
             configInfo.FilterNoCopyStringList = filterNoCopy.GetFilterDefinitions();
             configInfo.FilterEverytimeCopyStringList = filterEverytimeCopy.GetFilterDefinitions();
             configInfo.FilterCopyIfNewStringList = filterCopyIfNew.GetFilterDefinitions();
+
+            configInfo.OutputResultWindow = outputResultConfig.GetOutputResultWindowDefinition();
+            configInfo.OutputResultFile = outputResultConfig.GetOutputResultFileDefinition(); 
         }
 
         /// <summary>
@@ -346,7 +301,7 @@ namespace VSArrange.Control.Window
         /// <param name="inputText"></param>
         /// <param name="filterDefinitions"></param>
         /// <returns></returns>
-        private static bool IsFilterHit(string inputText, IList<ConfigInfoFilter> filterDefinitions)
+        private static bool IsFilterHit(string inputText, IList<ConfigInfoDetail> filterDefinitions)
         {
             if (string.IsNullOrEmpty(inputText))
             {
@@ -381,7 +336,7 @@ namespace VSArrange.Control.Window
         /// </summary>
         /// <param name="configInfoFilters"></param>
         /// <param name="filterList"></param>
-        private static void SetDataGridView(IEnumerable<ConfigInfoFilter> configInfoFilters, FilterList filterList)
+        private static void SetDataGridView(IEnumerable<ConfigInfoDetail> configInfoFilters, FilterList filterList)
         {
             //  未設定と見なして画面への繁栄は行わない
             if(configInfoFilters == null)
@@ -389,12 +344,154 @@ namespace VSArrange.Control.Window
                 return;
             }
 
-            foreach (ConfigInfoFilter filter in configInfoFilters)
+            foreach (ConfigInfoDetail filter in configInfoFilters)
             {
                 filterList.SetFilterDefinitions(
-                    new object[] { filter.IsEnable, filter.Name, filter.FilterString });
+                    new object[] { filter.IsEnable, filter.Name, filter.Value });
             }
         }
+
+        /// <summary>
+        /// ファイル用のフィルタ設定をコントロールに反映
+        /// </summary>
+        /// <param name="configInfo"></param>
+        private void SetFilterFile(ConfigInfo configInfo)
+        {
+            if (configInfo == null)
+            {
+                return;
+            }
+            filterFile.Clear();
+            SetDataGridView(configInfo.FilterFileStringList, filterFile);
+        }
+
+        /// <summary>
+        /// フォルダ用フィルタ設定をコントロールに反映
+        /// </summary>
+        /// <param name="configInfo"></param>
+        private void SetFilterFolder(ConfigInfo configInfo)
+        {
+            if (configInfo == null)
+            {
+                return;
+            }
+            filterFolder.Clear();
+            SetDataGridView(configInfo.FilterFolderStringList, filterFolder);
+        }
+
+        /// <summary>
+        /// ビルドアクション「コンパイル」用のフィルタ設定をコントロールに反映
+        /// </summary>
+        /// <param name="configInfo"></param>
+        private void SetFilterCompile(ConfigInfo configInfo)
+        {
+            if (configInfo == null)
+            {
+                return;
+            }
+            filterCompile.Clear();
+            SetDataGridView(configInfo.FilterCompileStringList, filterCompile);
+        }
+
+        /// <summary>
+        /// ビルドアクション「埋め込みリソース」用のフィルタ設定をコントロールに反映
+        /// </summary>
+        /// <param name="configInfo"></param>
+        private void SetFilterResouce(ConfigInfo configInfo)
+        {
+            if (configInfo == null)
+            {
+                return;
+            }
+            filterResource.Clear();
+            SetDataGridView(configInfo.FilterResourceStringList, filterResource);
+        }
+
+        /// <summary>
+        /// ビルドアクション「コンテンツ」用のフィルタ設定をコントロールに反映
+        /// </summary>
+        /// <param name="configInfo"></param>
+        private void SetFilterContents(ConfigInfo configInfo)
+        {
+            if (configInfo == null)
+            {
+                return;
+            }
+            filterContents.Clear();
+            SetDataGridView(configInfo.FilterContentsStringList, filterContents);
+        }
+
+        /// <summary>
+        /// ビルドアクション「なし」用のフィルタ設定をコントロールに反映
+        /// </summary>
+        /// <param name="configInfo"></param>
+        private void SetFilterNoAction(ConfigInfo configInfo)
+        {
+            if (configInfo == null)
+            {
+                return;
+            }
+            filterNoAction.Clear();
+            SetDataGridView(configInfo.FilterNoActionStringList, filterNoAction);
+        }
+
+        /// <summary>
+        /// ビルド後「コピーしない」用のフィルタ設定をコントロールに反映
+        /// </summary>
+        /// <param name="configInfo"></param>
+        private void SetFilterNoCopy(ConfigInfo configInfo)
+        {
+            if (configInfo == null)
+            {
+                return;
+            }
+            filterNoCopy.Clear();
+            SetDataGridView(configInfo.FilterNoCopyStringList, filterNoCopy);
+        }
+
+        /// <summary>
+        /// ビルド後「常にコピー用のフィルタ設定をコントロールに反映
+        /// </summary>
+        /// <param name="configInfo"></param>
+        private void SetFilterEverytimeCopy(ConfigInfo configInfo)
+        {
+            if (configInfo == null)
+            {
+                return;
+            }
+            filterEverytimeCopy.Clear();
+            SetDataGridView(configInfo.FilterEverytimeCopyStringList, filterEverytimeCopy);
+        }
+
+        /// <summary>
+        /// ビルド後「新しい場合はコピー」用のフィルタ設定をコントロールに反映
+        /// </summary>
+        /// <param name="configInfo"></param>
+        private void SetFilterCopyIfNew(ConfigInfo configInfo)
+        {
+            if (configInfo == null)
+            {
+                return;
+            }
+            filterCopyIfNew.Clear();
+            SetDataGridView(configInfo.FilterCopyIfNewStringList, filterCopyIfNew);
+        }
+
+        /// <summary>
+        /// 結果出力設定をコントロールに反映
+        /// </summary>
+        /// <param name="configInfo"></param>
+        private void SetOutputResult(ConfigInfo configInfo)
+        {
+            if (configInfo == null)
+            {
+                return;
+            }
+            outputResultConfig.SetOutputResultDefinitions(
+                configInfo.OutputResultWindow, configInfo.OutputResultFile);
+        }
         #endregion
+
+
     }
 }

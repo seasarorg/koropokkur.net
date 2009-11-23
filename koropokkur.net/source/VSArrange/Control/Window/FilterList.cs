@@ -23,21 +23,6 @@ using VSArrange.Config;
 
 namespace VSArrange.Control.Window
 {
-    #region delegate
-    /// <summary>
-    /// フィルターテスト実行イベントデリゲート
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="inputText"></param>
-    /// <returns></returns>
-    public delegate bool TestExecutedEventHandler(FilterList sender, string inputText);
-
-    /// <summary>
-    /// 再読み込みイベントデリゲート
-    /// </summary>
-    public delegate void ReloadExecutedEventHandler();
-    #endregion
-
     #region enum
 
     /// <summary>
@@ -68,6 +53,21 @@ namespace VSArrange.Control.Window
     /// </summary>
     public partial class FilterList : UserControl
     {
+        #region delegate
+        /// <summary>
+        /// フィルターテスト実行イベントデリゲート
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="inputText"></param>
+        /// <returns></returns>
+        public delegate bool TestExecutedEventHandler(FilterList sender, string inputText);
+
+        /// <summary>
+        /// 再読み込みイベントデリゲート
+        /// </summary>
+        public delegate void ReloadExecutedEventHandler();
+        #endregion
+
         /// <summary>
         /// フィルターテスト実行イベント
         /// </summary>
@@ -114,10 +114,10 @@ namespace VSArrange.Control.Window
         /// 入力されたフィルター一覧を取得
         /// </summary>
         /// <returns></returns>
-        public IList<ConfigInfoFilter> GetFilterDefinitions()
+        public IList<ConfigInfoDetail> GetFilterDefinitions()
         {
             DataGridViewRowCollection rowCollection = GetFilterDefinitionsAsDataGridViewRowCollection();
-            IList<ConfigInfoFilter> filters = new List<ConfigInfoFilter>(rowCollection.Count);
+            IList<ConfigInfoDetail> filters = new List<ConfigInfoDetail>(rowCollection.Count);
             foreach (DataGridViewRow row in rowCollection)
             {
                 if (row == null ||
@@ -126,11 +126,11 @@ namespace VSArrange.Control.Window
                 {
                     continue;
                 }
-                ConfigInfoFilter configInfoFilter = new ConfigInfoFilter();
+                ConfigInfoDetail configInfoFilter = new ConfigInfoDetail();
                 configInfoFilter.IsEnable = row.Cells[(int)EnumFilterConfigColumnNo.IsEnable].Value == null ?
                     false : (bool)row.Cells[(int)EnumFilterConfigColumnNo.IsEnable].Value;
                 configInfoFilter.Name = (string)row.Cells[(int)EnumFilterConfigColumnNo.FilterName].Value;
-                configInfoFilter.FilterString = (string)row.Cells[(int)EnumFilterConfigColumnNo.FilterString].Value;
+                configInfoFilter.Value = (string)row.Cells[(int)EnumFilterConfigColumnNo.FilterString].Value;
                 filters.Add(configInfoFilter);
             }
             return filters;
