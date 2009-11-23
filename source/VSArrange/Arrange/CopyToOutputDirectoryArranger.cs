@@ -137,7 +137,7 @@ namespace VSArrange.Arrange
         /// </summary>
         /// <param name="filter"></param>
         /// <param name="filterList"></param>
-        protected void AddFilters(ItemAttachmentFilter filter, IList<ConfigInfoFilter> filterList)
+        protected void AddFilters(ItemAttachmentFilter filter, IList<ConfigInfoDetail> filterList)
         {
             if (filterList != null)
             {

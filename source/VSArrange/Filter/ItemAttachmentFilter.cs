@@ -74,19 +74,19 @@ namespace VSArrange.Filter
         /// フィルター条件となる文字列を追加
         /// </summary>
         /// <param name="configInfoFilters"></param>
-        public void AddFilters(IList<ConfigInfoFilter> configInfoFilters)
+        public void AddFilters(IList<ConfigInfoDetail> configInfoFilters)
         {
             if (configInfoFilters == null)
             {
                 throw new ArgumentNullException("configInfoFilters");
             }
 
-            foreach (ConfigInfoFilter filter in configInfoFilters)
+            foreach (ConfigInfoDetail filter in configInfoFilters)
             {
                 if(filter.IsEnable &&
-                    !string.IsNullOrEmpty(filter.FilterString))
+                    !string.IsNullOrEmpty(filter.Value))
                 {
-                    AddFilter(filter.FilterString);
+                    AddFilter(filter.Value);
                 }
             }
         }

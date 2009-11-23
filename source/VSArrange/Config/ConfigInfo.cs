@@ -46,103 +46,134 @@ namespace VSArrange.Config
 
         #endregion
 
-        private IList<ConfigInfoFilter> _filterFileStringList;
+        private IList<ConfigInfoDetail> _filterFileStringList;
 
         /// <summary>
         /// ファイル名用フィルター文字列リスト
         /// </summary>
-        public IList<ConfigInfoFilter> FilterFileStringList
+        public IList<ConfigInfoDetail> FilterFileStringList
         {
             set { _filterFileStringList = value; }
             get { return _filterFileStringList; }
         }
 
-        private IList<ConfigInfoFilter> _filterFolderStringList;
+        private IList<ConfigInfoDetail> _filterFolderStringList;
 
         /// <summary>
         /// フォルダ名用フィルター文字列リスト
         /// </summary>
-        public IList<ConfigInfoFilter> FilterFolderStringList
+        public IList<ConfigInfoDetail> FilterFolderStringList
         {
             set { _filterFolderStringList = value; }
             get { return _filterFolderStringList; }
         }
 
-        private IList<ConfigInfoFilter> _filterCompileStringList;
+        private IList<ConfigInfoDetail> _filterCompileStringList;
 
         /// <summary>
         /// ビルドアクション「コンパイル」用フィルター文字列リスト
         /// </summary>
-        public IList<ConfigInfoFilter> FilterCompileStringList
+        public IList<ConfigInfoDetail> FilterCompileStringList
         {
             set { _filterCompileStringList = value; }
             get { return _filterCompileStringList; }
         }
 
-        private IList<ConfigInfoFilter> _filterResourceStringList;
+        private IList<ConfigInfoDetail> _filterResourceStringList;
 
         /// <summary>
         /// ビルドアクション「埋め込みリソース」名用フィルター文字列リスト
         /// </summary>
-        public IList<ConfigInfoFilter> FilterResourceStringList
+        public IList<ConfigInfoDetail> FilterResourceStringList
         {
             set { _filterResourceStringList = value; }
             get { return _filterResourceStringList; }
         }
 
-        private IList<ConfigInfoFilter> _filterContentsStringList;
+        private IList<ConfigInfoDetail> _filterContentsStringList;
 
         /// <summary>
         /// ビルドアクション「コンテンツ」用フィルター文字列リスト
         /// </summary>
-        public IList<ConfigInfoFilter> FilterContentsStringList
+        public IList<ConfigInfoDetail> FilterContentsStringList
         {
             set { _filterContentsStringList = value; }
             get { return _filterContentsStringList; }
         }
 
-        private IList<ConfigInfoFilter> _filterNoActionStringList;
+        private IList<ConfigInfoDetail> _filterNoActionStringList;
 
         /// <summary>
         /// ビルドアクション「なし」用フィルター文字列リスト
         /// </summary>
-        public IList<ConfigInfoFilter> FilterNoActionStringList
+        public IList<ConfigInfoDetail> FilterNoActionStringList
         {
             set { _filterNoActionStringList = value; }
             get { return _filterNoActionStringList; }
         }
 
-        private IList<ConfigInfoFilter> _filterNoCopyStringList;
+        private IList<ConfigInfoDetail> _filterNoCopyStringList;
 
         /// <summary>
         /// ビルド後「コピーしない」用フィルター文字列リスト
         /// </summary>
-        public IList<ConfigInfoFilter> FilterNoCopyStringList
+        public IList<ConfigInfoDetail> FilterNoCopyStringList
         {
             set { _filterNoCopyStringList = value; }
             get { return _filterNoCopyStringList; }
         }
 
-        private IList<ConfigInfoFilter> _filterEverytimeCopyStringList;
+        private IList<ConfigInfoDetail> _filterEverytimeCopyStringList;
 
         /// <summary>
         /// ビルド後「常にコピー」用フィルター文字列リスト
         /// </summary>
-        public IList<ConfigInfoFilter> FilterEverytimeCopyStringList
+        public IList<ConfigInfoDetail> FilterEverytimeCopyStringList
         {
             set { _filterEverytimeCopyStringList = value; }
             get { return _filterEverytimeCopyStringList; }
         }
 
-        private IList<ConfigInfoFilter> _filterCopyIfNewStringList;
+        private IList<ConfigInfoDetail> _filterCopyIfNewStringList;
 
         /// <summary>
         /// ビルド後「新しい場合はコピー」用フィルター文字列リスト
         /// </summary>
-        public IList<ConfigInfoFilter> FilterCopyIfNewStringList
+        public IList<ConfigInfoDetail> FilterCopyIfNewStringList
         {
             set { _filterCopyIfNewStringList = value; }
             get { return _filterCopyIfNewStringList; }
+        }
+
+        private ConfigInfoDetail _outputResultWindow;
+        /// <summary>
+        /// ウィンドウへの結果出力設定
+        /// </summary>
+        public ConfigInfoDetail OutputResultWindow
+        {
+            set { _outputResultWindow = value; }
+            get { return _outputResultWindow; }
+        }
+
+        private ConfigInfoDetail _outputResultFile;
+        /// <summary>
+        /// ファイルへの結果出力設定
+        /// </summary>
+        public ConfigInfoDetail OutputResultFile
+        {
+            set { _outputResultFile = value; }
+            get { return _outputResultFile; }
+        }
+
+        /// <summary>
+        /// 処理結果出力フラグ
+        /// </summary>
+        public bool IsOutputResult
+        {
+            get
+            {
+                return (OutputResultWindow.IsEnable || OutputResultFile.IsEnable);
+            }
         }
     }
 }

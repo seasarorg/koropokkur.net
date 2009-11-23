@@ -21,10 +21,10 @@ namespace VSArrange.Config
     /// <summary>
     /// フィルターに関する設定情報
     /// </summary>
-    public struct ConfigInfoFilter
+    public struct ConfigInfoDetail
     {
         public string Name;
         public bool IsEnable;
-        public string FilterString;
+        public string Value;
     }
 }

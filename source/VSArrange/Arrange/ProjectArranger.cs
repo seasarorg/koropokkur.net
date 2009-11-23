@@ -42,6 +42,11 @@ namespace VSArrange.Arrange
         private readonly AddInBackgroundWorker _worker;
 
         /// <summary>
+        /// 設定情報
+        /// </summary>
+        private ConfigInfo _configInfo;
+
+        /// <summary>
         /// プロジェクト要素整理処理中のプロジェクト名
         /// </summary>
         private string _projectName;
@@ -60,6 +65,11 @@ namespace VSArrange.Arrange
         /// 「出力後にコピー」設定
         /// </summary>
         protected CopyToOutputDirectoryArranger _copyToOutputDirectoryArranger;
+
+        /// <summary>
+        /// 結果出力管理
+        /// </summary>
+        protected readonly OutputResultManager _outputResultManager = new OutputResultManager();
 
         #region プロパティ
         /// <summary>
@@ -126,13 +136,8 @@ namespace VSArrange.Arrange
                 return;
             }
 
-            ////  他のプロジェクトでプロジェクト要素整理を実行中の場合は
-            ////  終わるまで待つ
-            //while(_worker.IsBusy)
-            //{
-            //    System.Threading.Thread.Sleep(1000);
-            //    Application.DoEvents();
-            //}
+            _outputResultManager.Initialize(project.Name, _configInfo);
+
             //  バックグラウンドでプロジェクト要素整理の開始
             _worker.RunWorkerAsync(project);
         }
@@ -166,11 +171,13 @@ namespace VSArrange.Arrange
                         if (!folderItems.ContainsKey(currentPath))
                         {
                             folderItems.Add(currentPath, projectItem);
+                            _outputResultManager.RegisterAddedDirectory(currentPath);
                         }
                     }
                     else
                     {
                         deleteTarget.Add(projectItem);
+                        _outputResultManager.RegisterRemovedDirectory(currentPath);
                     }
                 }
                 else if (File.Exists(currentPath))
@@ -180,23 +187,24 @@ namespace VSArrange.Arrange
                         if (!fileItems.ContainsKey(currentPath))
                         {
                             fileItems.Add(currentPath, projectItem);
+                            _outputResultManager.RegisterAddedFile(currentPath);
                         }
                     }
                     else
                     {
                         deleteTarget.Add(projectItem);
+                        _outputResultManager.RegisterRemovedFile(currentPath);
                     }
                 }
                 else
                 {
                     deleteTarget.Add(projectItem);
+                    _outputResultManager.RegisterRemovedUnknown(currentPath);
                 }
             }
 
             _worker.ReportProgress("プロジェクト要素を追加中（フォルダ）", 1, PROGRESS_PARTS_COUNT);
             //  ディレクトリ追加
-            //  ラストで行っている再起処理にも関係するので
-            //  ディレクトリ追加は新規スレッドでの実行は行わない
             DirectoryAppender directoryAppender = new DirectoryAppender(
                 dirPath, _filterFolder, projectItems, folderItems);
             directoryAppender.Execute();
@@ -227,7 +235,7 @@ namespace VSArrange.Arrange
         /// </summary>
         /// <param name="filter"></param>
         /// <param name="filterList"></param>
-        private void AddFilters(ItemAttachmentFilter filter, IList<ConfigInfoFilter> filterList)
+        private void AddFilters(ItemAttachmentFilter filter, IList<ConfigInfoDetail> filterList)
         {
             if (filterList != null)
             {
@@ -243,6 +251,8 @@ namespace VSArrange.Arrange
         private void Initialize(ConfigInfo configInfo)
         {
             if (configInfo == null) throw new ArgumentNullException("configInfo");
+
+            _configInfo = configInfo;
 
             AddFilters(FilterFile, configInfo.FilterFileStringList);
             AddFilters(FilterFolder, configInfo.FilterFolderStringList);
@@ -312,8 +322,19 @@ namespace VSArrange.Arrange
         {
             if (_exception == null)
             {
-                MessageUtils.ShowInfoMessage("[{0}]プロジェクト要素の整理が終了しました。",
-                    _projectName);
+                try
+                {
+                    _outputResultManager.OutputResult();
+                }
+                catch(Exception ex)
+                {
+                    StringBuilder builder = new StringBuilder();
+                    builder.AppendLine(string.Format(
+                        "[{0}]処理結果の出力に失敗しました。", _projectName));
+                    builder.AppendLine(ex.Message);
+                    builder.AppendLine(ex.StackTrace);
+                    MessageUtils.ShowErrorMessage(builder.ToString());
+                }
             }
             else
             {
