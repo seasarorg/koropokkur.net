@@ -43,5 +43,10 @@ namespace AddInCommon.Const
         /// 画面上部のメニュー
         /// </summary>
         public static string MENU_BAR = "MenuBar";
+
+        /// <summary>
+        /// ツールメニュー
+        /// </summary>
+        public static string TOOL_MENU = "Tools";
     }
 }

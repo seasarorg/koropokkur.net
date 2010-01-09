@@ -16,22 +16,27 @@
  */
 #endregion
 
-
-namespace AddInCommon.Const
+namespace AddInCommon.Exception
 {
     /// <summary>
-    /// Koropokkur.NET汎用定数クラス
+    /// 確実に存在するはずのCommandBarが存在しなかった場合に投げる例外
     /// </summary>
-    public sealed class KoropokkurConst
+    public class CommandBarNotFoundException : KoropokkurException
     {
-        /// <summary>
-        /// アドイン総称
-        /// </summary>
-        public const string NAME = "Koropokkur.NET";
+        private readonly string _expectedCommandBarName;
 
-        /// <summary>
-        /// 各種設定メニュー名
-        /// </summary>
-        public const string CONFIG_MENU_NAME = "Koropokkurの設定";
+        public CommandBarNotFoundException(string expectedCommandBarName)
+        {
+            _expectedCommandBarName = expectedCommandBarName;
+        }
+
+        public override string Message
+        {
+            get
+            {
+                return string.Format("[{0}]という名称のCommandBarは存在しません。",
+                    _expectedCommandBarName);
+            }
+        }
     }
 }

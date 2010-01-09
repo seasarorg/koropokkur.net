@@ -21,9 +21,11 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using AddInCommon.Command;
 using AddInCommon.Const;
+using AddInCommon.Util;
 using EnvDTE;
 using EnvDTE80;
 using Extensibility;
+using Microsoft.VisualStudio.CommandBars;
 
 namespace AddInCommon.Helper
 {
@@ -95,6 +97,22 @@ namespace AddInCommon.Helper
                     foreach (IDTCExecCommand execCommand in _eventCommands.Values)
                     {
                         DeleteCommand(execCommand.CommandName);
+                    }
+
+                    //  「Koropokkurの設定」メニューをクリアする
+                    CommandBar koropokkurMenu = VSCommandUtils.GetKoropokkurMenuBar(ApplicationObject);
+                    if(koropokkurMenu != null)
+                    {
+                        CommandBar toolMenuBar = VSCommandUtils.GetCommandBar(ApplicationObject,                                                     CommandBarConst.TOOL_MENU);
+                        foreach (CommandBarControl control in toolMenuBar.Controls)
+                        {
+                            if(control.Caption == KoropokkurConst.CONFIG_MENU_NAME)
+                            {
+                                control.Delete(null);
+                            }
+                        }
+
+                        koropokkurMenu.Delete();
                     }
                 }
                 catch(System.Exception ex)

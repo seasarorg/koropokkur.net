@@ -63,6 +63,7 @@
     <Compile Include="Command\VSCommandCreator.cs" />
     <Compile Include="Command\IDTCExecCommand.cs" />
     <Compile Include="Const\IconIdConst.cs" />
+    <Compile Include="Exception\CommandBarNotFoundException.cs" />
     <Compile Include="Helper\ConnectHelperBase.cs" />
     <Compile Include="Const\CommandBarConst.cs" />
     <Compile Include="Const\EnumCopyToOutputDirectory.cs" />

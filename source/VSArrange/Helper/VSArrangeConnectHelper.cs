@@ -35,10 +35,15 @@ namespace VSArrange.Helper
         {
             VSCommandCreator creator = new VSCommandCreator(AddInInstance, ApplicationObject);
 
+            //  ソリューションエクスプローラー右クリックメニュー
             CreateArrangeCommand(new ProjectArrangeCommand(), commands, creator,
                                  creator.GetCommandBar(CommandBarConst.CONTEXT_PROJECT));
             CreateArrangeCommand(new SolutionArrangeCommand(), commands, creator,
                                  creator.GetCommandBar(CommandBarConst.CONTEXT_SOLUTION));
+
+            //  ツールメニュー
+            CreateArrangeCommand(new VSArrangeMenuCommand(), commands, creator, 
+                                 creator.AddKoropokkurMenuCommandBar());
         }
 
         /// <summary>
