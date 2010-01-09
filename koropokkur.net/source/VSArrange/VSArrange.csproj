@@ -123,6 +123,9 @@
     <Compile Include="Arrange\OutputResultManager.cs" />
     <Compile Include="Arrange\ProjectArranger.cs" />
     <Compile Include="Arrange\Appender\ProjectItemRemover.cs" />
+    <Compile Include="Command\ProjectArrangeCommand.cs" />
+    <Compile Include="Command\SolutionArrangeCommand.cs" />
+    <Compile Include="Command\VSArrangeMenuCommand.cs" />
     <Compile Include="Config\ConfigConst.cs" />
     <Compile Include="Config\ConfigFileManager.cs" />
     <Compile Include="Config\ConfigInfo.cs" />
@@ -149,6 +152,8 @@
       <DependentUpon>OutputResult.cs</DependentUpon>
     </Compile>
     <Compile Include="Filter\ItemAttachmentFilter.cs" />
+    <Compile Include="Helper\VSArrangeConnectHelper.cs" />
+    <Compile Include="Util\ArrangeUtils.cs" />
     <Compile Include="VSArrangeConst.cs" />
   </ItemGroup>
   <ItemGroup>

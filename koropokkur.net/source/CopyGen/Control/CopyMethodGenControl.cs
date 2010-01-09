@@ -63,7 +63,7 @@ namespace CopyGen.Control
         public virtual CommandBarControl CreateContextMenuItem(CommandBar commandBar)
         {
             CommandBarButton refreshSolutuinButton =
-                CommandBarUtils.CreateCommandBarControl<CommandBarButton>(commandBar);
+                VSCommandUtils.CreateCommandBarControl<CommandBarButton>(commandBar);
             refreshSolutuinButton.Caption = COPY_GEN;
             refreshSolutuinButton.Click += generateCode_Click;
             return refreshSolutuinButton;
