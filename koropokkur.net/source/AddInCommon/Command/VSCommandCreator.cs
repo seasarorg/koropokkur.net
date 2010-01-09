@@ -61,7 +61,7 @@ namespace AddInCommon.Command
         /// <param name="style"></param>
         /// <param name="commandControlType">
         /// <returns>作成したコントロール</returns>
-        public EnvDTE.Command Create(
+        public EnvDTE.Command CreateNamedCommand(
             string commandName, string dispayText, string toolTipText,
             bool isUseOfficeResource, int officeItemId,
             vsCommandStatus status, vsCommandStyle style, vsCommandControlType commandControlType)
@@ -86,11 +86,56 @@ namespace AddInCommon.Command
             }
             catch (ArgumentException ex)
             {
-                MessageBox.Show(ex.Message, this.GetType().Name + "#" + "Create");
+                MessageBox.Show(ex.Message, this.GetType().Name + "#" + "CreateNamedCommand");
                 throw;
             }
  
             return newCommand;
+        }
+
+        /// <summary>
+        /// 「Koropokkurの設定」メニューにCommandBarを追加
+        /// </summary>
+        /// <returns></returns>
+        public CommandBar AddKoropokkurMenuCommandBar()
+        {
+            return CreateCommandBar(CONFIG_MENU_NAME,
+                                    VSCommandUtils.GetCommandBar(_applicationObject, CommandBarConst.TOOL_MENU),
+                                    vsCommandBarType.vsCommandBarTypeMenu);
+        }
+
+        /// <summary>
+        /// 新しいCommandBarの生成
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="parentCommandBar"></param>
+        /// <param name="commandBarType"></param>
+        /// <returns></returns>
+        public CommandBar CreateCommandBar(string name, CommandBar parentCommandBar, vsCommandBarType commandBarType)
+        {
+            if (VSCommandUtils.IsRegisterCommandBar(_applicationObject, name))
+            {
+                //  生成済の場合は一度消して作り直す
+                CommandBars commandBars = (CommandBars)_applicationObject.CommandBars;
+                commandBars[name].Delete();
+            }
+
+            Commands2 commands = (Commands2)_applicationObject.Commands;
+            CommandBar newCommandBar = null;
+            try
+            {
+                newCommandBar = (CommandBar)commands.AddCommandBar(
+                    CONFIG_MENU_NAME, 
+                    commandBarType, 
+                    parentCommandBar,
+                    parentCommandBar.Controls.Count + 1);
+            }
+            catch (ArgumentException ex)
+            {
+                MessageBox.Show(ex.Message, this.GetType().Name + "#" + "CreateCommandBar");
+                throw;
+            }
+            return newCommandBar;
         }
 
         /// <summary>
@@ -102,7 +147,7 @@ namespace AddInCommon.Command
         public EnvDTE.Command CreateButton(
             string commandName, string dispayText, string toolTipText) 
         {
-            return Create(commandName, dispayText, toolTipText, true, IconIdConst.SMILE,
+            return CreateNamedCommand(commandName, dispayText, toolTipText, true, IconIdConst.SMILE,
                    vsCommandStatus.vsCommandStatusEnabled, vsCommandStyle.vsCommandStylePictAndText,
                    vsCommandControlType.vsCommandControlTypeButton);
         }

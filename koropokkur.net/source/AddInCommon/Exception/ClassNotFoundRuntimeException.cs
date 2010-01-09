@@ -23,13 +23,24 @@ namespace AddInCommon.Exception
     /// </summary>
     public class ClassNotFoundRuntimeException : KoropokkurException
     {
+        private readonly string _expectedClassName;
+
         /// <summary>
         /// コンストラクタ
         /// </summary>
         /// <param name="expectedClassName">想定していたクラス名</param>
         public ClassNotFoundRuntimeException(string expectedClassName)
         {
-            
+            _expectedClassName = expectedClassName;    
+        }
+
+        public override string Message
+        {
+            get
+            {
+                return string.Format("[{0}]が参照可能なモジュール内に存在しません。",
+                    _expectedClassName);
+            }
         }
     }
 }

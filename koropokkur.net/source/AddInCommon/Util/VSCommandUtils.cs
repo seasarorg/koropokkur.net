@@ -18,9 +18,11 @@
 
 using System;
 using System.Collections.Generic;
+using AddInCommon.Exception;
 using EnvDTE;
 using EnvDTE80;
 using Microsoft.VisualStudio.CommandBars;
+using AddInCommon.Const;
 
 namespace AddInCommon.Util
 {
@@ -29,8 +31,6 @@ namespace AddInCommon.Util
     /// </summary>
     public sealed class VSCommandUtils
     {
-        private const string CONFIG_MENU_NAME = "Koropokkurの設定";
-
         /// <summary>
         /// コマンドが登録済みかどうか判定
         /// </summary>
@@ -50,6 +50,58 @@ namespace AddInCommon.Util
                 }
             }
             return false;
+        }
+
+        /// <summary>
+        /// CommandBarが登録済みかどうか判定
+        /// </summary>
+        /// <param name="applicationObject"></param>
+        /// <param name="commandBarName"></param>
+        /// <returns></returns>
+        public static bool IsRegisterCommandBar(DTE2 applicationObject, string commandBarName)
+        {
+            CommandBars commandBars = (CommandBars)applicationObject.CommandBars;
+            try
+            {
+                CommandBar commandBar = commandBars[commandBarName];
+                return commandBar == null ? false : true;
+            }
+            catch(System.Exception)
+            {
+
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// CommandBarの取得
+        /// </summary>
+        /// <param name="applicationObject"></param>
+        /// <param name="commandBarName"></param>
+        /// <returns></returns>
+        /// <exception cref="CommandBarNotFoundException"></exception>
+        public static CommandBar GetCommandBar(DTE2 applicationObject, string commandBarName)
+        {
+            if(IsRegisterCommandBar(applicationObject, commandBarName))
+            {
+                CommandBars commandBars = (CommandBars)applicationObject.CommandBars;
+                return commandBars[commandBarName];
+            }
+            throw new CommandBarNotFoundException(commandBarName);
+        }
+
+        /// <summary>
+        /// 「Koropokkurの設定」メニューの取得
+        /// </summary>
+        /// <param name="applicationObject"></param>
+        /// <returns></returns>
+        public static CommandBar GetKoropokkurMenuBar(DTE2 applicationObject)
+        {
+            if(IsRegisterCommandBar(applicationObject, KoropokkurConst.CONFIG_MENU_NAME))
+            {
+                return GetCommandBar(applicationObject, KoropokkurConst.CONFIG_MENU_NAME);
+            }
+            return null;
         }
 
         /// <summary>
@@ -108,6 +160,7 @@ namespace AddInCommon.Util
         /// <summary>
         /// Koropokkur設定メニューにコントロールを追加する
         /// </summary>
+        /// <remarks>CopyGenの方にもVSArrangeと同様の修正を入れたら削除する予定</remarks>
         /// <param name="applicationObject"></param>
         /// <param name="customControlContainer"></param>
         /// <returns></returns>
@@ -122,7 +175,7 @@ namespace AddInCommon.Util
 
             //  TODO:リソースファイルを使うようにする
             //string koroppokurMenuName = ResourceUtils.GetResourceWord(applicationObject, CONFIG_MENU_NAME);
-            const string koroppokurMenuName = CONFIG_MENU_NAME;
+            const string koroppokurMenuName = KoropokkurConst.CONFIG_MENU_NAME;
             CommandBarPopup koropokkurPopup;
             if (IsExistsControl(koroppokurMenuName, toolsPopup.Controls))
             {
@@ -200,17 +253,6 @@ namespace AddInCommon.Util
             }
             //  TODO:暫定。例外に変更予定
             return MsoControlType.msoControlButton;
-        }
-
-        /// <summary>
-        /// コントロール取得
-        /// </summary>
-        /// <param name="applicationObject"></param>
-        /// <param name="commandBarName"></param>
-        /// <returns></returns>
-        private static CommandBar GetCommandBar(DTE2 applicationObject, string commandBarName)
-        {
-            return ((CommandBars)applicationObject.CommandBars)[commandBarName];
         }
 
         #endregion
