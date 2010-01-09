@@ -37,7 +37,7 @@ namespace VSArrange.Control
         public virtual CommandBarControl CreateSolutionContextMenuItem(CommandBarPopup parentPopup)
         {
             CommandBarButton configMenuButton = 
-                CommandBarUtils.CreatePopupChildControl<CommandBarButton>(parentPopup);
+                VSCommandUtils.CreatePopupChildControl<CommandBarButton>(parentPopup);
             configMenuButton.Caption = MENU_NAME;
             configMenuButton.Click += configMenuButton_Click;
             return configMenuButton;

@@ -16,6 +16,7 @@
  */
 #endregion
 
+using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using AddInCommon.Background;
@@ -25,7 +26,6 @@ using EnvDTE80;
 using Microsoft.VisualStudio.CommandBars;
 using VSArrange.Arrange;
 using VSArrange.Config;
-using System;
 
 namespace VSArrange.Control
 {
@@ -56,7 +56,7 @@ namespace VSArrange.Control
         public virtual CommandBarControl CreateSolutionContextMenuItem(CommandBar commandBar)
         {
             CommandBarButton refreshSolutuinButton =
-                CommandBarUtils.CreateCommandBarControl<CommandBarButton>(commandBar);
+                VSCommandUtils.CreateCommandBarControl<CommandBarButton>(commandBar);
             refreshSolutuinButton.Caption = REFRESH_BUTTON_NAME_SOLUTION;
             refreshSolutuinButton.Click += refreshSolutuinButton_Click;
             return refreshSolutuinButton;
@@ -70,7 +70,7 @@ namespace VSArrange.Control
         public virtual CommandBarControl CreateProjectContextMenuItem(CommandBar commandBar)
         {
             CommandBarButton refreshProjectButton =
-                CommandBarUtils.CreateCommandBarControl<CommandBarButton>(commandBar);
+                VSCommandUtils.CreateCommandBarControl<CommandBarButton>(commandBar);
             refreshProjectButton.Caption = REFRESH_BUTTON_NAME_PROJECT;
             refreshProjectButton.Click += refreshProjectButton_Click;
             return refreshProjectButton;

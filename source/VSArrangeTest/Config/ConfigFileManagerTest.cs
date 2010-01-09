@@ -71,28 +71,28 @@ namespace VSArrangeTest.Config
             Assert.That(configInfo, Is.Not.Null);
             Assert.That(configInfo.FilterFileStringList.Count, Is.GreaterThan(1));
 
-            ConfigInfoFilter fileFilter1 = configInfo.FilterFileStringList[0];
+            ConfigInfoDetail fileFilter1 = configInfo.FilterFileStringList[0];
             Assert.That(fileFilter1.Name, Is.EqualTo("hoge"));
             Assert.That(fileFilter1.IsEnable, Is.True);
-            Assert.That(fileFilter1.FilterString, Is.EqualTo("test"));
+            Assert.That(fileFilter1.Value, Is.EqualTo("test"));
 
-            ConfigInfoFilter fileFilter2 = configInfo.FilterFileStringList[1];
+            ConfigInfoDetail fileFilter2 = configInfo.FilterFileStringList[1];
             Assert.That(fileFilter2.Name, Is.EqualTo("ほげ"));
             Assert.That(fileFilter2.IsEnable, Is.False);
-            Assert.That(fileFilter2.FilterString, Is.EqualTo("テストA"));
+            Assert.That(fileFilter2.Value, Is.EqualTo("テストA"));
 
 
             Assert.That(configInfo.FilterFolderStringList.Count, Is.GreaterThan(1));
 
-            ConfigInfoFilter folderFilter1 = configInfo.FilterFolderStringList[0];
+            ConfigInfoDetail folderFilter1 = configInfo.FilterFolderStringList[0];
             Assert.That(folderFilter1.Name, Is.EqualTo("ふが"));
             Assert.That(folderFilter1.IsEnable, Is.False);
-            Assert.That(folderFilter1.FilterString, Is.EqualTo("test1"));
+            Assert.That(folderFilter1.Value, Is.EqualTo("test1"));
 
-            ConfigInfoFilter folderFilter2 = configInfo.FilterFolderStringList[1];
+            ConfigInfoDetail folderFilter2 = configInfo.FilterFolderStringList[1];
             Assert.That(folderFilter2.Name, Is.EqualTo("huga"));
             Assert.That(folderFilter2.IsEnable, Is.True);
-            Assert.That(folderFilter2.FilterString, Is.EqualTo("テストB"));
+            Assert.That(folderFilter2.Value, Is.EqualTo("テストB"));
         }
 
         [Test]
@@ -104,15 +104,15 @@ namespace VSArrangeTest.Config
             Assert.That(configInfo, Is.Not.Null);
             Assert.That(configInfo.FilterFileStringList.Count, Is.GreaterThan(1));
 
-            ConfigInfoFilter fileFilter1 = configInfo.FilterFileStringList[0];
+            ConfigInfoDetail fileFilter1 = configInfo.FilterFileStringList[0];
             Assert.That(fileFilter1.Name, Is.EqualTo("hoge"));
             Assert.That(fileFilter1.IsEnable, Is.True);
-            Assert.That(fileFilter1.FilterString, Is.EqualTo("test"));
+            Assert.That(fileFilter1.Value, Is.EqualTo("test"));
 
-            ConfigInfoFilter fileFilter2 = configInfo.FilterFileStringList[1];
+            ConfigInfoDetail fileFilter2 = configInfo.FilterFileStringList[1];
             Assert.That(fileFilter2.Name, Is.EqualTo("ほげ"));
             Assert.That(fileFilter2.IsEnable, Is.False);
-            Assert.That(fileFilter2.FilterString, Is.EqualTo("テストA"));
+            Assert.That(fileFilter2.Value, Is.EqualTo("テストA"));
 
             Assert.That(configInfo.FilterFolderStringList == null || 
                 configInfo.FilterFolderStringList.Count == 0, Is.True);
@@ -130,15 +130,15 @@ namespace VSArrangeTest.Config
 
             Assert.That(configInfo.FilterFolderStringList.Count, Is.GreaterThan(1));
 
-            ConfigInfoFilter folderFilter1 = configInfo.FilterFolderStringList[0];
+            ConfigInfoDetail folderFilter1 = configInfo.FilterFolderStringList[0];
             Assert.That(folderFilter1.Name, Is.EqualTo("ふが"));
             Assert.That(folderFilter1.IsEnable, Is.False);
-            Assert.That(folderFilter1.FilterString, Is.EqualTo("test1"));
+            Assert.That(folderFilter1.Value, Is.EqualTo("test1"));
 
-            ConfigInfoFilter folderFilter2 = configInfo.FilterFolderStringList[1];
+            ConfigInfoDetail folderFilter2 = configInfo.FilterFolderStringList[1];
             Assert.That(folderFilter2.Name, Is.EqualTo("huga"));
             Assert.That(folderFilter2.IsEnable, Is.True);
-            Assert.That(folderFilter2.FilterString, Is.EqualTo("テストB"));
+            Assert.That(folderFilter2.Value, Is.EqualTo("テストB"));
         }
 
         [Test]
@@ -173,8 +173,8 @@ namespace VSArrangeTest.Config
 
             Assert.That(configInfo, Is.Not.Null);
 
-            Assert.That(configInfo.FilterFileStringList[0].FilterString, Is.Empty);
-            Assert.That(configInfo.FilterFolderStringList[0].FilterString, Is.Empty);
+            Assert.That(configInfo.FilterFileStringList[0].Value, Is.Empty);
+            Assert.That(configInfo.FilterFolderStringList[0].Value, Is.Empty);
         }
 
         [Test]

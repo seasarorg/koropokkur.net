@@ -126,9 +126,6 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\..\..\..\..\..\..\Documents and Settings\koyak\My Documents\Visual Studio 2008\Addins\CopyMethodGen - For Testing.AddIn">
-      <Link>CopyMethodGen - For Testing.AddIn</Link>
-    </Content>
     <Content Include="CopyMethodGen.AddIn" />
   </ItemGroup>
   <ItemGroup>
