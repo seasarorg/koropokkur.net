@@ -18,7 +18,7 @@
 
 using AddInCommon.Command;
 using AddInCommon.Util;
-using VSArrange.Control.Window;
+using VSArrange.Control;
 
 namespace VSArrange.Command
 {

@@ -21,10 +21,8 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using VSArrange.Config;
 
-namespace VSArrange.Control.Window
+namespace VSArrange.Control
 {
-    #region enum
-
     /// <summary>
     /// フィルター設定DataGridの列番号列挙体
     /// </summary>
@@ -45,8 +43,6 @@ namespace VSArrange.Control.Window
         /// </summary>
         FilterString
     }
-
-    #endregion
 
     /// <summary>
     /// フィルター設定コントロール
@@ -128,7 +124,7 @@ namespace VSArrange.Control.Window
                 }
                 ConfigInfoDetail configInfoFilter = new ConfigInfoDetail();
                 configInfoFilter.IsEnable = row.Cells[(int)EnumFilterConfigColumnNo.IsEnable].Value == null ?
-                    false : (bool)row.Cells[(int)EnumFilterConfigColumnNo.IsEnable].Value;
+                                                                                                                false : (bool)row.Cells[(int)EnumFilterConfigColumnNo.IsEnable].Value;
                 configInfoFilter.Name = (string)row.Cells[(int)EnumFilterConfigColumnNo.FilterName].Value;
                 configInfoFilter.Value = (string)row.Cells[(int)EnumFilterConfigColumnNo.FilterString].Value;
                 filters.Add(configInfoFilter);

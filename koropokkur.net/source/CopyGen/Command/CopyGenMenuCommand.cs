@@ -18,7 +18,7 @@
 
 using AddInCommon.Command;
 using AddInCommon.Util;
-using CopyGen.Control.Window;
+using CopyGen.Control;
 
 namespace CopyGen.Command
 {

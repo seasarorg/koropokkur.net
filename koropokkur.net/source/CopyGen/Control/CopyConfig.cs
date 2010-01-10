@@ -23,7 +23,7 @@ using AddInCommon.Util;
 using CodeGeneratorCore.Enum;
 using CopyGen.Gen;
 
-namespace CopyGen.Control.Window
+namespace CopyGen.Control
 {
     /// <summary>
     /// コピー情報設定画面

@@ -19,11 +19,11 @@
 using System;
 using System.Collections.Generic;
 using AddInCommon.Command;
+using AddInCommon.Const;
 using AddInCommon.Exception;
 using EnvDTE;
 using EnvDTE80;
 using Microsoft.VisualStudio.CommandBars;
-using AddInCommon.Const;
 
 namespace AddInCommon.Util
 {
@@ -40,12 +40,13 @@ namespace AddInCommon.Util
         /// <param name="commands"></param>
         /// <param name="creator"></param>
         /// <param name="commandBar"></param>
+        /// <param name="isBeginGroup">コントロール上に区切り線を入れるか</param>
         public static void RegisterAddInCommand(
             string programId,
             IDTCExecCommand eventCommand,
             IDictionary<string, IDTCExecCommand> commands,
             VSCommandCreator creator,
-            CommandBar commandBar)
+            CommandBar commandBar, bool isBeginGroup)
         {
             string vsCommandName = GetVSCommandName(
                 programId, eventCommand.CommandName);
@@ -54,7 +55,7 @@ namespace AddInCommon.Util
                 eventCommand.CommandName,
                 eventCommand.DisplayName,
                 eventCommand.ToolTipText);
-            RegisterControl(newCommand, commandBar);
+            RegisterControl(newCommand, commandBar, isBeginGroup);
         }
 
         /// <summary>
@@ -155,12 +156,13 @@ namespace AddInCommon.Util
         /// </summary>
         /// <param name="command"></param>
         /// <param name="control"></param>
-        public static void RegisterControl(EnvDTE.Command command, CommandBar control)
-        {            
-            CommandBarControl newControl = 
+        /// <param name="isBeginGroup">コントロール上の区切り線の有無</param>
+        public static void RegisterControl(EnvDTE.Command command, CommandBar control, bool isBeginGroup)
+        {
+            CommandBarControl newControl =
                 (CommandBarControl)command.AddControl(control, control.Controls.Count + 1);
-            //  追加したコントロールの上に区切り線を入れる
-            newControl.BeginGroup = true;
+            //  追加したコントロールの上に区切り線設定
+            newControl.BeginGroup = isBeginGroup;
         }
 
         /// <summary>
@@ -181,40 +183,6 @@ namespace AddInCommon.Util
         public static CommandBar GetMenuBar(DTE2 applicationObject)
         {
             return GetCommandBar(applicationObject, "MenuBar");
-        }
-
-        /// <summary>
-        /// Koropokkur設定メニューにコントロールを追加する
-        /// </summary>
-        /// <remarks>CopyGenの方にもVSArrangeと同様の修正を入れたら削除する予定</remarks>
-        /// <param name="applicationObject"></param>
-        /// <param name="customControlContainer"></param>
-        /// <returns></returns>
-        public static CommandBarPopup GetKoropokkurConfigMenu(DTE2 applicationObject, IList<CommandBarControl> customControlContainer)
-        {
-            //  Koropokkurメニューバーを追加
-            CommandBar menuBarCommandBar = GetMenuBar(applicationObject);
-            string toolsMenuName = ResourceUtils.GetResourceWord(applicationObject, "Tools");
-            //MenuBar コマンド バーで [ツール] コマンド バーを検索します:
-            CommandBarControl toolsControl = menuBarCommandBar.Controls[toolsMenuName];
-            CommandBarPopup toolsPopup = (CommandBarPopup)toolsControl;
-
-            //  TODO:リソースファイルを使うようにする
-            //string koroppokurMenuName = ResourceUtils.GetResourceWord(applicationObject, CONFIG_MENU_NAME);
-            const string koroppokurMenuName = KoropokkurConst.CONFIG_MENU_NAME;
-            CommandBarPopup koropokkurPopup;
-            if (IsExistsControl(koroppokurMenuName, toolsPopup.Controls))
-            {
-                koropokkurPopup = (CommandBarPopup)toolsPopup.Controls[koroppokurMenuName];
-            }
-            else
-            {
-                koropokkurPopup = CreatePopupChildControl<CommandBarPopup>(toolsPopup);
-                koropokkurPopup.Caption = koroppokurMenuName;
-                customControlContainer.Add(koropokkurPopup);
-            }
-
-            return koropokkurPopup;
         }
 
         /// <summary>

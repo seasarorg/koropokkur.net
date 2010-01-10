@@ -99,6 +99,10 @@ namespace AddInCommon.Command
         /// <returns></returns>
         public CommandBar AddKoropokkurMenuCommandBar()
         {
+            if(VSCommandUtils.IsRegisterCommandBar(_applicationObject, CONFIG_MENU_NAME))
+            {
+                return VSCommandUtils.GetCommandBar(_applicationObject, CONFIG_MENU_NAME);
+            }
             return CreateCommandBar(CONFIG_MENU_NAME,
                                     VSCommandUtils.GetCommandBar(_applicationObject, CommandBarConst.TOOL_MENU),
                                     vsCommandBarType.vsCommandBarTypeMenu);
@@ -162,36 +166,5 @@ namespace AddInCommon.Command
             CommandBars commandBars = (CommandBars)_applicationObject.CommandBars;
             return commandBars[commandBarName];
         }
-
-        /// <summary>
-        /// Koropokkur設定メニューにコントロールを取得(+未作成なら作成）
-        /// </summary>
-        /// <returns></returns>
-        public CommandBarPopup GetKoropokkurConfigMenu()
-        {
-            //  Koropokkurメニューバーを追加
-            CommandBar menuBarCommandBar = GetCommandBar(CommandBarConst.MENU_BAR);
-            string toolsMenuName = ResourceUtils.GetResourceWord(_applicationObject, "Tools");
-            //MenuBar コマンド バーで [ツール] コマンド バーを検索します:
-            CommandBarControl toolsControl = menuBarCommandBar.Controls[toolsMenuName];
-            CommandBarPopup toolsPopup = (CommandBarPopup)toolsControl;
-
-            //  TODO:リソースファイルを使うようにする
-            //string koroppokurMenuName = ResourceUtils.GetResourceWord(applicationObject, CONFIG_MENU_NAME);
-            const string koroppokurMenuName = CONFIG_MENU_NAME;
-            CommandBarPopup koropokkurPopup;
-            if (VSCommandUtils.IsExistsControl(koroppokurMenuName, toolsPopup.Controls))
-            {
-                koropokkurPopup = (CommandBarPopup)toolsPopup.Controls[koroppokurMenuName];
-            }
-            else
-            {
-                koropokkurPopup = VSCommandUtils.CreatePopupChildControl<CommandBarPopup>(toolsPopup);
-                koropokkurPopup.Caption = koroppokurMenuName;
-            }
-
-            return koropokkurPopup;
-        }
-
     }
 }

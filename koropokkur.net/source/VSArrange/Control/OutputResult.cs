@@ -20,7 +20,7 @@ using System;
 using System.Windows.Forms;
 using VSArrange.Config;
 
-namespace VSArrange.Control.Window
+namespace VSArrange.Control
 {
     /// <summary>
     /// 結果出力設定
