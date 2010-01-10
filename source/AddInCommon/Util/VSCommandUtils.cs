@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using AddInCommon.Command;
 using AddInCommon.Exception;
 using EnvDTE;
 using EnvDTE80;
@@ -31,6 +32,31 @@ namespace AddInCommon.Util
     /// </summary>
     public sealed class VSCommandUtils
     {
+        /// <summary>
+        /// アドイン機能コマンドの生成、登録
+        /// </summary>
+        /// <param name="programId"></param>
+        /// <param name="eventCommand"></param>
+        /// <param name="commands"></param>
+        /// <param name="creator"></param>
+        /// <param name="commandBar"></param>
+        public static void RegisterAddInCommand(
+            string programId,
+            IDTCExecCommand eventCommand,
+            IDictionary<string, IDTCExecCommand> commands,
+            VSCommandCreator creator,
+            CommandBar commandBar)
+        {
+            string vsCommandName = GetVSCommandName(
+                programId, eventCommand.CommandName);
+            commands[vsCommandName] = eventCommand;
+            EnvDTE.Command newCommand = creator.CreateButton(
+                eventCommand.CommandName,
+                eventCommand.DisplayName,
+                eventCommand.ToolTipText);
+            RegisterControl(newCommand, commandBar);
+        }
+
         /// <summary>
         /// コマンドが登録済みかどうか判定
         /// </summary>
