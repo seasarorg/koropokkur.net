@@ -46,21 +46,20 @@
     <Compile Include="Connect.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Control\ArrangeControl.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="CommandBar.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Control\Window\ConfigForm.resx">
+    <EmbeddedResource Include="Control\ConfigForm.resx">
       <DependentUpon>ConfigForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Control\Window\FilterList.resx">
+    <EmbeddedResource Include="Control\FilterList.resx">
       <DependentUpon>FilterList.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Control\Window\OutputResult.resx">
+    <EmbeddedResource Include="Control\OutputResult.resx">
       <DependentUpon>OutputResult.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
@@ -130,31 +129,27 @@
     <Compile Include="Config\ConfigFileManager.cs" />
     <Compile Include="Config\ConfigInfo.cs" />
     <Compile Include="Config\ConfigInfoDetail.cs" />
-    <Compile Include="Control\ConfigMenu.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Control\Window\ConfigForm.cs">
+    <Compile Include="Control\ConfigForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Control\Window\ConfigForm.Designer.cs">
+    <Compile Include="Control\ConfigForm.Designer.cs">
       <DependentUpon>ConfigForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Control\Window\FilterList.cs">
+    <Compile Include="Control\FilterList.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Control\Window\FilterList.Designer.cs">
+    <Compile Include="Control\FilterList.Designer.cs">
       <DependentUpon>FilterList.cs</DependentUpon>
     </Compile>
-    <Compile Include="Control\Window\OutputResult.cs">
+    <Compile Include="Control\OutputResult.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Control\Window\OutputResult.Designer.cs">
+    <Compile Include="Control\OutputResult.Designer.cs">
       <DependentUpon>OutputResult.cs</DependentUpon>
     </Compile>
     <Compile Include="Filter\ItemAttachmentFilter.cs" />
     <Compile Include="Core\VSArrangeConnectCore.cs" />
     <Compile Include="Util\ArrangeUtils.cs" />
-    <Compile Include="VSArrangeConst.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="VSArrange.config">

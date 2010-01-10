@@ -21,7 +21,7 @@ using System.Windows.Forms;
 using AddInCommon.Command;
 using AddInCommon.Util;
 using CodeGeneratorCore;
-using CopyGen.Control.Window;
+using CopyGen.Control;
 using CopyGen.Gen;
 using CopyGen.Util;
 using EnvDTE;

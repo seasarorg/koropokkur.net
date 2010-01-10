@@ -24,7 +24,7 @@ using VSArrange.Config;
 using VSArrange.Filter;
 using System.Diagnostics;
 
-namespace VSArrange.Control.Window
+namespace VSArrange.Control
 {
     /// <summary>
     /// 設定項目編集フォーム
@@ -119,8 +119,8 @@ namespace VSArrange.Control.Window
         private void btnEditDirect_Click(object sender, EventArgs e)
         {
             if(MessageBox.Show("設定ファイルを直接編集する場合、現在編集中の内容は破棄されます。よろしいですか？", 
-                "設定ファイル直接編集", MessageBoxButtons.OKCancel, 
-                MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.Cancel)
+                               "設定ファイル直接編集", MessageBoxButtons.OKCancel, 
+                               MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.Cancel)
             {
                 return;
             }
@@ -154,8 +154,8 @@ namespace VSArrange.Control.Window
             catch(System.Exception ex)
             {
                 MessageUtils.ShowErrorMessage("エディタの起動、設定ファイルの読込に失敗しました。\n" +
-                                PathUtils.GetConfigPath() + "\n" +
-                                ex.Message + "\n" + ex.StackTrace);
+                                              PathUtils.GetConfigPath() + "\n" +
+                                              ex.Message + "\n" + ex.StackTrace);
             }
         }
 

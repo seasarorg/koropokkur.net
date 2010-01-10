@@ -1,4 +1,4 @@
-﻿namespace VSArrange.Control.Window
+﻿namespace VSArrange.Control
 {
     partial class ConfigForm
     {
@@ -35,32 +35,32 @@
             this.tabExclueProject = new System.Windows.Forms.TabPage();
             this.tabgrpExcludeProject = new System.Windows.Forms.TabControl();
             this.tabExcludeFile = new System.Windows.Forms.TabPage();
-            this.filterFile = new VSArrange.Control.Window.FilterList();
+            this.filterFile = new FilterList();
             this.tabExcludeFolder = new System.Windows.Forms.TabPage();
-            this.filterFolder = new VSArrange.Control.Window.FilterList();
+            this.filterFolder = new FilterList();
             this.tabBuildAction = new System.Windows.Forms.TabPage();
             this.tabBuildActionItems = new System.Windows.Forms.TabControl();
             this.tabCompile = new System.Windows.Forms.TabPage();
-            this.filterCompile = new VSArrange.Control.Window.FilterList();
+            this.filterCompile = new FilterList();
             this.tabResources = new System.Windows.Forms.TabPage();
-            this.filterResource = new VSArrange.Control.Window.FilterList();
+            this.filterResource = new FilterList();
             this.tabContents = new System.Windows.Forms.TabPage();
-            this.filterContents = new VSArrange.Control.Window.FilterList();
+            this.filterContents = new FilterList();
             this.tabNoAction = new System.Windows.Forms.TabPage();
-            this.filterNoAction = new VSArrange.Control.Window.FilterList();
+            this.filterNoAction = new FilterList();
             this.tabOutputDirectoryCopy = new System.Windows.Forms.TabPage();
             this.tabgrpOutputDirectoryCopy = new System.Windows.Forms.TabControl();
             this.tabNoCopy = new System.Windows.Forms.TabPage();
-            this.filterNoCopy = new VSArrange.Control.Window.FilterList();
+            this.filterNoCopy = new FilterList();
             this.tabEverytimeCopy = new System.Windows.Forms.TabPage();
-            this.filterEverytimeCopy = new VSArrange.Control.Window.FilterList();
+            this.filterEverytimeCopy = new FilterList();
             this.tabCopyIfNew = new System.Windows.Forms.TabPage();
-            this.filterCopyIfNew = new VSArrange.Control.Window.FilterList();
+            this.filterCopyIfNew = new FilterList();
             this.btnEditDirect = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.grpConfigFilter = new System.Windows.Forms.GroupBox();
             this.grpConfigOutput = new System.Windows.Forms.GroupBox();
-            this.outputResultConfig = new VSArrange.Control.Window.OutputResult();
+            this.outputResultConfig = new OutputResult();
             this.tabgrpAllFilter.SuspendLayout();
             this.tabExclueProject.SuspendLayout();
             this.tabgrpExcludeProject.SuspendLayout();
@@ -84,7 +84,7 @@
             // txtNotice
             // 
             this.txtNotice.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+                                                                          | System.Windows.Forms.AnchorStyles.Right)));
             this.txtNotice.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
             this.txtNotice.Location = new System.Drawing.Point(6, 22);
             this.txtNotice.Multiline = true;
@@ -167,7 +167,7 @@
             // filterFile
             // 
             this.filterFile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+                                                                           | System.Windows.Forms.AnchorStyles.Right)));
             this.filterFile.AutoSize = true;
             this.filterFile.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.filterFile.FilterName = "除外ファイル";
@@ -190,7 +190,7 @@
             // filterFolder
             // 
             this.filterFolder.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+                                                                             | System.Windows.Forms.AnchorStyles.Right)));
             this.filterFolder.AutoSize = true;
             this.filterFolder.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.filterFolder.FilterName = "除外フォルダ";
@@ -402,7 +402,7 @@
             // textBox1
             // 
             this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+                                                                         | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox1.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
             this.textBox1.Location = new System.Drawing.Point(6, 22);
             this.textBox1.Multiline = true;

@@ -41,13 +41,15 @@ namespace VSArrange.Core
                 new ProjectArrangeCommand(), 
                 commands, 
                 creator,
-                creator.GetCommandBar(CommandBarConst.CONTEXT_PROJECT));
+                creator.GetCommandBar(CommandBarConst.CONTEXT_PROJECT),
+                true);
             VSCommandUtils.RegisterAddInCommand(
                 programId, 
                 new SolutionArrangeCommand(), 
                 commands, 
                 creator,                 
-                creator.GetCommandBar(CommandBarConst.CONTEXT_SOLUTION));
+                creator.GetCommandBar(CommandBarConst.CONTEXT_SOLUTION),
+                true);
 
             //  ツールメニュー
             VSCommandUtils.RegisterAddInCommand(
@@ -55,7 +57,8 @@ namespace VSArrange.Core
                 new VSArrangeMenuCommand(), 
                 commands, 
                 creator, 
-                creator.AddKoropokkurMenuCommandBar());
+                creator.AddKoropokkurMenuCommandBar(),
+                false);
         }
     }
 }

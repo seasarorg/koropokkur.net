@@ -101,7 +101,9 @@ namespace AddInCommon.Core
 
                     //  「Koropokkurの設定」メニューをクリアする
                     CommandBar koropokkurMenu = VSCommandUtils.GetKoropokkurMenuBar(ApplicationObject);
-                    if(koropokkurMenu != null)
+                    //  他にKoropokkur設定を使用しているアドインがない場合に
+                    //  Koropokkur設定メニューを削除する
+                    if(koropokkurMenu != null && koropokkurMenu.Controls.Count == 0)
                     {
                         CommandBar toolMenuBar = VSCommandUtils.GetCommandBar(ApplicationObject,                                                     CommandBarConst.TOOL_MENU);
                         foreach (CommandBarControl control in toolMenuBar.Controls)
@@ -111,7 +113,6 @@ namespace AddInCommon.Core
                                 control.Delete(null);
                             }
                         }
-
                         koropokkurMenu.Delete();
                     }
                 }

@@ -47,12 +47,10 @@
     <Compile Include="Connect.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Control\CopyMethodGenControl.cs" />
-    <Compile Include="Control\ConfigMenu.cs" />
-    <Compile Include="Control\Window\CopyConfig.cs">
+    <Compile Include="Control\CopyConfig.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Control\Window\CopyConfig.Designer.cs">
+    <Compile Include="Control\CopyConfig.Designer.cs">
       <DependentUpon>CopyConfig.cs</DependentUpon>
     </Compile>
     <Compile Include="Core\CopyGenConnectCore.cs" />
@@ -81,7 +79,7 @@
     <EmbeddedResource Include="CommandBar.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Control\Window\CopyConfig.resx">
+    <EmbeddedResource Include="Control\CopyConfig.resx">
       <DependentUpon>CopyConfig.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>

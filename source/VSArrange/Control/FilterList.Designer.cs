@@ -1,4 +1,4 @@
-﻿namespace VSArrange.Control.Window
+﻿namespace VSArrange.Control
 {
     partial class FilterList
     {
@@ -123,13 +123,13 @@
             // dgFilters
             // 
             this.dgFilters.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+                                                                          | System.Windows.Forms.AnchorStyles.Right)));
             this.dgFilters.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgFilters.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.IsEnableFileFilter,
-            this.FileFilterName,
-            this.FileFilterString,
-            this.buttonRemoveFileFilter});
+                                                                                              this.IsEnableFileFilter,
+                                                                                              this.FileFilterName,
+                                                                                              this.FileFilterString,
+                                                                                              this.buttonRemoveFileFilter});
             this.dgFilters.Location = new System.Drawing.Point(6, 18);
             this.dgFilters.Name = "dgFilters";
             this.dgFilters.RowHeadersVisible = false;

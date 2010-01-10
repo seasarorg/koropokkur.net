@@ -41,7 +41,8 @@ namespace CopyGen.Core
                 new CopyMethodGenCommand(),
                 commands,
                 creator,
-                creator.GetCommandBar(CommandBarConst.CONTEXT_EDITOR));
+                creator.GetCommandBar(CommandBarConst.CONTEXT_EDITOR),
+                true);
 
             //  ツールメニュー
             VSCommandUtils.RegisterAddInCommand(
@@ -49,7 +50,8 @@ namespace CopyGen.Core
                 new CopyGenMenuCommand(),
                 commands,
                 creator,
-                creator.AddKoropokkurMenuCommandBar());
+                creator.AddKoropokkurMenuCommandBar(),
+                false);
         }
     }
 }
