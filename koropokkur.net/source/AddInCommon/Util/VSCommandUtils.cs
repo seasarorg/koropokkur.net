@@ -166,51 +166,6 @@ namespace AddInCommon.Util
         }
 
         /// <summary>
-        /// エディタ右クリックで表示されるメニューコントロールを取得
-        /// </summary>
-        /// <param name="applicationObject"></param>
-        /// <returns></returns>
-        public static CommandBar GetCodeContextMenu(DTE2 applicationObject)
-        {
-            return GetCommandBar(applicationObject, "Code Window");
-        }
-
-        /// <summary>
-        /// メニューコントロールを取得
-        /// </summary>
-        /// <param name="applicationObject"></param>
-        /// <returns></returns>
-        public static CommandBar GetMenuBar(DTE2 applicationObject)
-        {
-            return GetCommandBar(applicationObject, "MenuBar");
-        }
-
-        /// <summary>
-        /// 引数コントロールの一番後ろにコントロールを一つ追加する
-        /// </summary>
-        /// <param name="commandBar"></param>
-        /// <returns></returns>
-        public static CONTROL_TYPE CreateCommandBarControl<CONTROL_TYPE>(CommandBar commandBar)
-        {
-            return (CONTROL_TYPE)commandBar.Controls.Add(
-                                         GetMsoControlType(typeof(CONTROL_TYPE)), Type.Missing,
-                                         Type.Missing, Type.Missing, true);
-        }
-
-        /// <summary>
-        /// ポップアップにコントロールを追加する
-        /// </summary>
-        /// <param name="parentPopup">親コントロール</param>
-        /// <returns></returns>
-        public static CONTROL_TYPE CreatePopupChildControl<CONTROL_TYPE>(CommandBarPopup parentPopup)
-            where CONTROL_TYPE : CommandBarControl
-        {
-            return (CONTROL_TYPE)parentPopup.Controls.Add(
-                                         GetMsoControlType(typeof(CONTROL_TYPE)), Type.Missing,
-                                         Type.Missing, Type.Missing, true);
-        }
-
-        /// <summary>
         /// コントロールが既に含まれているか判定する
         /// </summary>
         /// <param name="controlName"></param>
@@ -236,12 +191,12 @@ namespace AddInCommon.Util
         /// <returns></returns>
         private static MsoControlType GetMsoControlType(Type controlType)
         {
-            if(controlType == typeof(CommandBarPopup))
+            if (controlType == typeof(CommandBarPopup))
             {
                 return MsoControlType.msoControlPopup;
             }
-            
-            if(controlType == typeof(CommandBarButton))
+
+            if (controlType == typeof(CommandBarButton))
             {
                 return MsoControlType.msoControlButton;
             }

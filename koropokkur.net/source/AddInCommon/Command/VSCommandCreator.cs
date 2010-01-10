@@ -152,7 +152,7 @@ namespace AddInCommon.Command
             string commandName, string dispayText, string toolTipText) 
         {
             return CreateNamedCommand(commandName, dispayText, toolTipText, true, IconIdConst.SMILE,
-                   vsCommandStatus.vsCommandStatusEnabled, vsCommandStyle.vsCommandStylePictAndText,
+                   vsCommandStatus.vsCommandStatusEnabled, vsCommandStyle.vsCommandStyleText,
                    vsCommandControlType.vsCommandControlTypeButton);
         }
 
