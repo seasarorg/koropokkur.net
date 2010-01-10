@@ -152,7 +152,7 @@
       <DependentUpon>OutputResult.cs</DependentUpon>
     </Compile>
     <Compile Include="Filter\ItemAttachmentFilter.cs" />
-    <Compile Include="Helper\VSArrangeConnectHelper.cs" />
+    <Compile Include="Core\VSArrangeConnectCore.cs" />
     <Compile Include="Util\ArrangeUtils.cs" />
     <Compile Include="VSArrangeConst.cs" />
   </ItemGroup>

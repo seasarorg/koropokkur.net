@@ -1,4 +1,4 @@
-#region Copyright
+ï»¿#region Copyright
 /*
  * Copyright 2005-2009 the Seasar Foundation and the Others.
  *
@@ -18,58 +18,133 @@
 
 using System.IO;
 using System.Windows.Forms;
+using AddInCommon.Command;
 using AddInCommon.Util;
 using CodeGeneratorCore;
 using CopyGen.Control.Window;
 using CopyGen.Gen;
 using CopyGen.Util;
 using EnvDTE;
-using EnvDTE80;
-using Microsoft.VisualStudio.CommandBars;
 
-namespace CopyGen.Control
+namespace CopyGen.Command
 {
     /// <summary>
-    /// ƒ\ƒŠƒ…[ƒVƒ‡ƒ“AƒvƒƒWƒFƒNƒg—v‘f®—ˆ—
+    /// ã‚³ãƒ”ãƒ¼ãƒ¡ã‚½ãƒƒãƒ‰ç”Ÿæˆå‡¦ç†ã‚¯ãƒ©ã‚¹
     /// </summary>
-    public class CopyMethodGenControl
+    public class CopyMethodGenCommand : IDTCExecCommand
     {
-        private const string COPY_GEN = "ƒRƒs[ˆ—¶¬";
-        
-        
-        private readonly DTE2 _applicationObject;
-
-
         /// <summary>
-        /// ƒRƒs[î•ñ
+        /// ã‚³ãƒ”ãƒ¼æƒ…å ±
         /// </summary>
         private CopyInfo _copyInfo = new CopyInfo();
-        
-        /// <summary>
-        /// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-        /// </summary>
-        /// <param name="applicationObject"></param>
-        public CopyMethodGenControl(DTE2 applicationObject)
+
+        #region IDTCExecCommand ãƒ¡ãƒ³ãƒ
+
+        public string CommandName
         {
-            _applicationObject = applicationObject;
+            get { return "CopyMethodGen"; }
         }
 
-        /// <summary>
-        /// ƒ\ƒŠƒ…[ƒVƒ‡ƒ“‰EƒNƒŠƒbƒNƒƒjƒ…[‚É€–Ú‚ğˆê‚Â’Ç‰Á‚µ‚Ä•Ô‚·
-        /// </summary>
-        /// <param name="commandBar"></param>
-        /// <returns></returns>
-        public virtual CommandBarControl CreateContextMenuItem(CommandBar commandBar)
+        public string DisplayName
         {
-            CommandBarButton refreshSolutuinButton =
-                VSCommandUtils.CreateCommandBarControl<CommandBarButton>(commandBar);
-            refreshSolutuinButton.Caption = COPY_GEN;
-            refreshSolutuinButton.Click += generateCode_Click;
-            return refreshSolutuinButton;
+            get { return "ã‚³ãƒ”ãƒ¼ãƒ¡ã‚½ãƒƒãƒ‰ã®ç”Ÿæˆ"; }
         }
 
+        public string ToolTipText
+        {
+            get { return "ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã®ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£å€¤ã‚’ã‚³ãƒ”ãƒ¼ã™ã‚‹å‡¦ç†ã‚’ç”Ÿæˆã—ã¾ã™ã€‚"; }
+        }
+
+        public EnvDTE.vsCommandStatus GetCommandStatus(EnvDTE80.DTE2 applicationObject, EnvDTE.AddIn addInInstance, ref object commandText)
+        {
+            return VSCommandUtils.GetDefaultStatus();
+        }
+
+        public bool Execute(EnvDTE80.DTE2 applicationObject, EnvDTE.AddIn addInInstance, ref object varIn, ref object varOut)
+        {
+            Document document = applicationObject.ActiveDocument;
+            if (!ProgramLanguageUtils.IsEnableLanguage(document.FullName))
+            {
+                MessageUtils.ShowWarnMessage(
+                    "[{0}]ã¯\næœªå¯¾å¿œè¨€èªã®ã‚³ãƒ¼ãƒ‰ãƒ•ã‚¡ã‚¤ãƒ«ã®ãŸã‚ã€ã‚³ãƒ”ãƒ¼å‡¦ç†ã‚’ç”Ÿæˆã§ãã¾ã›ã‚“ã€‚\nä½¿ç”¨å¯èƒ½ãªè¨€èªã¯ã€ŒC#ã€VB.NETã€ã§ã™ã€‚",
+                    document.FullName);
+                return false;
+            }
+
+            try
+            {
+                RefreshCopyInfo();
+                //  æ¯å›è¨­å®šã—ãªãŠã™å ´åˆ
+                if (_copyInfo.IsEverytimeConfirm)
+                {
+                    using (CopyConfig config = new CopyConfig())
+                    {
+                        if (config.ShowDialog() == DialogResult.Cancel)
+                        {
+                            return false;
+                        }
+                    }
+                    RefreshCopyInfo();
+                }
+
+                //  è¨€èªä¾å­˜ã®ãƒ­ã‚¸ãƒƒã‚¯ç”Ÿæˆãƒ•ã‚¡ã‚¯ãƒˆãƒªã‚’å–å¾—
+                ICopyCodeBuildFactory factory = ProgramLanguageUtils.CreateCopyCodePartsBuilder(document.FullName);
+
+                //  ã‚³ãƒ”ãƒ¼ã™ã‚‹å‹åã‚’å–å¾—
+                TextSelection selection = (TextSelection)document.Selection;
+                selection.StartOfLine(vsStartOfLineOptions.vsStartOfLineOptionsFirstColumn, false);
+                selection.SelectLine();
+                //  ã‚³ãƒ¼ãƒ‰å‡ºåŠ›é–‹å§‹åœ°ç‚¹ã®ã‚¤ãƒ³ãƒ‡ãƒ³ãƒˆã‚’å–å¾—
+                string indent = factory.GetIndent(selection.Text);
+
+                //  ã‚³ãƒ”ãƒ¼ç”Ÿæˆå¯¾è±¡ã®æƒ…å ±ã‚’ç”Ÿæˆ
+                ICopyTargetBaseInfoCreator destBaseInfoCreator = factory.CreateCopyTargetBaseInfoCreator();
+                CopyTargetBaseInfo targetBaseInfo = destBaseInfoCreator.Create(document.FullName, selection.Text);
+
+                //  å‚ç…§å…ˆã‚¢ã‚»ãƒ³ãƒ–ãƒªãƒ‘ã‚¹ã‚’å–å¾—
+                string referencePaths = AssemblyUtils.GetReferencePath(document);
+
+                PropertyCodeInfo propertyCodeInfo =
+                    CodeInfoUtils.ReadPropertyInfo(referencePaths,
+                                                       targetBaseInfo.SourceTypeFullNames,
+                                                       targetBaseInfo.DestTypeFullNames);
+
+                CopyCodeGeneratorCreationFacade facade = new CopyCodeGeneratorCreationFacade(
+                    factory.CreateCopyCodeGeneratorCreator(), _copyInfo, propertyCodeInfo);
+                ICodeGenerator generator = facade.CreateCodeGenerator();
+                if (generator == null)
+                {
+                    MessageUtils.ShowWarnMessage("ã‚³ãƒ”ãƒ¼å‡¦ç†ã‚’ç”Ÿæˆã§ãã¾ã›ã‚“ã§ã—ãŸã€‚\nãƒ•ã‚¡ã‚¤ãƒ«åã¨ã‚¯ãƒ©ã‚¹åãŒä¸€è‡´ã—ã¦ã„ãªã„ã€\nã¾ãŸã¯ã‚¢ãƒ‰ã‚¤ãƒ³ã®ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«å…ˆãŒæ›¸ãè¾¼ã¿ä¸å¯ã«ãªã£ã¦ã„ãªã„ã‹ã”ç¢ºèªä¸‹ã•ã„ã€‚");
+                    return false;
+                }
+
+                if (_copyInfo.IsOutputMethod)
+                {
+                    selection.StartOfLine(vsStartOfLineOptions.vsStartOfLineOptionsFirstColumn, true);
+                    selection.Insert(generator.GenerateCode(indent),
+                                     (int)vsInsertFlags.vsInsertFlagsCollapseToEnd);
+                }
+                else
+                {
+                    selection.Insert(generator.GenerateCode(indent),
+                                     (int)vsInsertFlags.vsInsertFlagsCollapseToEnd);
+                }
+                //  ç”Ÿæˆã‚³ãƒ¼ãƒ‰ã®æœ«å°¾ã«ã‚«ãƒ¼ã‚½ãƒ«ã‚’åˆã‚ã›ã‚‹
+                selection.LineUp(false, 1);
+                selection.EndOfLine(false);
+                return true;
+            }
+            catch (System.Exception ex)
+            {
+                MessageUtils.ShowErrorMessage(ex.Message + "\n" + ex.StackTrace);
+                return false;
+            }
+        }
+
+        #endregion
+
         /// <summary>
-        /// ƒRƒs[İ’è‚ÌÄ“Ç‚İ‚İ‚ğs‚¤
+        /// ã‚³ãƒ”ãƒ¼è¨­å®šã®å†èª­ã¿è¾¼ã¿ã‚’è¡Œã†
         /// </summary>
         private void RefreshCopyInfo()
         {
@@ -79,95 +154,5 @@ namespace CopyGen.Control
                 _copyInfo = CopyConfigFileManager.ReadConfig(configPath);
             }
         }
-
-        #region ƒCƒxƒ“ƒg
-
-        /// <summary>
-        /// ƒRƒs[ˆ—¶¬ƒ{ƒ^ƒ“ƒNƒŠƒbƒNƒCƒxƒ“ƒg
-        /// </summary>
-        /// <param name="Ctrl"></param>
-        /// <param name="CancelDefault"></param>
-        private void generateCode_Click(CommandBarButton Ctrl, ref bool CancelDefault)
-        {
-            Document document = _applicationObject.ActiveDocument;
-            if (!ProgramLanguageUtils.IsEnableLanguage(document.FullName))
-            {
-                MessageUtils.ShowWarnMessage(
-                    "[{0}]‚Í\n–¢‘Î‰Œ¾Œê‚ÌƒR[ƒhƒtƒ@ƒCƒ‹‚Ì‚½‚ßAƒRƒs[ˆ—‚ğ¶¬‚Å‚«‚Ü‚¹‚ñB\ng—p‰Â”\‚ÈŒ¾Œê‚ÍuC#AVB.NETv‚Å‚·B", 
-                    document.FullName);
-                return;
-            }
-            
-            try
-            {
-                RefreshCopyInfo();
-                //  –ˆ‰ñİ’è‚µ‚È‚¨‚·ê‡
-                if(_copyInfo.IsEverytimeConfirm)
-                {
-                    using(CopyConfig config = new CopyConfig())
-                    {
-                        if(config.ShowDialog() == DialogResult.Cancel)
-                        {
-                            return;
-                        }
-                    }
-                    RefreshCopyInfo();
-                }
-
-                //  Œ¾ŒêˆË‘¶‚ÌƒƒWƒbƒN¶¬ƒtƒ@ƒNƒgƒŠ‚ğæ“¾
-                ICopyCodeBuildFactory factory = ProgramLanguageUtils.CreateCopyCodePartsBuilder(document.FullName);
-
-                //  ƒRƒs[‚·‚éŒ^–¼‚ğæ“¾
-                TextSelection selection = (TextSelection)document.Selection;
-                selection.StartOfLine(vsStartOfLineOptions.vsStartOfLineOptionsFirstColumn, false);
-                selection.SelectLine();
-                //  ƒR[ƒho—ÍŠJn’n“_‚ÌƒCƒ“ƒfƒ“ƒg‚ğæ“¾
-                string indent = factory.GetIndent(selection.Text);
-
-                //  ƒRƒs[¶¬‘ÎÛ‚Ìî•ñ‚ğ¶¬
-                ICopyTargetBaseInfoCreator destBaseInfoCreator = factory.CreateCopyTargetBaseInfoCreator();
-                CopyTargetBaseInfo targetBaseInfo = destBaseInfoCreator.Create(document.FullName, selection.Text);
-
-                //  QÆæƒAƒZƒ“ƒuƒŠƒpƒX‚ğæ“¾
-                string referencePaths = AssemblyUtils.GetReferencePath(document);
-
-                PropertyCodeInfo propertyCodeInfo =
-                    CodeInfoUtils.ReadPropertyInfo(referencePaths,
-                                                       targetBaseInfo.SourceTypeFullNames,
-                                                       targetBaseInfo.DestTypeFullNames);
-                
-                CopyCodeGeneratorCreationFacade facade = new CopyCodeGeneratorCreationFacade(
-                    factory.CreateCopyCodeGeneratorCreator(), _copyInfo, propertyCodeInfo);
-                ICodeGenerator generator = facade.CreateCodeGenerator();
-                if(generator == null)
-                {
-                    MessageUtils.ShowWarnMessage("ƒRƒs[ˆ—‚ğ¶¬‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B\nƒtƒ@ƒCƒ‹–¼‚ÆƒNƒ‰ƒX–¼‚ªˆê’v‚µ‚Ä‚¢‚È‚¢A\n‚Ü‚½‚ÍƒAƒhƒCƒ“‚ÌƒCƒ“ƒXƒg[ƒ‹æ‚ª‘‚«‚İ•s‰Â‚É‚È‚Á‚Ä‚¢‚È‚¢‚©‚²Šm”F‰º‚³‚¢B");
-                    return;
-                }
-                
-                if (_copyInfo.IsOutputMethod)
-                {
-                    selection.StartOfLine(vsStartOfLineOptions.vsStartOfLineOptionsFirstColumn, true);
-                    selection.Insert(generator.GenerateCode(indent),
-                                     (int) vsInsertFlags.vsInsertFlagsCollapseToEnd);
-                }
-                else
-                {
-                    selection.Insert(generator.GenerateCode(indent),
-                                     (int)vsInsertFlags.vsInsertFlagsCollapseToEnd);
-                }
-                //  ¶¬ƒR[ƒh‚Ì––”ö‚ÉƒJ[ƒ\ƒ‹‚ğ‡‚í‚¹‚é
-                selection.LineUp(false, 1);
-                selection.EndOfLine(false);
-            }
-            catch (System.Exception ex)
-            {
-                MessageUtils.ShowErrorMessage(ex.Message + "\n" + ex.StackTrace);
-            }
-            
-        }
-        
-
-        #endregion
     }
 }

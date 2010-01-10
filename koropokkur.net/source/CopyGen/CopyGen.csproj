@@ -42,6 +42,8 @@
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Command\CopyGenMenuCommand.cs" />
+    <Compile Include="Command\CopyMethodGenCommand.cs" />
     <Compile Include="Connect.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -53,6 +55,7 @@
     <Compile Include="Control\Window\CopyConfig.Designer.cs">
       <DependentUpon>CopyConfig.cs</DependentUpon>
     </Compile>
+    <Compile Include="Core\CopyGenConnectCore.cs" />
     <Compile Include="Exception\ConfigNotFoundException.cs" />
     <Compile Include="Exception\NotSupportLanguageException.cs" />
     <Compile Include="Exception\PropertyNotFoundRutimeException.cs" />
