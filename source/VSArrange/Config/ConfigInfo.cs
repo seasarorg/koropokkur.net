@@ -166,6 +166,23 @@ namespace VSArrange.Config
         }
 
         /// <summary>
+        /// 属性設定実行フラグ
+        /// </summary>
+        public bool IsSetOption
+        {
+            get
+            {
+                return (FilterCompileStringList.Count > 0 ||
+                        FilterContentsStringList.Count > 0 ||
+                        FilterCopyIfNewStringList.Count > 0 ||
+                        FilterEverytimeCopyStringList.Count > 0 ||
+                        FilterNoActionStringList.Count > 0 ||
+                        FilterNoCopyStringList.Count > 0 ||
+                        FilterResourceStringList.Count > 0);
+            }
+        }
+
+        /// <summary>
         /// 処理結果出力フラグ
         /// </summary>
         public bool IsOutputResult

@@ -62,6 +62,9 @@
     <EmbeddedResource Include="Control\OutputResult.resx">
       <DependentUpon>OutputResult.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Control\ResultMessageForm.resx">
+      <DependentUpon>ResultMessageForm.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="EnvDTE">
@@ -146,6 +149,12 @@
     </Compile>
     <Compile Include="Control\OutputResult.Designer.cs">
       <DependentUpon>OutputResult.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Control\ResultMessageForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Control\ResultMessageForm.Designer.cs">
+      <DependentUpon>ResultMessageForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Filter\ItemAttachmentFilter.cs" />
     <Compile Include="Core\VSArrangeConnectCore.cs" />

@@ -19,8 +19,11 @@
 using System;
 using System.IO;
 using System.Text;
-using AddInCommon.Util;
+using AddInCommon.Const;
 using VSArrange.Config;
+using VSArrange.Control;
+using VSLangProj;
+using AddInCommon.Util;
 
 namespace VSArrange.Arrange
 {
@@ -82,7 +85,12 @@ namespace VSArrange.Arrange
 
             if(_configInfo.OutputResultWindow.IsEnable)
             {
-                MessageUtils.ShowInfoMessage(_resultMessageBuilder.ToString());
+                //MessageUtils.ShowInfoMessage(_resultMessageBuilder.ToString());
+                using(ResultMessageForm resultMessageForm = new ResultMessageForm())
+                {
+                    resultMessageForm.SetResultList(resultMessage);
+                    resultMessageForm.ShowDialog();
+                }
             }
 
             if (_configInfo.OutputResultFile.IsEnable)
@@ -96,12 +104,34 @@ namespace VSArrange.Arrange
         }
 
         /// <summary>
+        /// ビルドアクションが設定されたことを保持する
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="newValue"></param>
+        public void RegisterdBuildAction(string path, prjBuildAction newValue)
+        {
+            RegisterAddedProjectItem(string.Format("ビルドアクション\t{0}\t",
+                ProjectItemUtils.BuildActionToString(newValue)), path);
+        }
+
+        /// <summary>
+        /// 「出力ディレクトリにコピー」が設定されたことを保持する
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="newValue"></param>
+        public void RegisterdCopyToOutputDirectory(string path, EnumCopyToOutputDirectory newValue)
+        {
+            RegisterAddedProjectItem(string.Format("出力ﾃﾞｨﾚｸﾄﾘにｺﾋﾟｰ\t{0}\t", 
+                ProjectItemUtils.CopyToOutputDirectoryToString(newValue)), path);
+        }
+
+        /// <summary>
         /// プロジェクトにフォルダが追加されたことを保持する
         /// </summary>
         /// <param name="path"></param>
         public void RegisterAddedDirectory(string path)
         {
-            RegisterAddedProjectItem("登録（フォルダ）：", path);
+            RegisterAddedProjectItem("フォルダ\t登録\t", path);
         }
 
         /// <summary>
@@ -110,7 +140,7 @@ namespace VSArrange.Arrange
         /// <param name="path"></param>
         public void RegisterAddedFile(string path)
         {
-            RegisterAddedProjectItem("登録（ファイル）：", path);
+            RegisterAddedProjectItem("ファイル\t登録\t", path);
         }
 
         /// <summary>
@@ -119,7 +149,7 @@ namespace VSArrange.Arrange
         /// <param name="path"></param>
         public void RegisterRemovedDirectory(string path)
         {
-            RegisterAddedProjectItem("除外（フォルダ）：", path);
+            RegisterAddedProjectItem("フォルダ\t除外\t", path);
         }
 
         /// <summary>
@@ -128,7 +158,7 @@ namespace VSArrange.Arrange
         /// <param name="path"></param>
         public void RegisterRemovedFile(string path)
         {
-            RegisterAddedProjectItem("除外（ファイル）：", path);
+            RegisterAddedProjectItem("ファイル\t除外\t", path);
         }
 
         /// <summary>
@@ -137,7 +167,7 @@ namespace VSArrange.Arrange
         /// <param name="path"></param>
         public void RegisterRemovedUnknown(string path)
         {
-            RegisterAddedProjectItem("除外（種別不明なプロジェクト要素）：", path);
+            RegisterAddedProjectItem("種別不明なプロジェクト要素\t除外\t", path);
         }
 
         private void RegisterAddedProjectItem(string addedMessage, string path)

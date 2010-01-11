@@ -30,6 +30,8 @@ namespace VSArrange.Arrange
     /// </summary>
     public class CopyToOutputDirectoryArranger : IProjectItemAccessor
     {
+        private readonly OutputResultManager _outputResultManager;
+
         #region プロパティ
 
         /// <summary>
@@ -77,11 +79,14 @@ namespace VSArrange.Arrange
         /// コンストラクタ
         /// </summary>
         /// <param name="configInfo"></param>
-        public CopyToOutputDirectoryArranger(ConfigInfo configInfo)
+        /// <param name="outputResultManager"></param>
+        public CopyToOutputDirectoryArranger(ConfigInfo configInfo, OutputResultManager outputResultManager)
         {
             AddFilters(FilterNoCopy, configInfo.FilterNoCopyStringList);
             AddFilters(FilterEverytimeCopy, configInfo.FilterEverytimeCopyStringList);
             AddFilters(FilterCopyIfNew, configInfo.FilterCopyIfNewStringList);
+
+            _outputResultManager = outputResultManager;
         }
 
         #region IProjectItemAccessor メンバ
@@ -94,6 +99,9 @@ namespace VSArrange.Arrange
             if (currentValue != newValue)
             {
                 ProjectItemUtils.SetCopyToOutputDirectory(projectItem, newValue);
+
+                _outputResultManager.RegisterdCopyToOutputDirectory(
+                    ProjectItemUtils.GetFullPath(projectItem), newValue);
             }
         }
 
@@ -116,7 +124,7 @@ namespace VSArrange.Arrange
         {
             if (FilterNoCopy.IsHitFilter(fileName))
             {
-                return EnumCopyToOutputDirectory.Not;
+                return EnumCopyToOutputDirectory.NotCopy;
             }
 
             if (FilterEverytimeCopy.IsHitFilter(fileName))

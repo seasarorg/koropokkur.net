@@ -19,9 +19,9 @@
 using System.Collections.Generic;
 using AddInCommon.Invoke;
 using AddInCommon.Util;
+using VSArrange.Config;
 using VSArrange.Filter;
 using VSLangProj;
-using VSArrange.Config;
 
 namespace VSArrange.Arrange
 {
@@ -30,6 +30,11 @@ namespace VSArrange.Arrange
     /// </summary>
     public class BuildActionArranger : IProjectItemAccessor
     {
+        /// <summary>
+        /// 結果出力情報
+        /// </summary>
+        private readonly OutputResultManager _outputResultManager;
+
         #region プロパティ
 
         /// <summary>
@@ -90,12 +95,15 @@ namespace VSArrange.Arrange
         /// コンストラクタ
         /// </summary>
         /// <param name="configInfo"></param>
-        public BuildActionArranger(ConfigInfo configInfo)
+        /// <param name="outputResultManager"></param>
+        public BuildActionArranger(ConfigInfo configInfo, OutputResultManager outputResultManager)
         {
             AddFilters(FilterCompile, configInfo.FilterCompileStringList);
             AddFilters(FilterResource, configInfo.FilterResourceStringList);
             AddFilters(FilterContents, configInfo.FilterContentsStringList);
             AddFilters(FilterNoAction, configInfo.FilterNoActionStringList);
+
+            _outputResultManager = outputResultManager;
         }
 
         #region IProjectItemAccessor メンバ
@@ -108,6 +116,8 @@ namespace VSArrange.Arrange
             if(currentValue != newValue)
             {
                 ProjectItemUtils.SetBuildAction(projectItem, newValue);
+
+                _outputResultManager.RegisterdBuildAction(ProjectItemUtils.GetFullPath(projectItem), newValue);
             }
         }
 

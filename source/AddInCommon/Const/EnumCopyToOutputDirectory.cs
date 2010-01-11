@@ -26,7 +26,7 @@ namespace AddInCommon.Const
         /// <summary>
         /// コピーしない
         /// </summary>
-        Not = 0,
+        NotCopy = 0,
 
         /// <summary>
         /// 常にコピーする
