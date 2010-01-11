@@ -171,13 +171,11 @@ namespace VSArrange.Arrange
                         if (!folderItems.ContainsKey(currentPath))
                         {
                             folderItems.Add(currentPath, projectItem);
-                            _outputResultManager.RegisterAddedDirectory(currentPath);
                         }
                     }
                     else
                     {
                         deleteTarget.Add(projectItem);
-                        _outputResultManager.RegisterRemovedDirectory(currentPath);
                     }
                 }
                 else if (File.Exists(currentPath))
@@ -187,37 +185,35 @@ namespace VSArrange.Arrange
                         if (!fileItems.ContainsKey(currentPath))
                         {
                             fileItems.Add(currentPath, projectItem);
-                            _outputResultManager.RegisterAddedFile(currentPath);
                         }
                     }
                     else
                     {
                         deleteTarget.Add(projectItem);
-                        _outputResultManager.RegisterRemovedFile(currentPath);
                     }
                 }
                 else
                 {
                     deleteTarget.Add(projectItem);
-                    _outputResultManager.RegisterRemovedUnknown(currentPath);
                 }
             }
 
             _worker.ReportProgress("プロジェクト要素を追加中（フォルダ）", 1, PROGRESS_PARTS_COUNT);
             //  ディレクトリ追加
             DirectoryAppender directoryAppender = new DirectoryAppender(
-                dirPath, _filterFolder, projectItems, folderItems);
+                dirPath, _filterFolder, projectItems, folderItems, _outputResultManager);
             directoryAppender.Execute();
 
             _worker.ReportProgress("プロジェクト要素を追加中（ファイル）", 2, PROGRESS_PARTS_COUNT);
             //  ファイル追加
             FileAppender fileAppender = new FileAppender(
-                dirPath, _filterFile, projectItems, fileItems);
+                dirPath, _filterFile, projectItems, fileItems, _outputResultManager);
             fileAppender.Execute();
 
             _worker.ReportProgress("不要なプロジェクト要素を削除中", 3, PROGRESS_PARTS_COUNT);
             //  不要な要素は削除
-            ProjectItemRemover projectItemRemover = new ProjectItemRemover(deleteTarget);
+            ProjectItemRemover projectItemRemover = new ProjectItemRemover(
+                deleteTarget, _outputResultManager);
             projectItemRemover.Execute();
 
             _worker.ReportProgress("フォルダ内プロジェクト要素の整理中", 0, PROGRESS_PARTS_COUNT);
@@ -258,8 +254,8 @@ namespace VSArrange.Arrange
             AddFilters(FilterFolder, configInfo.FilterFolderStringList);
 
             //  プロジェクト要素属性設定フィルターを設定
-            _buildActionArranger = new BuildActionArranger(configInfo);
-            _copyToOutputDirectoryArranger = new CopyToOutputDirectoryArranger(configInfo);
+            _buildActionArranger = new BuildActionArranger(configInfo, _outputResultManager);
+            _copyToOutputDirectoryArranger = new CopyToOutputDirectoryArranger(configInfo, _outputResultManager);
         }
 
         #region Background
@@ -294,13 +290,16 @@ namespace VSArrange.Arrange
                 worker.ReportProgress("プロジェクト要素の整理中", 0, 2);
                 ArrangeDirectories(projectDirPath, projectItems);
 
-                worker.ReportProgress("プロジェクト要素の属性を設定中", 1, 2);
-                //  整理し終わったプロジェクト要素に対して属性設定
-                ProjectItemUtils.AccessAllProjectItems(
-                    projectItems, new IProjectItemAccessor[]
-                                      {
-                                          _buildActionArranger, _copyToOutputDirectoryArranger
-                                      });
+                if (_configInfo.IsSetOption)
+                {
+                    worker.ReportProgress("プロジェクト要素の属性を設定中", 1, 2);
+                    //  整理し終わったプロジェクト要素に対して属性設定
+                    ProjectItemUtils.AccessAllProjectItems(
+                        projectItems, new IProjectItemAccessor[]
+                                          {
+                                              _buildActionArranger, _copyToOutputDirectoryArranger
+                                          });
+                }
                 worker.ReportProgress("プロジェクト要素の属性を設定中", 2, 2);
             }
             catch(Exception ex)

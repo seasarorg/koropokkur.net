@@ -18,6 +18,7 @@
 
 using System.Collections.Generic;
 using EnvDTE;
+using System.IO;
 
 namespace VSArrange.Arrange.Appender
 {
@@ -27,16 +28,28 @@ namespace VSArrange.Arrange.Appender
     public class ProjectItemRemover
     {
         private readonly IList<ProjectItem> _deleteTarget;
+        private readonly OutputResultManager _outputResultManager;
 
-        public ProjectItemRemover(IList<ProjectItem> deleteTarget)
+        public ProjectItemRemover(IList<ProjectItem> deleteTarget, OutputResultManager outputResultManager)
         {
             _deleteTarget = deleteTarget;
+            _outputResultManager = outputResultManager;
         }
 
         public void Execute()
         {
             foreach (ProjectItem projectItem in _deleteTarget)
             {
+                string path = (string)projectItem.Properties.Item("FullPath").Value;
+                if(Path.HasExtension(path))
+                {
+                    _outputResultManager.RegisterRemovedFile(path);
+                }
+                else
+                {
+                    _outputResultManager.RegisterRemovedDirectory(path);
+                }
+
                 projectItem.Remove();
             }
         }

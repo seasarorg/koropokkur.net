@@ -150,6 +150,27 @@ namespace AddInCommon.Util
         {
             SetValue(projectItem, ProjectItemFileConst.BUILD_ACTION, value);
         }
+
+        /// <summary>
+        /// 「ビルドアクション」列挙体を文字列に変換
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static string BuildActionToString(prjBuildAction value)
+        {
+            switch (value)
+            {
+                case prjBuildAction.prjBuildActionCompile:
+                    return "コンパイル";
+                case prjBuildAction.prjBuildActionContent:
+                    return "コンテンツ";
+                case prjBuildAction.prjBuildActionEmbeddedResource:
+                    return "なし";
+                case prjBuildAction.prjBuildActionNone:
+                    return "";
+            }
+            return "不明";
+        }
         #endregion
 
         #region 出力ディレクトリへのコピー
@@ -166,7 +187,7 @@ namespace AddInCommon.Util
             switch (copyToOutputDirectoryValue)
             {
                 case 0:
-                    return EnumCopyToOutputDirectory.Not;
+                    return EnumCopyToOutputDirectory.NotCopy;
                 case 1:
                     return EnumCopyToOutputDirectory.EveryTime;
                 case 2:
@@ -184,6 +205,25 @@ namespace AddInCommon.Util
         public static void SetCopyToOutputDirectory(ProjectItem projectItem, EnumCopyToOutputDirectory value)
         {
             SetValue(projectItem, ProjectItemFileConst.COPY_TO_OUTPUT_DIRECTORY, value);
+        }
+
+        /// <summary>
+        /// 「出力ディレクトリへコピー」列挙体を文字列に変換する
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static string CopyToOutputDirectoryToString(EnumCopyToOutputDirectory value)
+        {
+            switch (value)
+            {
+                case EnumCopyToOutputDirectory.NotCopy:
+                    return "コピーしない";
+                case EnumCopyToOutputDirectory.EveryTime:
+                    return "常にコピーする";
+                case EnumCopyToOutputDirectory.IfModified:
+                    return "新しい場合はコピー";
+            }
+            return "不明";
         }
 
         #endregion

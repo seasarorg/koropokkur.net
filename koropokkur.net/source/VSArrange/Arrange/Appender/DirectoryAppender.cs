@@ -32,15 +32,18 @@ namespace VSArrange.Arrange.Appender
         private readonly ItemAttachmentFilter _filter;
         private readonly ProjectItems _projectItems;
         private readonly IDictionary<string, ProjectItem> _folderItems;
+        private readonly OutputResultManager _outputResultManager;
 
         public DirectoryAppender(
             string dirPath, ItemAttachmentFilter filter,
-            ProjectItems projectItems, IDictionary<string, ProjectItem> folderItems)
+            ProjectItems projectItems, IDictionary<string, ProjectItem> folderItems,
+            OutputResultManager outputResultManager)
         {
             _dirPath = dirPath;
             _filter = filter;
             _projectItems = projectItems;
             _folderItems = folderItems;
+            _outputResultManager = outputResultManager;
         }
 
         /// <summary>
@@ -59,6 +62,8 @@ namespace VSArrange.Arrange.Appender
                     //  まだ追加していないもののみ追加
                     ProjectItem newItem = _projectItems.AddFromDirectory(subDirPath);
                     _folderItems.Add(subDirPath, newItem);
+
+                    _outputResultManager.RegisterAddedDirectory(subDirPath);
                 }
             }
         }
