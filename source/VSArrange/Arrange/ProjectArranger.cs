@@ -59,17 +59,17 @@ namespace VSArrange.Arrange
         /// <summary>
         /// 「ビルドアクション」設定
         /// </summary>
-        protected BuildActionArranger _buildActionArranger;
+        private BuildActionArranger _buildActionArranger;
 
         /// <summary>
         /// 「出力後にコピー」設定
         /// </summary>
-        protected CopyToOutputDirectoryArranger _copyToOutputDirectoryArranger;
+        private CopyToOutputDirectoryArranger _copyToOutputDirectoryArranger;
 
         /// <summary>
         /// 結果出力管理
         /// </summary>
-        protected readonly OutputResultManager _outputResultManager = new OutputResultManager();
+        private readonly OutputResultManager _outputResultManager = new OutputResultManager();
 
         #region プロパティ
         /// <summary>

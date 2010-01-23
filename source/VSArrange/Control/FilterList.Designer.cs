@@ -31,7 +31,7 @@
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.grpFilter = new System.Windows.Forms.GroupBox();
-            this.button1 = new System.Windows.Forms.Button();
+            this.btnReload = new System.Windows.Forms.Button();
             this.lblTestExplain = new System.Windows.Forms.Label();
             this.lblOK = new System.Windows.Forms.Label();
             this.txtTestInput = new System.Windows.Forms.TextBox();
@@ -48,7 +48,7 @@
             // 
             // grpFilter
             // 
-            this.grpFilter.Controls.Add(this.button1);
+            this.grpFilter.Controls.Add(this.btnReload);
             this.grpFilter.Controls.Add(this.lblTestExplain);
             this.grpFilter.Controls.Add(this.lblOK);
             this.grpFilter.Controls.Add(this.txtTestInput);
@@ -61,16 +61,16 @@
             this.grpFilter.TabStop = false;
             this.grpFilter.Text = "ファイル";
             // 
-            // button1
+            // btnReload
             // 
-            this.button1.Font = new System.Drawing.Font("MS UI Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.button1.Location = new System.Drawing.Point(442, 250);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(95, 23);
-            this.button1.TabIndex = 16;
-            this.button1.Text = "再読込み(&R)";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.btnUndo_Click);
+            this.btnReload.Font = new System.Drawing.Font("MS UI Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.btnReload.Location = new System.Drawing.Point(442, 250);
+            this.btnReload.Name = "btnReload";
+            this.btnReload.Size = new System.Drawing.Size(95, 23);
+            this.btnReload.TabIndex = 16;
+            this.btnReload.Text = "再読込み(&R)";
+            this.btnReload.UseVisualStyleBackColor = true;
+            this.btnReload.Click += new System.EventHandler(this.btnUndo_Click);
             // 
             // lblTestExplain
             // 
@@ -206,6 +206,6 @@
         private System.Windows.Forms.Label lblNG;
         private System.Windows.Forms.Label lblOK;
         private System.Windows.Forms.Timer timerCloseMessage;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnReload;
     }
 }
