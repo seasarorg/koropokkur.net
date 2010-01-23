@@ -35,32 +35,33 @@
             this.tabExclueProject = new System.Windows.Forms.TabPage();
             this.tabgrpExcludeProject = new System.Windows.Forms.TabControl();
             this.tabExcludeFile = new System.Windows.Forms.TabPage();
-            this.filterFile = new FilterList();
+            this.filterFile = new VSArrange.Control.FilterList();
             this.tabExcludeFolder = new System.Windows.Forms.TabPage();
-            this.filterFolder = new FilterList();
+            this.filterFolder = new VSArrange.Control.FilterList();
             this.tabBuildAction = new System.Windows.Forms.TabPage();
             this.tabBuildActionItems = new System.Windows.Forms.TabControl();
             this.tabCompile = new System.Windows.Forms.TabPage();
-            this.filterCompile = new FilterList();
+            this.filterCompile = new VSArrange.Control.FilterList();
             this.tabResources = new System.Windows.Forms.TabPage();
-            this.filterResource = new FilterList();
+            this.filterResource = new VSArrange.Control.FilterList();
             this.tabContents = new System.Windows.Forms.TabPage();
-            this.filterContents = new FilterList();
+            this.filterContents = new VSArrange.Control.FilterList();
             this.tabNoAction = new System.Windows.Forms.TabPage();
-            this.filterNoAction = new FilterList();
+            this.filterNoAction = new VSArrange.Control.FilterList();
             this.tabOutputDirectoryCopy = new System.Windows.Forms.TabPage();
             this.tabgrpOutputDirectoryCopy = new System.Windows.Forms.TabControl();
             this.tabNoCopy = new System.Windows.Forms.TabPage();
-            this.filterNoCopy = new FilterList();
+            this.filterNoCopy = new VSArrange.Control.FilterList();
             this.tabEverytimeCopy = new System.Windows.Forms.TabPage();
-            this.filterEverytimeCopy = new FilterList();
+            this.filterEverytimeCopy = new VSArrange.Control.FilterList();
             this.tabCopyIfNew = new System.Windows.Forms.TabPage();
-            this.filterCopyIfNew = new FilterList();
+            this.filterCopyIfNew = new VSArrange.Control.FilterList();
             this.btnEditDirect = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.grpConfigFilter = new System.Windows.Forms.GroupBox();
             this.grpConfigOutput = new System.Windows.Forms.GroupBox();
-            this.outputResultConfig = new OutputResult();
+            this.outputResultConfig = new VSArrange.Control.OutputResult();
+            this.btnApply = new System.Windows.Forms.Button();
             this.tabgrpAllFilter.SuspendLayout();
             this.tabExclueProject.SuspendLayout();
             this.tabgrpExcludeProject.SuspendLayout();
@@ -84,7 +85,7 @@
             // txtNotice
             // 
             this.txtNotice.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                                                                          | System.Windows.Forms.AnchorStyles.Right)));
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.txtNotice.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
             this.txtNotice.Location = new System.Drawing.Point(6, 22);
             this.txtNotice.Multiline = true;
@@ -100,11 +101,11 @@
             this.btnExit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnExit.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnExit.Font = new System.Drawing.Font("MS UI Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.btnExit.Location = new System.Drawing.Point(493, 534);
+            this.btnExit.Location = new System.Drawing.Point(361, 536);
             this.btnExit.Name = "btnExit";
             this.btnExit.Size = new System.Drawing.Size(136, 29);
             this.btnExit.TabIndex = 303;
-            this.btnExit.Text = "保存せずに終了(&C)";
+            this.btnExit.Text = "キャンセル(&C)";
             this.btnExit.UseVisualStyleBackColor = true;
             this.btnExit.Click += new System.EventHandler(this.buttonExit_Click);
             // 
@@ -112,11 +113,11 @@
             // 
             this.btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnSave.Font = new System.Drawing.Font("MS UI Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.btnSave.Location = new System.Drawing.Point(352, 534);
+            this.btnSave.Location = new System.Drawing.Point(220, 536);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(135, 29);
             this.btnSave.TabIndex = 302;
-            this.btnSave.Text = "保存して終了(&S)";
+            this.btnSave.Text = "OK(&O)";
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
@@ -135,10 +136,10 @@
             // tabExclueProject
             // 
             this.tabExclueProject.Controls.Add(this.tabgrpExcludeProject);
-            this.tabExclueProject.Location = new System.Drawing.Point(4, 21);
+            this.tabExclueProject.Location = new System.Drawing.Point(4, 22);
             this.tabExclueProject.Name = "tabExclueProject";
             this.tabExclueProject.Padding = new System.Windows.Forms.Padding(3);
-            this.tabExclueProject.Size = new System.Drawing.Size(597, 322);
+            this.tabExclueProject.Size = new System.Drawing.Size(597, 321);
             this.tabExclueProject.TabIndex = 0;
             this.tabExclueProject.Text = "プロジェクト除外";
             this.tabExclueProject.UseVisualStyleBackColor = true;
@@ -156,10 +157,10 @@
             // tabExcludeFile
             // 
             this.tabExcludeFile.Controls.Add(this.filterFile);
-            this.tabExcludeFile.Location = new System.Drawing.Point(4, 21);
+            this.tabExcludeFile.Location = new System.Drawing.Point(4, 22);
             this.tabExcludeFile.Name = "tabExcludeFile";
             this.tabExcludeFile.Padding = new System.Windows.Forms.Padding(3);
-            this.tabExcludeFile.Size = new System.Drawing.Size(561, 287);
+            this.tabExcludeFile.Size = new System.Drawing.Size(561, 286);
             this.tabExcludeFile.TabIndex = 0;
             this.tabExcludeFile.Text = "ファイル";
             this.tabExcludeFile.UseVisualStyleBackColor = true;
@@ -167,7 +168,7 @@
             // filterFile
             // 
             this.filterFile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                                                                           | System.Windows.Forms.AnchorStyles.Right)));
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.filterFile.AutoSize = true;
             this.filterFile.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.filterFile.FilterName = "除外ファイル";
@@ -179,10 +180,10 @@
             // tabExcludeFolder
             // 
             this.tabExcludeFolder.Controls.Add(this.filterFolder);
-            this.tabExcludeFolder.Location = new System.Drawing.Point(4, 21);
+            this.tabExcludeFolder.Location = new System.Drawing.Point(4, 22);
             this.tabExcludeFolder.Name = "tabExcludeFolder";
             this.tabExcludeFolder.Padding = new System.Windows.Forms.Padding(3);
-            this.tabExcludeFolder.Size = new System.Drawing.Size(561, 287);
+            this.tabExcludeFolder.Size = new System.Drawing.Size(561, 286);
             this.tabExcludeFolder.TabIndex = 1;
             this.tabExcludeFolder.Text = "フォルダ";
             this.tabExcludeFolder.UseVisualStyleBackColor = true;
@@ -190,11 +191,11 @@
             // filterFolder
             // 
             this.filterFolder.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
-                                                                             | System.Windows.Forms.AnchorStyles.Right)));
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.filterFolder.AutoSize = true;
             this.filterFolder.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.filterFolder.FilterName = "除外フォルダ";
-            this.filterFolder.Location = new System.Drawing.Point(6, 3);
+            this.filterFolder.Location = new System.Drawing.Point(6, 2);
             this.filterFolder.Name = "filterFolder";
             this.filterFolder.Size = new System.Drawing.Size(549, 283);
             this.filterFolder.TabIndex = 12;
@@ -202,10 +203,10 @@
             // tabBuildAction
             // 
             this.tabBuildAction.Controls.Add(this.tabBuildActionItems);
-            this.tabBuildAction.Location = new System.Drawing.Point(4, 21);
+            this.tabBuildAction.Location = new System.Drawing.Point(4, 22);
             this.tabBuildAction.Name = "tabBuildAction";
             this.tabBuildAction.Padding = new System.Windows.Forms.Padding(3);
-            this.tabBuildAction.Size = new System.Drawing.Size(597, 322);
+            this.tabBuildAction.Size = new System.Drawing.Size(597, 321);
             this.tabBuildAction.TabIndex = 1;
             this.tabBuildAction.Text = "ビルドアクション";
             this.tabBuildAction.UseVisualStyleBackColor = true;
@@ -225,10 +226,10 @@
             // tabCompile
             // 
             this.tabCompile.Controls.Add(this.filterCompile);
-            this.tabCompile.Location = new System.Drawing.Point(4, 21);
+            this.tabCompile.Location = new System.Drawing.Point(4, 22);
             this.tabCompile.Name = "tabCompile";
             this.tabCompile.Padding = new System.Windows.Forms.Padding(3);
-            this.tabCompile.Size = new System.Drawing.Size(561, 360);
+            this.tabCompile.Size = new System.Drawing.Size(561, 359);
             this.tabCompile.TabIndex = 0;
             this.tabCompile.Text = "コンパイル";
             this.tabCompile.UseVisualStyleBackColor = true;
@@ -246,10 +247,10 @@
             // tabResources
             // 
             this.tabResources.Controls.Add(this.filterResource);
-            this.tabResources.Location = new System.Drawing.Point(4, 21);
+            this.tabResources.Location = new System.Drawing.Point(4, 22);
             this.tabResources.Name = "tabResources";
             this.tabResources.Padding = new System.Windows.Forms.Padding(3);
-            this.tabResources.Size = new System.Drawing.Size(561, 360);
+            this.tabResources.Size = new System.Drawing.Size(561, 359);
             this.tabResources.TabIndex = 1;
             this.tabResources.Text = "埋め込みリソース";
             this.tabResources.UseVisualStyleBackColor = true;
@@ -267,9 +268,9 @@
             // tabContents
             // 
             this.tabContents.Controls.Add(this.filterContents);
-            this.tabContents.Location = new System.Drawing.Point(4, 21);
+            this.tabContents.Location = new System.Drawing.Point(4, 22);
             this.tabContents.Name = "tabContents";
-            this.tabContents.Size = new System.Drawing.Size(561, 360);
+            this.tabContents.Size = new System.Drawing.Size(561, 359);
             this.tabContents.TabIndex = 2;
             this.tabContents.Text = "コンテンツ";
             this.tabContents.UseVisualStyleBackColor = true;
@@ -287,9 +288,9 @@
             // tabNoAction
             // 
             this.tabNoAction.Controls.Add(this.filterNoAction);
-            this.tabNoAction.Location = new System.Drawing.Point(4, 21);
+            this.tabNoAction.Location = new System.Drawing.Point(4, 22);
             this.tabNoAction.Name = "tabNoAction";
-            this.tabNoAction.Size = new System.Drawing.Size(561, 360);
+            this.tabNoAction.Size = new System.Drawing.Size(561, 359);
             this.tabNoAction.TabIndex = 3;
             this.tabNoAction.Text = "なし";
             this.tabNoAction.UseVisualStyleBackColor = true;
@@ -307,9 +308,9 @@
             // tabOutputDirectoryCopy
             // 
             this.tabOutputDirectoryCopy.Controls.Add(this.tabgrpOutputDirectoryCopy);
-            this.tabOutputDirectoryCopy.Location = new System.Drawing.Point(4, 21);
+            this.tabOutputDirectoryCopy.Location = new System.Drawing.Point(4, 22);
             this.tabOutputDirectoryCopy.Name = "tabOutputDirectoryCopy";
-            this.tabOutputDirectoryCopy.Size = new System.Drawing.Size(597, 322);
+            this.tabOutputDirectoryCopy.Size = new System.Drawing.Size(597, 321);
             this.tabOutputDirectoryCopy.TabIndex = 2;
             this.tabOutputDirectoryCopy.Text = "出力ディレクトリにコピー";
             this.tabOutputDirectoryCopy.UseVisualStyleBackColor = true;
@@ -328,10 +329,10 @@
             // tabNoCopy
             // 
             this.tabNoCopy.Controls.Add(this.filterNoCopy);
-            this.tabNoCopy.Location = new System.Drawing.Point(4, 21);
+            this.tabNoCopy.Location = new System.Drawing.Point(4, 22);
             this.tabNoCopy.Name = "tabNoCopy";
             this.tabNoCopy.Padding = new System.Windows.Forms.Padding(3);
-            this.tabNoCopy.Size = new System.Drawing.Size(561, 360);
+            this.tabNoCopy.Size = new System.Drawing.Size(561, 359);
             this.tabNoCopy.TabIndex = 0;
             this.tabNoCopy.Text = "コピーしない";
             this.tabNoCopy.UseVisualStyleBackColor = true;
@@ -349,10 +350,10 @@
             // tabEverytimeCopy
             // 
             this.tabEverytimeCopy.Controls.Add(this.filterEverytimeCopy);
-            this.tabEverytimeCopy.Location = new System.Drawing.Point(4, 21);
+            this.tabEverytimeCopy.Location = new System.Drawing.Point(4, 22);
             this.tabEverytimeCopy.Name = "tabEverytimeCopy";
             this.tabEverytimeCopy.Padding = new System.Windows.Forms.Padding(3);
-            this.tabEverytimeCopy.Size = new System.Drawing.Size(561, 360);
+            this.tabEverytimeCopy.Size = new System.Drawing.Size(561, 359);
             this.tabEverytimeCopy.TabIndex = 1;
             this.tabEverytimeCopy.Text = "常にコピー";
             this.tabEverytimeCopy.UseVisualStyleBackColor = true;
@@ -370,9 +371,9 @@
             // tabCopyIfNew
             // 
             this.tabCopyIfNew.Controls.Add(this.filterCopyIfNew);
-            this.tabCopyIfNew.Location = new System.Drawing.Point(4, 21);
+            this.tabCopyIfNew.Location = new System.Drawing.Point(4, 22);
             this.tabCopyIfNew.Name = "tabCopyIfNew";
-            this.tabCopyIfNew.Size = new System.Drawing.Size(561, 360);
+            this.tabCopyIfNew.Size = new System.Drawing.Size(561, 359);
             this.tabCopyIfNew.TabIndex = 2;
             this.tabCopyIfNew.Text = "新しい場合はコピー";
             this.tabCopyIfNew.UseVisualStyleBackColor = true;
@@ -391,7 +392,7 @@
             // 
             this.btnEditDirect.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnEditDirect.Font = new System.Drawing.Font("MS UI Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.btnEditDirect.Location = new System.Drawing.Point(211, 534);
+            this.btnEditDirect.Location = new System.Drawing.Point(79, 536);
             this.btnEditDirect.Name = "btnEditDirect";
             this.btnEditDirect.Size = new System.Drawing.Size(135, 29);
             this.btnEditDirect.TabIndex = 301;
@@ -402,7 +403,7 @@
             // textBox1
             // 
             this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                                                                         | System.Windows.Forms.AnchorStyles.Right)));
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox1.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
             this.textBox1.Location = new System.Drawing.Point(6, 22);
             this.textBox1.Multiline = true;
@@ -447,6 +448,17 @@
             this.outputResultConfig.Size = new System.Drawing.Size(605, 43);
             this.outputResultConfig.TabIndex = 13;
             // 
+            // btnApply
+            // 
+            this.btnApply.Font = new System.Drawing.Font("MS UI Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.btnApply.Location = new System.Drawing.Point(503, 536);
+            this.btnApply.Name = "btnApply";
+            this.btnApply.Size = new System.Drawing.Size(136, 29);
+            this.btnApply.TabIndex = 309;
+            this.btnApply.Text = "適用(&A)";
+            this.btnApply.UseVisualStyleBackColor = true;
+            this.btnApply.Click += new System.EventHandler(this.btnApply_Click);
+            // 
             // ConfigForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -454,6 +466,7 @@
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(641, 566);
             this.ControlBox = false;
+            this.Controls.Add(this.btnApply);
             this.Controls.Add(this.btnEditDirect);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.btnExit);
@@ -533,5 +546,6 @@
         private System.Windows.Forms.GroupBox grpConfigFilter;
         private System.Windows.Forms.GroupBox grpConfigOutput;
         private OutputResult outputResultConfig;
+        private System.Windows.Forms.Button btnApply;
     }
 }

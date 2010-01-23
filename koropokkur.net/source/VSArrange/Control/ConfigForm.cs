@@ -85,19 +85,7 @@ namespace VSArrange.Control
         private void btnSave_Click(object sender, EventArgs e)
         {
             //  設定を保存する
-            try
-            {
-                ConfigInfo configInfo = ConfigInfo.GetInstance();
-                SetConfingInfo(configInfo);
-
-                string configFilePath = PathUtils.GetConfigPath();
-                ConfigFileManager.WriteConfig(configFilePath, configInfo);
-            }
-            catch (Exception ex)
-            {
-                MessageUtils.ShowErrorMessage("設定の書き込みに失敗しました。\n" + ex.Message);
-                return;
-            }
+            Save();
             Close();
         }
 
@@ -109,6 +97,16 @@ namespace VSArrange.Control
         private void buttonExit_Click(object sender, EventArgs e)
         {
             Close();
+        }
+
+        /// <summary>
+        /// 適用（画面は閉じずに設定を保存）
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnApply_Click(object sender, EventArgs e)
+        {
+            Save();
         }
 
         /// <summary>
@@ -247,6 +245,26 @@ namespace VSArrange.Control
         #endregion
 
         #region 補助メソッド
+
+        /// <summary>
+        /// 編集した設定を保存する
+        /// </summary>
+        private void Save()
+        {
+            try
+            {
+                ConfigInfo configInfo = ConfigInfo.GetInstance();
+                SetConfingInfo(configInfo);
+
+                string configFilePath = PathUtils.GetConfigPath();
+                ConfigFileManager.WriteConfig(configFilePath, configInfo);
+            }
+            catch (Exception ex)
+            {
+                MessageUtils.ShowErrorMessage("設定の書き込みに失敗しました。\n" + ex.Message);
+                return;
+            }
+        }
 
         /// <summary>
         /// イベントの設定
@@ -491,7 +509,5 @@ namespace VSArrange.Control
                 configInfo.OutputResultWindow, configInfo.OutputResultFile);
         }
         #endregion
-
-
     }
 }
