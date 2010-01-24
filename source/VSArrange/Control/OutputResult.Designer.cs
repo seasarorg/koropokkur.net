@@ -1,4 +1,4 @@
-﻿namespace VSArrange.Control
+namespace VSArrange.Control
 {
     partial class OutputResult
     {

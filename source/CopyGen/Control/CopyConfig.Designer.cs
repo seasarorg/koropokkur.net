@@ -1,4 +1,4 @@
-﻿namespace CopyGen.Control
+namespace CopyGen.Control
 {
     partial class CopyConfig
     {

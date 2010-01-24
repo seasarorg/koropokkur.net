@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("VSArrangeTest")]
-[assembly: AssemblyCopyright("2005-2009 the Seasar Foundation and the Others.")]
+[assembly: AssemblyCopyright("Copyright 2005-2010 the Seasar Foundation and the Others.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
