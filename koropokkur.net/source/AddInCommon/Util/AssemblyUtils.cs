@@ -1,6 +1,6 @@
 #region Copyright
 /*
- * Copyright 2005-2009 the Seasar Foundation and the Others.
+ * Copyright 2005-2010 the Seasar Foundation and the Others.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,12 +26,12 @@ using VSLangProj;
 namespace AddInCommon.Util
 {
     /// <summary>
-    /// ƒAƒZƒ“ƒuƒŠî•ñ‚ğg—p‚µ‚½ˆ—‚ğæ‚èˆµ‚¤ƒ†[ƒeƒBƒŠƒeƒB
+    /// ï¿½Aï¿½Zï¿½ï¿½ï¿½uï¿½ï¿½ï¿½ï¿½ï¿½ï¿½gï¿½pï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½èˆµï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½eï¿½Bï¿½ï¿½ï¿½eï¿½B
     /// </summary>
     public static class AssemblyUtils
     {
         /// <summary>
-        /// Às’†‚ÌƒAƒZƒ“ƒuƒŠƒpƒX‚ğ•Ô‚·
+        /// ï¿½ï¿½ï¿½sï¿½ï¿½ï¿½ÌƒAï¿½Zï¿½ï¿½ï¿½uï¿½ï¿½ï¿½pï¿½Xï¿½ï¿½Ô‚ï¿½
         /// </summary>
         /// <returns></returns>
         public static string GetExecutingAssemblyPath()
@@ -40,7 +40,7 @@ namespace AddInCommon.Util
         }
 
         /// <summary>
-        /// ƒAƒZƒ“ƒuƒŠƒpƒX‚ğ•Ô‚·
+        /// ï¿½Aï¿½Zï¿½ï¿½ï¿½uï¿½ï¿½ï¿½pï¿½Xï¿½ï¿½Ô‚ï¿½
         /// </summary>
         /// <param name="assembly"></param>
         /// <returns></returns>
@@ -50,7 +50,7 @@ namespace AddInCommon.Util
         }
 
         /// <summary>
-        /// ƒhƒLƒ…ƒƒ“ƒgî•ñ‚©‚çŒ^–¼‚ğæ“¾‚·‚é
+        /// ï¿½hï¿½Lï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½gï¿½ï¿½ñ‚©‚ï¿½^ï¿½ï¿½ï¿½ï¿½æ“¾ï¿½ï¿½ï¿½ï¿½
         /// </summary>
         /// <param name="document"></param>
         /// <returns></returns>
@@ -60,7 +60,7 @@ namespace AddInCommon.Util
         }
 
         /// <summary>
-        /// ƒhƒLƒ…ƒƒ“ƒgî•ñ‚©‚çŒ^–¼‚ğæ“¾‚·‚é
+        /// ï¿½hï¿½Lï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½gï¿½ï¿½ñ‚©‚ï¿½^ï¿½ï¿½ï¿½ï¿½æ“¾ï¿½ï¿½ï¿½ï¿½
         /// </summary>
         /// <param name="documentPath"></param>
         /// <returns></returns>
@@ -76,7 +76,7 @@ namespace AddInCommon.Util
         }
 
         /// <summary>
-        /// ƒtƒ@ƒCƒ‹‚©‚ç–¼‘O‹óŠÔ‚ğæ“¾
+        /// ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½ç–¼ï¿½Oï¿½ï¿½Ô‚ï¿½æ“¾
         /// </summary>
         /// <param name="documentPath"></param>
         /// <returns></returns>
@@ -90,7 +90,7 @@ namespace AddInCommon.Util
                     string line = reader.ReadLine();
                     if (line.Contains("namespace"))
                     {
-                        //  –¼‘O‹óŠÔ–¼‚Ì’Šo
+                        //  ï¿½ï¿½ï¿½Oï¿½ï¿½Ô–ï¿½ï¿½Ì’ï¿½ï¿½o
                         ns = line.Replace("namespace", "").Replace("{", "").Trim();
                         break;
                     }
@@ -100,7 +100,7 @@ namespace AddInCommon.Util
         }
 
         /// <summary>
-        /// ƒhƒLƒ…ƒƒ“ƒgî•ñ‚©‚çƒAƒZƒ“ƒuƒŠ–¼‚ğæ“¾
+        /// ï¿½hï¿½Lï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½gï¿½ï¿½ñ‚©‚ï¿½Aï¿½Zï¿½ï¿½ï¿½uï¿½ï¿½ï¿½ï¿½ï¿½ï¿½æ“¾
         /// </summary>
         /// <param name="document"></param>
         /// <returns></returns>
@@ -111,7 +111,7 @@ namespace AddInCommon.Util
                project.ConfigurationManager.ActiveConfiguration;
 
             // =====================================================
-            //                      ƒrƒ‹ƒho—Íæ‚ÌƒpƒX‚ğæ“¾‚µ‚Ä•\¦
+            //                      ï¿½rï¿½ï¿½ï¿½hï¿½oï¿½Íï¿½Ìƒpï¿½Xï¿½ï¿½æ“¾ï¿½ï¿½ï¿½Ä•\ï¿½ï¿½
             //                      ================================
             string currentAssemblyPath =
                string.Format(@"{0}{1}{2}",
@@ -122,7 +122,7 @@ namespace AddInCommon.Util
         }
 
         /// <summary>
-        /// QÆæƒAƒZƒ“ƒuƒŠƒpƒXˆê——‚ğæ“¾
+        /// ï¿½Qï¿½Æï¿½Aï¿½Zï¿½ï¿½ï¿½uï¿½ï¿½ï¿½pï¿½Xï¿½ê——ï¿½ï¿½æ“¾
         /// </summary>
         /// <param name="document"></param>
         /// <returns></returns>
@@ -147,7 +147,7 @@ namespace AddInCommon.Util
         }
 
         /// <summary>
-        /// ƒRƒ“ƒXƒgƒ‰ƒNƒ^î•ñ‚Ìæ“¾
+        /// ï¿½Rï¿½ï¿½ï¿½Xï¿½gï¿½ï¿½ï¿½Nï¿½^ï¿½ï¿½ï¿½Ìæ“¾
         /// </summary>
         /// <param name="type"></param>
         /// <param name="argTypes"></param>
@@ -160,7 +160,7 @@ namespace AddInCommon.Util
         }
 
         /// <summary>
-        /// ƒNƒ‰ƒX–¼‚©‚çTypeî•ñ‚ğæ“¾
+        /// ï¿½Nï¿½ï¿½ï¿½Xï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Typeï¿½ï¿½ï¿½ï¿½æ“¾
         /// </summary>
         /// <param name="className"></param>
         /// <param name="assemblys"></param>
@@ -184,18 +184,18 @@ namespace AddInCommon.Util
         }
 
         /// <summary>
-        /// Œ»İg—p‰Â”\‚ÈƒAƒZƒ“ƒuƒŠ‚Ì’†‚©‚çA
-        /// ƒNƒ‰ƒX–¼‚ğg‚Á‚ÄŒ^‚ğæ“¾‚·‚é
+        /// ï¿½ï¿½ï¿½İgï¿½pï¿½Â”\ï¿½ÈƒAï¿½Zï¿½ï¿½ï¿½uï¿½ï¿½ï¿½Ì’ï¿½ï¿½ï¿½ï¿½ï¿½A
+        /// ï¿½Nï¿½ï¿½ï¿½Xï¿½ï¿½ï¿½ï¿½gï¿½ï¿½ï¿½ÄŒ^ï¿½ï¿½æ“¾ï¿½ï¿½ï¿½ï¿½
         /// </summary>
-        /// <param name="className">–¼‘O‹óŠÔ‚ğŠÜ‚ŞƒNƒ‰ƒX–¼</param>
-        /// <returns>ŠY“–‚·‚éŒ^</returns>
+        /// <param name="className">ï¿½ï¿½ï¿½Oï¿½ï¿½Ô‚ï¿½Ü‚ŞƒNï¿½ï¿½ï¿½Xï¿½ï¿½</param>
+        /// <returns>ï¿½Yï¿½ï¿½ï¿½ï¿½ï¿½ï¿½^</returns>
         public static Type ForName(string className)
         {
             return ForName(className, AppDomain.CurrentDomain.GetAssemblies());
         }
 
         /// <summary>
-        /// ƒCƒ“ƒXƒ^ƒ“ƒX‚Ì¶¬
+        /// ï¿½Cï¿½ï¿½ï¿½Xï¿½^ï¿½ï¿½ï¿½Xï¿½Ìï¿½ï¿½ï¿½
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
@@ -205,7 +205,7 @@ namespace AddInCommon.Util
         }
 
         /// <summary>
-        /// ƒNƒ‰ƒX–¼‚ÆƒAƒZƒ“ƒuƒŠ–¼‚©‚çƒCƒ“ƒXƒ^ƒ“ƒX‚ğ¶¬
+        /// ï¿½Nï¿½ï¿½ï¿½Xï¿½ï¿½ï¿½ÆƒAï¿½Zï¿½ï¿½ï¿½uï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½^ï¿½ï¿½ï¿½Xï¿½ğ¶ï¿½
         /// </summary>
         /// <param name="className"></param>
         /// <param name="assemblyName"></param>
