@@ -165,9 +165,9 @@ namespace AddInCommon.Util
                 case prjBuildAction.prjBuildActionContent:
                     return "コンテンツ";
                 case prjBuildAction.prjBuildActionEmbeddedResource:
-                    return "なし";
+                    return "埋め込まれたリソース";
                 case prjBuildAction.prjBuildActionNone:
-                    return "";
+                    return "なし";
             }
             return "不明";
         }

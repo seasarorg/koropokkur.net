@@ -16,14 +16,13 @@
  */
 #endregion
 
-using System.Collections.Generic;
-using NUnit.Framework;
-using VSArrange.Config;
 using System;
-using NUnit.Framework.SyntaxHelpers;
-using System.Xml;
-using System.Reflection;
 using System.IO;
+using System.Reflection;
+using System.Xml;
+using NUnit.Framework;
+using NUnit.Framework.SyntaxHelpers;
+using VSArrange.Config;
 
 namespace VSArrangeTest.Config
 {
