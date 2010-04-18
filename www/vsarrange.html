@@ -85,7 +85,8 @@ VisualStudioプロジェクトフォルダ下にある要素を整理します�
 <!--                                                                       ========= -->
 <h3><a name="News">お知らせ</a></h3>
 <ul>
-	<li>2009/09/06 Koropokkur.NET 0.2.2をリリースしました（0.1.2とVSArrangeの内容は同じです）。<a href="index.html#Download">ダウンロード</a></li>
+	<li>2010/04/18 Koropokkur.NET 0.2.3をリリースしました。<a href="index.html#Download">ダウンロード</a></li>
+	<li>2009/09/06 Koropokkur.NET 0.2.2をリリースしました（0.1.2とVSArrangeの内容は同じです）。</li>
 	<li>2009/05/06 Koropokkur.NET 0.2.1をリリースしました（0.1.2とVSArrangeの内容は同じです）。</li>
 	<li>2009/02/22 Koropokkur.NET 0.1.2をリリースしました。</li>
 	<p>(Koropokkur.NETはこのアドインが含まれるアドイン集です）</p>
@@ -102,18 +103,20 @@ VisualStudioプロジェクトフォルダ下にある要素を整理します�
 <!--                                                                        ======== -->
 <h3><a name="Usage">使い方</a></h3>
 <p><b>１．プロジェクト、またはソリューションのアイコン上で右クリックメニューを表示させます。</b></p><br>
-<img src="images/project_tree_before.JPG"/><br><br>
+<img src="images/VSArrange/project_tree_before.JPG"/><br><br>
 <p><b>２．メニューの下の方にある「プロジェクト要素の整理」を選択します。</b></p><br>
-<img src="images/project_tree_menu.JPG"/><br><br>
+<img src="images/VSArrange/project_tree_menu.JPG"/><br><br>
 <p><b>３．削除ファイルはプロジェクトから除外、未登録ファイルは追加されます。</b></p><br>
-<img src="images/project_tree_after.JPG"/><br>
+<img src="images/VSArrange/project_tree_after.JPG"/><br>
 
 <!-- =============================================================================== -->
 <!--                                                                           設定  -->
 <!--                                                                        ======== -->
-<h3><a name="Config">プロジェクト除外条件の設定方法</a></h3>
+<h3><a name="Config">プロジェクト除外条件の設定方法</a></h3>(Koropokkur.NET 0.2.3以降)
 <p><b>１．VisualStudioの「ツール」メニューから「Koropokkurの設定」→「VSArrange」を選択します。</b></p>
-<img src="images/koropokkur_config.JPG"/><br><br>
+<img src="images/VSArrange/koropokkur_config.JPG"/><br><br>
+<p><b>２．以下、「プロジェクト除外」「ファイル」の設定方法です。</b><br>
+（他項目のフィルター設定も操作方法は同様です）
 <p><b>２a．プロジェクトに追加したくないファイル名、フォルダ名を設定します（正規表現も使えます）。</b></p>
 <img src="images/config_regex.JPG"/><br><br>
 <p><b>２b．除外条件は残しておきたいが適用はしたくない場合は「有効」チェックボックスをOFFにします。</b></p>
@@ -129,8 +132,7 @@ VisualStudioプロジェクトフォルダ下にある要素を整理します�
 <img src="images/filter_ok.JPG"/><br><br>
 <p><b>３c. 入力した文字列がフィルターに引っかからないとき、「NG」と表示されます。</b></p>
 <img src="images/filter_ng.JPG"/><br><br>
-<p><b>４a．「保存して終了」ボタンを押すと変更した設定で保存し、設定画面が閉じられます。</b></p>
-<p><b>４b．「保存せずに終了」ボタンを押すと変更した内容を破棄して設定画面が閉じられます。</b></p>
+<p><b>４．「OK」ボタンを押すと変更した設定で保存し、設定画面が閉じられます。</b></p>
 <img src="images/config_save.JPG"/><br><br>
 <p><b>５．「<a href="#Usage">使い方</a>」に記載した手順で「（全）プロジェクト要素の整理」を選ぶと<br>
 設定した除外条件に従ってプロジェクト要素の整理が行われます。</b></p>
