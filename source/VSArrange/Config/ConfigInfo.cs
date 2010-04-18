@@ -172,13 +172,13 @@ namespace VSArrange.Config
         {
             get
             {
-                return (FilterCompileStringList.Count > 0 ||
-                        FilterContentsStringList.Count > 0 ||
-                        FilterCopyIfNewStringList.Count > 0 ||
-                        FilterEverytimeCopyStringList.Count > 0 ||
-                        FilterNoActionStringList.Count > 0 ||
-                        FilterNoCopyStringList.Count > 0 ||
-                        FilterResourceStringList.Count > 0);
+                return (HasEnableFilter(FilterCompileStringList) ||
+                        HasEnableFilter(FilterContentsStringList) ||
+                        HasEnableFilter(FilterCopyIfNewStringList) ||
+                        HasEnableFilter(FilterEverytimeCopyStringList) ||
+                        HasEnableFilter(FilterNoActionStringList) ||
+                        HasEnableFilter(FilterNoCopyStringList) ||
+                        HasEnableFilter(FilterResourceStringList));
             }
         }
 
@@ -191,6 +191,28 @@ namespace VSArrange.Config
             {
                 return (OutputResultWindow.IsEnable || OutputResultFile.IsEnable);
             }
+        }
+
+        /// <summary>
+        /// 有効なフィルターが設定されているか判定する
+        /// </summary>
+        /// <param name="configInfoDetails"></param>
+        /// <returns></returns>
+        private bool HasEnableFilter(ICollection<ConfigInfoDetail> configInfoDetails)
+        {
+            if(configInfoDetails == null || configInfoDetails.Count == 0)
+            {
+                return false;
+            }
+
+            foreach (ConfigInfoDetail configInfoDetail in configInfoDetails)
+            {
+                if(configInfoDetail.IsEnable)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }

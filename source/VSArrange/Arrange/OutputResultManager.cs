@@ -32,13 +32,30 @@ namespace VSArrange.Arrange
     /// </summary>
     public class OutputResultManager
     {
+        /// <summary>
+        /// 結果メッセージビルダー
+        /// </summary>
         private StringBuilder _resultMessageBuilder;
 
+        /// <summary>
+        /// 設定情報
+        /// </summary>
         private ConfigInfo _configInfo;
 
+        /// <summary>
+        /// 出力先
+        /// </summary>
         private string _outputPath;
 
+        /// <summary>
+        /// ヘッダメッセージ
+        /// </summary>
         private string _firstMessage;
+
+        /// <summary>
+        /// 処理対象要素の存在有無フラグ
+        /// </summary>
+        private bool _hasArrangedItem;
 
         /// <summary>
         /// 初期化
@@ -50,6 +67,7 @@ namespace VSArrange.Arrange
             if (projectName == null) throw new ArgumentNullException("projectName");
             if (configInfo == null) throw new ArgumentNullException("configInfo");
 
+            _hasArrangedItem = false;
             _configInfo = configInfo;
             _firstMessage = string.Format("[{0}]プロジェクト要素整理", projectName);
 
@@ -77,6 +95,11 @@ namespace VSArrange.Arrange
         {
             if(_configInfo.IsOutputResult)
             {
+                if(!_hasArrangedItem)
+                {
+                    _resultMessageBuilder.AppendLine("処理対象となるファイル、フォルダはありません。");
+                }
+
                 DateTime currentTime = DateTime.Now;
                 _resultMessageBuilder.AppendLine(
                     string.Format("{0}<終了>({1}.{2})", _firstMessage, currentTime, currentTime.Millisecond));
@@ -170,8 +193,14 @@ namespace VSArrange.Arrange
             RegisterAddedProjectItem("種別不明なプロジェクト要素\t除外\t", path);
         }
 
+        /// <summary>
+        /// 追加された要素の情報を保持する
+        /// </summary>
+        /// <param name="addedMessage"></param>
+        /// <param name="path"></param>
         private void RegisterAddedProjectItem(string addedMessage, string path)
         {
+            _hasArrangedItem = true;
             if (_configInfo.IsOutputResult)
             {
                 _resultMessageBuilder.Append(addedMessage).AppendLine(path);
