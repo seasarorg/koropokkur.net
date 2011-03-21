@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VSArrange", "VSArrange\VSArrange.csproj", "{23022F2A-F97F-4570-8000-D2D9CB8EEFED}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AddInCommon", "AddInCommon\AddInCommon.csproj", "{4E1C075D-9803-4DA8-884E-3033D9AB9B58}"

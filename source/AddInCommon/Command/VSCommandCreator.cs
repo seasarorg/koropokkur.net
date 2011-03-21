@@ -99,13 +99,14 @@ namespace AddInCommon.Command
         /// <returns></returns>
         public CommandBar AddKoropokkurMenuCommandBar()
         {
-            if(VSCommandUtils.IsRegisterCommandBar(_applicationObject, CONFIG_MENU_NAME))
+            if (VSCommandUtils.IsRegisterCommandBar(_applicationObject, CONFIG_MENU_NAME))
             {
-                return VSCommandUtils.GetCommandBar(_applicationObject, CONFIG_MENU_NAME);
+                CommandBar commandBar = VSCommandUtils.GetCommandBar(_applicationObject, CONFIG_MENU_NAME);
+                return commandBar;
             }
             return CreateCommandBar(CONFIG_MENU_NAME,
                                     VSCommandUtils.GetCommandBar(_applicationObject, CommandBarConst.TOOL_MENU),
-                                    vsCommandBarType.vsCommandBarTypeMenu);
+                                    vsCommandBarType.vsCommandBarTypeMenu);     
         }
 
         /// <summary>
@@ -129,8 +130,8 @@ namespace AddInCommon.Command
             try
             {
                 newCommandBar = (CommandBar)commands.AddCommandBar(
-                    CONFIG_MENU_NAME, 
-                    commandBarType, 
+                    name,
+                    commandBarType,
                     parentCommandBar,
                     parentCommandBar.Controls.Count + 1);
             }
