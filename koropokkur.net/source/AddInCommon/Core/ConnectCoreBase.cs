@@ -62,10 +62,10 @@ namespace AddInCommon.Core
                 {
                     RegisterEventCommandAfterStartUp(_eventCommands);
                 }
-                catch (System.Exception ex)
+                catch (System.Exception)
                 {
-                    MessageBox.Show("アドインの起動処理に失敗しました。\n" + ex.Message,
-                                    KoropokkurConst.NAME, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    MessageBox.Show("アドインの再登録はできません。お手数ですが一度VisualStudioを再起動して下さい。",
+                        KoropokkurConst.NAME, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }
             }
             else if (connectMode == ext_ConnectMode.ext_cm_UISetup)
@@ -93,7 +93,7 @@ namespace AddInCommon.Core
             {
                 try
                 {
-                    //  登録したイベント処理をクリアする
+                    ////  登録したイベント処理をクリアする
                     foreach (IDTCExecCommand execCommand in _eventCommands.Values)
                     {
                         DeleteCommand(execCommand.CommandName);
@@ -101,19 +101,20 @@ namespace AddInCommon.Core
 
                     //  「Koropokkurの設定」メニューをクリアする
                     CommandBar koropokkurMenu = VSCommandUtils.GetKoropokkurMenuBar(ApplicationObject);
+
                     //  他にKoropokkur設定を使用しているアドインがない場合に
                     //  Koropokkur設定メニューを削除する
-                    if(koropokkurMenu != null && koropokkurMenu.Controls.Count == 0)
+                    if (koropokkurMenu != null && koropokkurMenu.Controls.Count == 0)
                     {
-                        CommandBar toolMenuBar = VSCommandUtils.GetCommandBar(ApplicationObject,                                                     CommandBarConst.TOOL_MENU);
-                        foreach (CommandBarControl control in toolMenuBar.Controls)
+                        CommandBar toolBar = VSCommandUtils.GetCommandBar(_applicationObject, CommandBarConst.TOOL_MENU);
+                        foreach (CommandBarControl control in toolBar.Controls)
                         {
-                            if(control.Caption == KoropokkurConst.CONFIG_MENU_NAME)
+                            if (control.Caption == KoropokkurConst.CONFIG_MENU_NAME)
                             {
-                                control.Delete(null);
+                                control.Delete();
+                                break;
                             }
                         }
-                        koropokkurMenu.Delete();
                     }
                 }
                 catch(System.Exception ex)
