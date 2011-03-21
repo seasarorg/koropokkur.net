@@ -1,4 +1,16 @@
+VisualStudioのバージョンとアドインの対応は下記の通りです
 
+/* ================================================ *
+ * フォルダ名	対応するVisualStudio                *
+ * ------------------------------------------------ *
+ * 2005		VisualStudio2005(.NET Framework2.0)     *
+ * 2008		VisualStudio2008(.NET Framework3.5)     *
+ * 2010		VisualStudio2010(.NET Framework4.0)     *
+ * ================================================ */
+
+○アドイン共通
+	・[注意]VisualStudio起動中に当アドインを解除して再登録することはできません。
+	　　　　再登録する場合は一度VisualStudioを終了してから行って下さい。
 ○VSArrange
 	・[注意] VB.NET上で使用するとVisualStudioが強制終了することがあります。
 ○CopyGen
