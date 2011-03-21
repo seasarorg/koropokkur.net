@@ -11,7 +11,7 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("")]
-[assembly: AssemblyCopyright("Copyright 2005-2010 the Seasar Foundation and the Others.")]
+[assembly: AssemblyCopyright("Copyright 2005-2011 the Seasar Foundation and the Others.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
