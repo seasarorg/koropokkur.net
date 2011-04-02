@@ -137,11 +137,11 @@
     <Content Include="CopyMethodGen.AddIn" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AddInCommon\AddInCommon.csproj">
+    <ProjectReference Include="..\..\CommonSources\AddIn\AddInCommon\AddInCommon.csproj">
       <Project>{4E1C075D-9803-4DA8-884E-3033D9AB9B58}</Project>
       <Name>AddInCommon</Name>
     </ProjectReference>
-    <ProjectReference Include="..\CodeGeneratorCore\CodeGeneratorCore.csproj">
+    <ProjectReference Include="..\..\CommonSources\Koropokkur\CodeGeneratorCore\CodeGeneratorCore.csproj">
       <Project>{5B9E49BC-C148-419C-BC2A-D0C7C00ADB82}</Project>
       <Name>CodeGeneratorCore</Name>
     </ProjectReference>

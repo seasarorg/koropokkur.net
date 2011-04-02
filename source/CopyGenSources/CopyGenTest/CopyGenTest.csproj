@@ -44,9 +44,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\..\Program Files\Microsoft Visual Studio 9.0\Common7\IDE\PublicAssemblies\EnvDTE80.dll</HintPath>
     </Reference>
-    <Reference Include="nunit.framework, Version=2.4.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\nunit.framework.dll</HintPath>
+    <Reference Include="nunit.framework">
+      <HintPath>..\..\..\lib\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -81,11 +80,11 @@
     <Compile Include="Util\PropertyCodeInfoUtilsTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AddInCommon\AddInCommon.csproj">
+    <ProjectReference Include="..\..\CommonSources\AddIn\AddInCommon\AddInCommon.csproj">
       <Project>{4E1C075D-9803-4DA8-884E-3033D9AB9B58}</Project>
       <Name>AddInCommon</Name>
     </ProjectReference>
-    <ProjectReference Include="..\CodeGeneratorCore\CodeGeneratorCore.csproj">
+    <ProjectReference Include="..\..\CommonSources\Koropokkur\CodeGeneratorCore\CodeGeneratorCore.csproj">
       <Project>{5B9E49BC-C148-419C-BC2A-D0C7C00ADB82}</Project>
       <Name>CodeGeneratorCore</Name>
     </ProjectReference>

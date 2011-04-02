@@ -121,7 +121,7 @@
     <Content Include="VSArrange.AddIn" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AddInCommon\AddInCommon.csproj">
+    <ProjectReference Include="..\..\CommonSources\AddIn\AddInCommon\AddInCommon.csproj">
       <Project>{4E1C075D-9803-4DA8-884E-3033D9AB9B58}</Project>
       <Name>AddInCommon</Name>
     </ProjectReference>
