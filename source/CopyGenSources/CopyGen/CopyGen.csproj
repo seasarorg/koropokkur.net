@@ -1,0 +1,160 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{6874D751-FAB2-47C1-8EFF-B89DD30B69D2}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <StartupObject>
+    </StartupObject>
+    <NoStandardLibraries>false</NoStandardLibraries>
+    <AssemblyName>CopyGen</AssemblyName>
+    <RootNamespace>CopyGen</RootNamespace>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>3.5</OldToolsVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <WarningLevel>4</WarningLevel>
+    <IncrementalBuild>false</IncrementalBuild>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>false</DebugSymbols>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+    <DefineConstants>TRACE</DefineConstants>
+    <WarningLevel>4</WarningLevel>
+    <IncrementalBuild>false</IncrementalBuild>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Extensibility, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Command\CopyGenMenuCommand.cs" />
+    <Compile Include="Command\CopyMethodGenCommand.cs" />
+    <Compile Include="Connect.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Control\CopyConfig.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Control\CopyConfig.Designer.cs">
+      <DependentUpon>CopyConfig.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Core\CopyGenConnectCore.cs" />
+    <Compile Include="Exception\ConfigNotFoundException.cs" />
+    <Compile Include="Exception\NotSupportLanguageException.cs" />
+    <Compile Include="Exception\PropertyNotFoundRutimeException.cs" />
+    <Compile Include="Gen\CopyConfigFileManager.cs" />
+    <Compile Include="Gen\CopyCodeGeneratorCreationFacade.cs" />
+    <Compile Include="Gen\CopyInfo.cs" />
+    <Compile Include="Gen\CopyTargetBaseInfo.cs" />
+    <Compile Include="Gen\ICopyCodeBuildFactory.cs" />
+    <Compile Include="Gen\ICopyCodeGeneratorCreator.cs" />
+    <Compile Include="Gen\ICopyTargetBaseInfoCreator.cs" />
+    <Compile Include="Gen\Impl\AbstractCopyTargetBaseInfoCreator.cs" />
+    <Compile Include="Gen\Impl\Cs\CopyCodeBuildFactoryCs.cs" />
+    <Compile Include="Gen\Impl\Cs\CopyCodeGeneratorCreatorCs.cs" />
+    <Compile Include="Gen\Impl\Cs\CopyTargetBaseInfoCreatorCs.cs" />
+    <Compile Include="Gen\Impl\Vb\CopyCodeBuildFactoryVb.cs" />
+    <Compile Include="Gen\Impl\Vb\CopyCodeGeneratorCreatorVb.cs" />
+    <Compile Include="Gen\Impl\Vb\CopyTargetBaseInfoCreatorVb.cs" />
+    <Compile Include="Gen\PropertyCodeInfo.cs" />
+    <Compile Include="Util\ProgramLanguageUtils.cs" />
+    <Compile Include="Util\CodeInfoUtils.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="CommandBar.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Control\CopyConfig.resx">
+      <DependentUpon>CopyConfig.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="EnvDTE">
+      <Guid>{80CC9F66-E7D8-4DDD-85B6-D9E6CD0E93E2}</Guid>
+      <VersionMajor>8</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+    </COMReference>
+    <COMReference Include="EnvDTE80">
+      <Guid>{1A31287A-4D7D-413E-8E32-3B374931BD89}</Guid>
+      <VersionMajor>8</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+    </COMReference>
+    <COMReference Include="EnvDTE90">
+      <Guid>{2CE2370E-D744-4936-A090-3FFFE667B0E1}</Guid>
+      <VersionMajor>9</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+    </COMReference>
+    <COMReference Include="Microsoft.VisualStudio.CommandBars">
+      <Guid>{1CBA492E-7263-47BB-87FE-639000619B15}</Guid>
+      <VersionMajor>8</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+    </COMReference>
+    <COMReference Include="stdole">
+      <Guid>{00020430-0000-0000-C000-000000000046}</Guid>
+      <VersionMajor>2</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+    </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="CopyMethodGen.AddIn" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AddInCommon\AddInCommon.csproj">
+      <Project>{4E1C075D-9803-4DA8-884E-3033D9AB9B58}</Project>
+      <Name>AddInCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CodeGeneratorCore\CodeGeneratorCore.csproj">
+      <Project>{5B9E49BC-C148-419C-BC2A-D0C7C00ADB82}</Project>
+      <Name>CodeGeneratorCore</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>
