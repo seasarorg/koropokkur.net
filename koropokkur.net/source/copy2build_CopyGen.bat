@@ -1,5 +1,5 @@
 cd /d %0\..
-copy /-Y CopyGen\bin\CopyGen.dll ..\build\CopyGen.dll
-copy /-Y CopyGen\bin\CodeGeneratorCore.dll ..\build\CodeGeneratorCore.dll
-copy /-Y CopyGen\bin\AddInCommon.dll ..\build\AddInCommon.dll
+copy /-Y CopyGenSources\CopyGen\bin\CopyGen.dll ..\build\2010\CopyGen.dll
+copy /-Y CopyGenSources\CopyGen\bin\CodeGeneratorCore.dll ..\build\2010\CodeGeneratorCore.dll
+copy /-Y CopyGenSources\CopyGen\bin\AddInCommon.dll ..\build\2010\AddInCommon.dll
 pause
