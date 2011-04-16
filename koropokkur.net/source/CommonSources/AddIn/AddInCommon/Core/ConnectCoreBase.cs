@@ -54,7 +54,7 @@ namespace AddInCommon.Core
         {
             _applicationObject = (DTE2) application;
             _addInInstance = (AddIn) addInInst;
-
+            
             if (connectMode == ext_ConnectMode.ext_cm_AfterStartup ||
                 connectMode == ext_ConnectMode.ext_cm_Startup)
             {

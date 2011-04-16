@@ -23,19 +23,17 @@ namespace AddInCommon.Const
     /// </summary>
     public enum EnumCopyToOutputDirectory
     {
-        /// <summary>
-        /// コピーしない
-        /// </summary>
-        NotCopy = 0,
+        /// <summary>変更なし</summary>
+        /// <remarks>プロパティを変更しないときはこの値を設定</remarks>
+        Nothing = 0,
 
-        /// <summary>
-        /// 常にコピーする
-        /// </summary>
+        /// <summary>コピーしない</summary>
+        NotCopy,
+
+        /// <summary>常にコピーする</summary>
         EveryTime,
 
-        /// <summary>
-        /// 新しい場合はコピー
-        /// </summary>
+        /// <summary>新しい場合はコピー</summary>
         IfModified
     }
 }

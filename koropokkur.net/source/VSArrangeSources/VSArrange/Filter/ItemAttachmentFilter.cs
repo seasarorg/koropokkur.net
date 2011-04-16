@@ -92,6 +92,16 @@ namespace VSArrange.Filter
         }
 
         /// <summary>
+        /// フィルター設定を入れ替える
+        /// </summary>
+        /// <param name="configInfoFilters"></param>
+        public void ReplaceFilters(IList<ConfigInfoDetail> configInfoFilters)
+        {
+            _filterList.Clear();
+            AddFilters(configInfoFilters);
+        }
+
+        /// <summary>
         /// フィルターを消去する
         /// </summary>
         public void Clear()

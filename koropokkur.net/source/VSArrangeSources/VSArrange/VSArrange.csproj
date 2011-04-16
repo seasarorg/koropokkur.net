@@ -47,6 +47,9 @@
     <Reference Include="VSLangProj, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Arrange\BackgroundProjectArranger.cs" />
+    <Compile Include="Report\Impl\AddInOutputReport.cs" />
+    <Compile Include="Report\IOutputReport.cs" />
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -141,6 +144,7 @@
     <Compile Include="Config\ConfigFileManager.cs" />
     <Compile Include="Config\ConfigInfo.cs" />
     <Compile Include="Config\ConfigInfoDetail.cs" />
+    <Compile Include="Const\VSArrangeConst.cs" />
     <Compile Include="Control\ConfigForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -165,8 +169,12 @@
     <Compile Include="Control\ResultMessageForm.Designer.cs">
       <DependentUpon>ResultMessageForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Filter\BuildActionFilter.cs" />
+    <Compile Include="Filter\CopyToOutputDirectoryFilter.cs" />
     <Compile Include="Filter\ItemAttachmentFilter.cs" />
     <Compile Include="Core\VSArrangeConnectCore.cs" />
+    <Compile Include="Filter\ProjectIncludeFilter.cs" />
+    <Compile Include="Message\VSArrangeMessage.cs" />
     <Compile Include="Util\ArrangeUtils.cs" />
   </ItemGroup>
   <ItemGroup>

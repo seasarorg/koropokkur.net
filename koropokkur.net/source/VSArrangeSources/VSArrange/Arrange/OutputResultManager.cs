@@ -17,15 +17,13 @@
 #endregion
 
 using System;
-using System.IO;
 using System.Text;
 using AddInCommon.Const;
-using VSArrange.Config;
-using VSArrange.Control;
-using VSLangProj;
 using AddInCommon.Util;
+using VSArrange.Config;
+using VSLangProj;
 
-namespace VSArrange.Arrange
+namespace VSArrange.Report
 {
     /// <summary>
     /// 処理結果出力管理クラス
@@ -41,11 +39,6 @@ namespace VSArrange.Arrange
         /// 設定情報
         /// </summary>
         private ConfigInfo _configInfo;
-
-        /// <summary>
-        /// 出力先
-        /// </summary>
-        private string _outputPath;
 
         /// <summary>
         /// ヘッダメッセージ
@@ -75,27 +68,17 @@ namespace VSArrange.Arrange
             DateTime currentTime = DateTime.Now;
             _resultMessageBuilder.AppendLine(
                     string.Format("{0}<開始>({1}.{2})", _firstMessage, currentTime, currentTime.Millisecond));
-            
-            if(configInfo.OutputResultFile.IsEnable)
-            {
-                StringBuilder outputPathBuilder = new StringBuilder();
-                outputPathBuilder.Append(configInfo.OutputResultFile.Value);
-                outputPathBuilder.Append(Path.DirectorySeparatorChar);
-                outputPathBuilder.Append(projectName);
-                outputPathBuilder.Append(".log");
-
-                _outputPath = outputPathBuilder.ToString();
-            }
         }
 
         /// <summary>
-        /// 結果出力
+        /// 結果メッセージを取得する
         /// </summary>
-        public void OutputResult()
+        /// <returns></returns>
+        public string GetResultMessage()
         {
-            if(_configInfo.IsOutputResult)
+            if (_configInfo.IsOutputResult)
             {
-                if(!_hasArrangedItem)
+                if (!_hasArrangedItem)
                 {
                     _resultMessageBuilder.AppendLine("処理対象となるファイル、フォルダはありません。");
                 }
@@ -104,26 +87,7 @@ namespace VSArrange.Arrange
                 _resultMessageBuilder.AppendLine(
                     string.Format("{0}<終了>({1}.{2})", _firstMessage, currentTime, currentTime.Millisecond));
             }
-            string resultMessage = _resultMessageBuilder.ToString();
-
-            if(_configInfo.OutputResultWindow.IsEnable)
-            {
-                //MessageUtils.ShowInfoMessage(_resultMessageBuilder.ToString());
-                using(ResultMessageForm resultMessageForm = new ResultMessageForm())
-                {
-                    resultMessageForm.SetResultList(resultMessage);
-                    resultMessageForm.ShowDialog();
-                }
-            }
-
-            if (_configInfo.OutputResultFile.IsEnable)
-            {
-                using (StreamWriter writer = new StreamWriter(_outputPath, true))
-                {
-                    writer.WriteLine(resultMessage);
-                    writer.Flush();
-                }
-            }
+            return _resultMessageBuilder.ToString();
         }
 
         /// <summary>

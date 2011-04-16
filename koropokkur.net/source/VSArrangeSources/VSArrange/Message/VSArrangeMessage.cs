@@ -1,4 +1,4 @@
-#region Copyright
+﻿#region Copyright
 /*
  * Copyright 2005-2011 the Seasar Foundation and the Others.
  *
@@ -16,15 +16,25 @@
  */
 #endregion
 
-namespace AddInCommon.Exception
+
+using AddInCommon.Message;
+using VSArrange.Const;
+
+namespace VSArrange.Message
 {
     /// <summary>
-    /// Koropokkurアドイン共通例外
+    /// VSArrange固有のメッセージ取得クラス
     /// </summary>
-    public class KoropokkurException : System.Exception
+    public class VSArrangeMessage
     {
-        public KoropokkurException() : base() { }
-        public KoropokkurException(string message) : base(message) { }
-        public KoropokkurException(string message, System.Exception innerException) : base(message, innerException) { }
+        /// <summary>
+        /// VSArrangeではサポートしていない旨を知らせるメッセージの取得
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
+        public static string GetNotSupported(string fileName)
+        {
+            return KMessage.GetNotSupportExtension(VSArrangeConst.ADDIN_NAME, fileName, VSArrangeConst.SUPPORTED_EXT_CSPROJ);
+        }
     }
 }
