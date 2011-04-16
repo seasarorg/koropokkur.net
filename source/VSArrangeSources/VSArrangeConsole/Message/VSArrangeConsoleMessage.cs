@@ -1,4 +1,4 @@
-#region Copyright
+﻿#region Copyright
 /*
  * Copyright 2005-2011 the Seasar Foundation and the Others.
  *
@@ -16,15 +16,23 @@
  */
 #endregion
 
-namespace AddInCommon.Exception
+
+namespace VSArrangeConsole.Message
 {
     /// <summary>
-    /// Koropokkurアドイン共通例外
+    /// VSArrangeコンソール用メッセージ
     /// </summary>
-    public class KoropokkurException : System.Exception
+    public class VSArrangeConsoleMessage
     {
-        public KoropokkurException() : base() { }
-        public KoropokkurException(string message) : base(message) { }
-        public KoropokkurException(string message, System.Exception innerException) : base(message, innerException) { }
+        /// <summary>
+        /// プロジェクトファイルパスが見つからないメッセージ
+        /// </summary>
+        /// <param name="basePath"></param>
+        /// <returns></returns>
+        public static string GetNotExistsProject(string basePath)
+        {
+            return string.Format("[{0}]下にプロジェクトファイルのパスが見つかりません。",
+                basePath);
+        }
     }
 }

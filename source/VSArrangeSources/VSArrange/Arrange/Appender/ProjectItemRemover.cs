@@ -20,7 +20,7 @@ using System.Collections.Generic;
 using EnvDTE;
 using System.IO;
 
-namespace VSArrange.Arrange.Appender
+namespace VSArrange.Report.Appender
 {
     /// <summary>
     /// プロジェクト要素削除クラス

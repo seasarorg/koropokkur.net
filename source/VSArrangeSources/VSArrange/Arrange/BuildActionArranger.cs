@@ -17,13 +17,14 @@
 #endregion
 
 using System.Collections.Generic;
+using AddInCommon.Const;
 using AddInCommon.Invoke;
 using AddInCommon.Util;
 using VSArrange.Config;
 using VSArrange.Filter;
 using VSLangProj;
 
-namespace VSArrange.Arrange
+namespace VSArrange.Report
 {
     /// <summary>
     /// 「ビルドアクション」設定クラス
@@ -35,61 +36,15 @@ namespace VSArrange.Arrange
         /// </summary>
         private readonly OutputResultManager _outputResultManager;
 
-        #region プロパティ
+        /// <summary>
+        /// 「ビルドアクション」設定取得フィルター
+        /// </summary>
+        private readonly BuildActionFilter _filter;
 
         /// <summary>
-        /// プロジェクト要素に設定する属性付加の判定に使う正規表現
+        /// 列挙体変換Map
         /// </summary>
-        private readonly ItemAttachmentFilter _filterCompile = new ItemAttachmentFilter();
-
-        /// <summary>
-        /// ビルドアクション「コンパイル」設定フィルター
-        /// </summary>
-        public ItemAttachmentFilter FilterCompile
-        {
-            get { return _filterCompile; }
-        }
-
-        /// <summary>
-        /// プロジェクト要素に設定する属性付加の判定に使う正規表現
-        /// </summary>
-        private readonly ItemAttachmentFilter _filterResource = new ItemAttachmentFilter();
-
-        /// <summary>
-        /// ビルドアクション「埋め込みリソース」設定フィルター
-        /// </summary>
-        public ItemAttachmentFilter FilterResource
-        {
-            get { return _filterResource; }
-        }
-
-        /// <summary>
-        /// プロジェクト要素に設定する属性付加の判定に使う正規表現
-        /// </summary>
-        private readonly ItemAttachmentFilter _filterContents = new ItemAttachmentFilter();
-
-        /// <summary>
-        /// ビルドアクション「コンテンツ」設定フィルター
-        /// </summary>
-        public ItemAttachmentFilter FilterContents
-        {
-            get { return _filterContents; }
-        }
-
-        /// <summary>
-        /// プロジェクト要素に設定する属性付加の判定に使う正規表現
-        /// </summary>
-        private readonly ItemAttachmentFilter _filterNoAction = new ItemAttachmentFilter();
-
-        /// <summary>
-        /// ビルドアクション「なし」設定フィルター
-        /// </summary>
-        public ItemAttachmentFilter FilterNoAction
-        {
-            get { return _filterNoAction; }
-        }
-
-        #endregion
+        private IDictionary<EnumBuildAction, prjBuildAction> _adapter;
 
         /// <summary>
         /// コンストラクタ
@@ -98,11 +53,8 @@ namespace VSArrange.Arrange
         /// <param name="outputResultManager"></param>
         public BuildActionArranger(ConfigInfo configInfo, OutputResultManager outputResultManager)
         {
-            AddFilters(FilterCompile, configInfo.FilterCompileStringList);
-            AddFilters(FilterResource, configInfo.FilterResourceStringList);
-            AddFilters(FilterContents, configInfo.FilterContentsStringList);
-            AddFilters(FilterNoAction, configInfo.FilterNoActionStringList);
-
+            _filter = new BuildActionFilter(configInfo);
+            _adapter = CreateAdapter();
             _outputResultManager = outputResultManager;
         }
 
@@ -135,43 +87,28 @@ namespace VSArrange.Arrange
         /// <param name="fileName"></param>
         /// <param name="defaultValue"></param>
         /// <returns></returns>
-        protected virtual prjBuildAction GetBuildAction(string fileName, prjBuildAction defaultValue)
+        private prjBuildAction GetBuildAction(string fileName, prjBuildAction defaultValue)
         {
-            if (FilterNoAction.IsHitFilter(fileName))
+            var buildAction = _filter.GetBuildAction(fileName);
+            if (_adapter.ContainsKey(buildAction))
             {
-                return prjBuildAction.prjBuildActionNone;
+                return _adapter[buildAction];
             }
-
-            if (FilterCompile.IsHitFilter(fileName))
-            {
-                return prjBuildAction.prjBuildActionCompile;
-            }
-
-            if (FilterContents.IsHitFilter(fileName))
-            {
-                return prjBuildAction.prjBuildActionContent;
-            }
-
-            if (FilterResource.IsHitFilter(fileName))
-            {
-                return prjBuildAction.prjBuildActionEmbeddedResource;
-            }
-
             return defaultValue;
         }
 
         /// <summary>
-        /// フィルター設定追加
+        /// 変換Mapを生成する
         /// </summary>
-        /// <param name="filter"></param>
-        /// <param name="filterList"></param>
-        protected void AddFilters(ItemAttachmentFilter filter, IList<ConfigInfoDetail> filterList)
+        /// <returns></returns>
+        private IDictionary<EnumBuildAction, prjBuildAction> CreateAdapter()
         {
-            if (filterList != null)
-            {
-                filter.Clear();
-                filter.AddFilters(filterList);
-            }
+            var adapter = new Dictionary<EnumBuildAction, prjBuildAction>();
+            adapter[EnumBuildAction.Compile] = prjBuildAction.prjBuildActionCompile;
+            adapter[EnumBuildAction.Contents] = prjBuildAction.prjBuildActionContent;
+            adapter[EnumBuildAction.NoAction] = prjBuildAction.prjBuildActionNone;
+            adapter[EnumBuildAction.Resource] = prjBuildAction.prjBuildActionEmbeddedResource;
+            return adapter;
         }
     }
 }

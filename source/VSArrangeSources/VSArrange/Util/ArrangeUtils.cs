@@ -16,11 +16,14 @@
  */
 #endregion
 
-using AddInCommon.Background;
+using System.IO;
+using System.Text;
 using AddInCommon.Util;
 using EnvDTE80;
-using VSArrange.Arrange;
+using VSArrange.Report;
+using VSArrange.Report.Impl;
 using VSArrange.Config;
+using VSArrange.Const;
 
 namespace VSArrange.Util
 {
@@ -30,21 +33,62 @@ namespace VSArrange.Util
     public sealed class ArrangeUtils
     {
         /// <summary>
-        /// 設定情報再読み込み
+        /// サポートしている言語か判定
         /// </summary>
-        /// <remarks>
-        //  設定が変更された時点で予め非同期で読んでおく方がより良いが
-        //  パフォーマンス的に整理処理直前に読んでも問題がないと思われるため
-        //  実装を単純にする＋漏れをなくすためここで呼び出し
-        /// </remarks>
-        public static ProjectArranger CreateArranger(DTE2 applicationObject)
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static bool IsSupportLanguage(string name)
         {
-            //  設定読み込み
-            //  設定が変更された時点で予め非同期で読んでおく方がより良いが
-            //  パフォーマンス的に整理処理直前に読んでも問題がないと思われるため
-            //  実装を単純にする＋漏れをなくすためここで呼び出し
-            ConfigInfo configInfo = ConfigFileManager.ReadConfig(PathUtils.GetConfigPath());
-            return new ProjectArranger(configInfo, new AddInBackgroundWorker(applicationObject));
+            if (name.EndsWith(VSArrangeConst.SUPPORTED_EXT_CSPROJ) ||
+                name.EndsWith(VSArrangeConst.SUPPORTED_EXT_VBPROJ))
+            {
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// プロジェクト整理オブジェクトの取得
+        /// </summary>
+        /// <param name="configInfo"></param>
+        /// <param name="reporter"></param>
+        /// <param name="isBackground"></param>
+        public static ProjectArranger CreateArranger(ConfigInfo configInfo, IOutputReport reporter,
+            bool isBackground = false)
+        {
+            if (isBackground)
+            {
+                return new BackgroundProjectArranger(configInfo, reporter);
+            }
+            return new ProjectArranger(configInfo, reporter);
+        }
+
+        /// <summary>
+        /// 処理状況出力オブジェクトの生成
+        /// </summary>
+        /// <param name="configInfo"></param>
+        /// <param name="applicationObject"></param>
+        /// <returns></returns>
+        public static IOutputReport CreateAddInReporter(ConfigInfo configInfo, DTE2 applicationObject)
+        {
+            return new AddInOutputReport(configInfo, applicationObject);
+        }
+
+        /// <summary>
+        /// 出力先パスの取得
+        /// </summary>
+        /// <param name="configInfo"></param>
+        /// <param name="projectName"></param>
+        /// <returns></returns>
+        public static string GetOutputPath(ConfigInfo configInfo, string projectName)
+        {
+            var outputPathBuilder = new StringBuilder();
+            outputPathBuilder.Append(configInfo.OutputResultFile.Value);
+            outputPathBuilder.Append(Path.DirectorySeparatorChar);
+            outputPathBuilder.Append(projectName);
+            outputPathBuilder.Append(".log");
+
+            return outputPathBuilder.ToString();
         }
     }
 }

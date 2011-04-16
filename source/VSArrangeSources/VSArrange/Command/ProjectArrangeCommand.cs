@@ -18,11 +18,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
 using AddInCommon.Command;
 using AddInCommon.Util;
 using EnvDTE;
-using VSArrange.Arrange;
+using VSArrange.Config;
 using VSArrange.Util;
 
 namespace VSArrange.Command
@@ -56,40 +55,43 @@ namespace VSArrange.Command
 
         public bool Execute(EnvDTE80.DTE2 applicationObject, EnvDTE.AddIn addInInstance, ref object varIn, ref object varOut)
         {
-            IDictionary<string, Project> refreshedProjects = new Dictionary<string, Project>();
-            SelectedItems items = applicationObject.SelectedItems;
+            var refreshedProjects = new Dictionary<string, Project>();
+            var items = applicationObject.SelectedItems;
 
             try
             {
+                //  設定読み込み
+                //  設定が変更された時点で予め非同期で読んでおく方がより良いが
+                //  パフォーマンス的に整理処理直前に読んでも問題がないと思われるため
+                //  実装を単純にする＋漏れをなくすためここで呼び出し
+                var configInfo = ConfigFileManager.ReadConfig(PathUtils.GetConfigPath());
+
                 //  選択されている要素は実質一つだけのはずだが
                 //  コレクションの形でしか取得できないためforeachでまわす
                 foreach (SelectedItem selectedItem in items)
                 {
-                    Project currentProject = selectedItem.Project;
+                    var currentProject = selectedItem.Project;
 
                     if (refreshedProjects.ContainsKey(currentProject.FullName))
                     {
                         //  更新済のプロジェクトは無視
                         continue;
                     }
-                    ProjectArranger arranger = ArrangeUtils.CreateArranger(applicationObject);
+                    var reporter = ArrangeUtils.CreateAddInReporter(configInfo, applicationObject);
+                    var arranger = ArrangeUtils.CreateArranger(configInfo, reporter, true);
                     arranger.ArrangeProject(currentProject);
-
-                    applicationObject.StatusBar.Text = string.Format(
-                        "{0}の整理が終了しました。", currentProject.Name);
                     refreshedProjects[currentProject.FullName] = currentProject;
                 }
                 return true;
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message + Environment.NewLine + ex.StackTrace);
+                MessageUtils.ShowErrorMessage(ex.Message + Environment.NewLine + ex.StackTrace);
                 return false;
             }
             finally
             {
                 refreshedProjects.Clear();
-                StatusBarUtils.Clear(applicationObject);
             }
         }
 

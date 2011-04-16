@@ -17,11 +17,10 @@
 #endregion
 
 using System;
-using System.Windows.Forms;
 using AddInCommon.Command;
 using AddInCommon.Util;
 using EnvDTE;
-using VSArrange.Arrange;
+using VSArrange.Config;
 using VSArrange.Util;
 
 namespace VSArrange.Command
@@ -55,26 +54,24 @@ namespace VSArrange.Command
 
         public bool Execute(EnvDTE80.DTE2 applicationObject, EnvDTE.AddIn addInInstance, ref object varIn, ref object varOut)
         {
-            Solution solution = applicationObject.Solution;
+            var solution = applicationObject.Solution;
 
             try
             {
+                var configInfo = ConfigFileManager.ReadConfig(PathUtils.GetConfigPath());
+                var reporter = ArrangeUtils.CreateAddInReporter(configInfo, applicationObject);
+                var arranger = ArrangeUtils.CreateArranger(configInfo, reporter, true);
                 foreach (Project project in solution.Projects)
                 {
                     //  プロジェクト追加フィルタの更新
-                    ProjectArranger arranger = ArrangeUtils.CreateArranger(applicationObject);
                     arranger.ArrangeProject(project);
                 }
                 return true;
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message + Environment.NewLine + ex.StackTrace);
+                MessageUtils.ShowErrorMessage(ex.Message + Environment.NewLine + ex.StackTrace);
                 return false;
-            }
-            finally
-            {
-                StatusBarUtils.Clear(applicationObject);
             }
         }
 

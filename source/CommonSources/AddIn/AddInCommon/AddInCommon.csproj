@@ -62,11 +62,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Background\AddInBackgroundWorker.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Command\VSCommandCreator.cs" />
     <Compile Include="Command\IDTCExecCommand.cs" />
+    <Compile Include="Const\EnumBuildAction.cs" />
     <Compile Include="Const\IconIdConst.cs" />
     <Compile Include="Exception\CommandBarNotFoundException.cs" />
     <Compile Include="Core\ConnectCoreBase.cs" />
@@ -76,7 +74,9 @@
     <Compile Include="Const\ProjectItemFileConst.cs" />
     <Compile Include="Exception\ClassNotFoundRuntimeException.cs" />
     <Compile Include="Exception\KoropokkurException.cs" />
+    <Compile Include="Exception\NotSupportedFileException.cs" />
     <Compile Include="Invoke\IProjectItemAccessor.cs" />
+    <Compile Include="Message\KMessage.cs" />
     <Compile Include="Util\BindingFalgsUtils.cs" />
     <Compile Include="Util\AssemblyUtils.cs" />
     <Compile Include="Util\VSCommandUtils.cs" />

@@ -1,16 +1,16 @@
-using System.Reflection;
+﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // アセンブリに関する一般情報は以下の属性セットをとおして制御されます。
 // アセンブリに関連付けられている情報を変更するには、
 // これらの属性値を変更してください。
-[assembly: AssemblyTitle("AddInCommon")]
+[assembly: AssemblyTitle("VSArrangeConsole")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("AddInCommon")]
-[assembly: AssemblyCopyright("Copyright 2005-2011 the Seasar Foundation and the Others.")]
+[assembly: AssemblyCompany("Microsoft")]
+[assembly: AssemblyProduct("VSArrangeConsole")]
+[assembly: AssemblyCopyright("Copyright © Microsoft 2011")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // 次の GUID は、このプロジェクトが COM に公開される場合の、typelib の ID です
-[assembly: Guid("0fbd8f90-d752-40b7-a17b-d77088250c09")]
+[assembly: Guid("e6ab0c3b-422d-4a37-ae3a-cd5de81e0322")]
 
 // アセンブリのバージョン情報は、以下の 4 つの値で構成されています:
 //

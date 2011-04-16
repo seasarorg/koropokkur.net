@@ -21,7 +21,7 @@ using System.IO;
 using EnvDTE;
 using VSArrange.Filter;
 
-namespace VSArrange.Arrange.Appender
+namespace VSArrange.Report.Appender
 {
     /// <summary>
     /// ファイル追加クラス

@@ -1,4 +1,4 @@
-#region Copyright
+﻿#region Copyright
 /*
  * Copyright 2005-2011 the Seasar Foundation and the Others.
  *
@@ -16,15 +16,27 @@
  */
 #endregion
 
-namespace AddInCommon.Exception
+namespace AddInCommon.Const
 {
     /// <summary>
-    /// Koropokkurアドイン共通例外
+    /// 「ビルドアクション」列挙体
     /// </summary>
-    public class KoropokkurException : System.Exception
+    public enum EnumBuildAction
     {
-        public KoropokkurException() : base() { }
-        public KoropokkurException(string message) : base(message) { }
-        public KoropokkurException(string message, System.Exception innerException) : base(message, innerException) { }
+        /// <summary>変更なし</summary>
+        /// <remarks>プロパティを変更しないときはこの値を設定</remarks>
+        Nothing = 0,
+
+        /// <summary>コンパイル</summary>
+        Compile,
+
+        /// <summary>埋め込まれたリソース</summary>
+        Resource,
+
+        /// <summary>コンテンツ</summary>
+        Contents,
+
+        /// <summary>何もしない</summary>
+        NoAction
     }
 }

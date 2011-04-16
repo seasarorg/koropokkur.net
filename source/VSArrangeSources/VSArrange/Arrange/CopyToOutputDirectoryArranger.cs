@@ -23,7 +23,7 @@ using AddInCommon.Util;
 using VSArrange.Config;
 using VSArrange.Filter;
 
-namespace VSArrange.Arrange
+namespace VSArrange.Report
 {
     /// <summary>
     /// 「出力先にコピー」設定クラス
@@ -32,48 +32,7 @@ namespace VSArrange.Arrange
     {
         private readonly OutputResultManager _outputResultManager;
 
-        #region プロパティ
-
-        /// <summary>
-        /// プロジェクト要素に設定する属性付加の判定に使う正規表現
-        /// </summary>
-        private readonly ItemAttachmentFilter _filterNoCopy = new ItemAttachmentFilter();
-
-        /// <summary>
-        /// ビルド後「コピーしない」設定フィルター
-        /// </summary>
-        public ItemAttachmentFilter FilterNoCopy
-        {
-            get { return _filterNoCopy; }
-        }
-
-        /// <summary>
-        /// プロジェクト要素に設定する属性付加の判定に使う正規表現
-        /// </summary>
-        private readonly ItemAttachmentFilter _filterEverytimeCopy = new ItemAttachmentFilter();
-
-        /// <summary>
-        /// ビルド後「常にコピー」設定フィルター
-        /// </summary>
-        public ItemAttachmentFilter FilterEverytimeCopy
-        {
-            get { return _filterEverytimeCopy; }
-        }
-
-        /// <summary>
-        /// プロジェクト要素に設定する属性付加の判定に使う正規表現
-        /// </summary>
-        private readonly ItemAttachmentFilter _filterCopyIfNew = new ItemAttachmentFilter();
-
-        /// <summary>
-        /// ビルド後「新しい場合はコピー」設定フィルター
-        /// </summary>
-        public ItemAttachmentFilter FilterCopyIfNew
-        {
-            get { return _filterCopyIfNew; }
-        }
-
-        #endregion
+        private readonly CopyToOutputDirectoryFilter _filter;
 
         /// <summary>
         /// コンストラクタ
@@ -82,10 +41,7 @@ namespace VSArrange.Arrange
         /// <param name="outputResultManager"></param>
         public CopyToOutputDirectoryArranger(ConfigInfo configInfo, OutputResultManager outputResultManager)
         {
-            AddFilters(FilterNoCopy, configInfo.FilterNoCopyStringList);
-            AddFilters(FilterEverytimeCopy, configInfo.FilterEverytimeCopyStringList);
-            AddFilters(FilterCopyIfNew, configInfo.FilterCopyIfNewStringList);
-
+            _filter = new CopyToOutputDirectoryFilter(configInfo);
             _outputResultManager = outputResultManager;
         }
 
@@ -122,36 +78,12 @@ namespace VSArrange.Arrange
         protected virtual EnumCopyToOutputDirectory GetCopyToOutputDeirectory(
             string fileName, EnumCopyToOutputDirectory defaultValue)
         {
-            if (FilterNoCopy.IsHitFilter(fileName))
+            var copyToOutputDirectory = _filter.GetCopyToOutputDeirectory(fileName);
+            if (copyToOutputDirectory == EnumCopyToOutputDirectory.Nothing)
             {
-                return EnumCopyToOutputDirectory.NotCopy;
+                return defaultValue;
             }
-
-            if (FilterEverytimeCopy.IsHitFilter(fileName))
-            {
-                return EnumCopyToOutputDirectory.EveryTime;
-            }
-
-            if (FilterCopyIfNew.IsHitFilter(fileName))
-            {
-                return EnumCopyToOutputDirectory.IfModified;
-            }
-
-            return defaultValue;
-        }
-
-        /// <summary>
-        /// フィルター設定追加
-        /// </summary>
-        /// <param name="filter"></param>
-        /// <param name="filterList"></param>
-        protected void AddFilters(ItemAttachmentFilter filter, IList<ConfigInfoDetail> filterList)
-        {
-            if (filterList != null)
-            {
-                filter.Clear();
-                filter.AddFilters(filterList);
-            }
+            return copyToOutputDirectory;
         }
     }
 }
