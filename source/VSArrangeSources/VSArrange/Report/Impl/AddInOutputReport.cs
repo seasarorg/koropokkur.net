@@ -92,6 +92,11 @@ namespace VSArrange.Report.Impl
             }
         }
 
+        public void ReportWarning(string message)
+        {
+            ReportError(message);
+        }
+
         public void ReportError(string message)
         {
             MessageUtils.ShowErrorMessage(message);

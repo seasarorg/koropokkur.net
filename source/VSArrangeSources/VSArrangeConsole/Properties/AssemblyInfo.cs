@@ -34,3 +34,11 @@ using System.Runtime.InteropServices;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("0.2.5.0")]
 [assembly: AssemblyFileVersion("0.2.5.0")]
+
+// [AssemblyInfo.cs]
+// Log4Net の設定
+// 
+// ConfigFile を指定しない場合は、このプロジェクトの app.config を使用する。
+// 開発環境下では、proj/ の config ファイルを proj/bin/Debug/ の exe から
+// 参照するので、この設定になる。デプロイ時は要変更。注意すること。
+[assembly: log4net.Config.XmlConfigurator()]

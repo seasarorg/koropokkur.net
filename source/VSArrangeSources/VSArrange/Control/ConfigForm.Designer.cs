@@ -436,7 +436,7 @@ namespace VSArrange.Control
             this.grpConfigOutput.Size = new System.Drawing.Size(617, 97);
             this.grpConfigOutput.TabIndex = 308;
             this.grpConfigOutput.TabStop = false;
-            this.grpConfigOutput.Text = "結果出力の設定";
+            this.grpConfigOutput.Text = "結果出力の設定（アドイン用）";
             // 
             // outputResultConfig
             // 

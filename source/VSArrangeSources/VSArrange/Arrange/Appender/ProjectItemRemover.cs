@@ -17,8 +17,8 @@
 #endregion
 
 using System.Collections.Generic;
-using EnvDTE;
 using System.IO;
+using EnvDTE;
 
 namespace VSArrange.Report.Appender
 {
@@ -38,10 +38,11 @@ namespace VSArrange.Report.Appender
 
         public void Execute()
         {
-            foreach (ProjectItem projectItem in _deleteTarget)
+            foreach(ProjectItem projectItem in _deleteTarget)
             {
-                string path = (string)projectItem.Properties.Item("FullPath").Value;
-                if(Path.HasExtension(path))
+                var path = (string)projectItem.Properties.Item("FullPath").Value;
+
+                if (Path.HasExtension(path))
                 {
                     _outputResultManager.RegisterRemovedFile(path);
                 }

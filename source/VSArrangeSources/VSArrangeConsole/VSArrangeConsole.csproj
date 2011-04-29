@@ -45,6 +45,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Message\Log4NetUtils.cs" />
     <Compile Include="Message\VSArrangeConsoleMessage.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

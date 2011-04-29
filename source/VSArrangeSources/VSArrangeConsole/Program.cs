@@ -18,14 +18,12 @@
 
 using System;
 using System.IO;
-using AddInCommon.Util;
 using EnvDTE;
 using EnvDTE80;
-using log4net;
-using VSArrange.Report;
 using VSArrange.Config;
 using VSArrange.Const;
 using VSArrange.Message;
+using VSArrange.Report;
 using VSArrange.Util;
 using VSArrangeConsole.Message;
 using VSArrangeConsole.Report.Impl;
@@ -35,22 +33,34 @@ namespace VSArrangeConsole
     class Program
     {
         /// <summary>
-        /// ログ出力
+        /// デフォルト設定ファイルパス
         /// </summary>
-        private static readonly ILog _logger = LogManager.GetLogger(VSArrangeConst.ADDIN_NAME);
+        private const string DEFAULT_CONFIG_PATH = @"./VSArrange.config";
 
+        /// <summary>
+        /// プログラムの起点
+        /// </summary>
+        /// <param name="args">[0](必須)=処理対象ファイルパス, [1](任意)=設定ファイルパス, [2](任意)処理対象プロジェクト名</param>
         static void Main(string[] args)
         {
-            if (_logger.IsInfoEnabled)
+            Log4NetUtils.InfoIfEnable(string.Format("開始：ARGS=[{0}]", string.Join(",", args)));
+            if (args.Length == 0)
             {
-                _logger.InfoFormat("開始({0})：ARGS=[{1}]", DateTime.Now, string.Join(",", args));
+                Log4NetUtils.WarnIfEnable(VSArrangeConsoleMessage.GetNoArgumentMessage());
+                return;
             }
 
             string targetPath = args[0];
-            string projectName = null;
+            string configPath = DEFAULT_CONFIG_PATH;
             if (args.Length > 1)
             {
-                projectName = args[1];
+                configPath = args[1];
+            }
+
+            string[] targetProjectNames = null;
+            if (args.Length > 2)
+            {
+                targetProjectNames = args[2].Split(',');
             }
 
             Solution solution = null;
@@ -60,43 +70,50 @@ namespace VSArrangeConsole
                 var version = GetVersion(targetPath);
 
                 solution = LoadSolution(targetPath, version);
-                var configInfo = ConfigFileManager.ReadConfig(PathUtils.GetConfigPath());
+                Log4NetUtils.DebugIfEnable(string.Format("configPath:[{0}]", configPath));
+                if (!File.Exists(configPath))
+                {
+                    throw new FileNotFoundException("設定ファイルがありません。", configPath);
+                }
+
+                var configInfo = ConfigFileManager.ReadConfig(configPath);
                 var reporter = CreateReporter();
                 var arranger = ArrangeUtils.CreateArranger(configInfo, reporter);
+
+                Log4NetUtils.InfoIfEnable(string.Format("対象プロジェクト数：{0}", solution.Projects.Count));
                 foreach (Project project in solution.Projects)
                 {
-                    if (IsTargetProject(project, projectName))
+                    if (IsTargetProject(project, targetProjectNames))
                     {
-                        if (_logger.IsInfoEnabled)
-                        {
-                            _logger.InfoFormat("処理実行中。。。[{0}]", project.Name);
-                        }
+                        var projectName = project.Name;
+                        Log4NetUtils.InfoIfEnable(string.Format("処理実行中。。。[{0}]", projectName));
                         arranger.ArrangeProject(project);
                         project.Save();
-
-                        if (_logger.IsInfoEnabled)
-                        {
-                            _logger.InfoFormat("処理完了[{0}]", project.Name);
-                        }
+                        Log4NetUtils.InfoIfEnable(string.Format("処理完了[{0}]", projectName));
                     }
                 }
             }
             catch (System.Exception ex)
             {
-                if (_logger.IsErrorEnabled)
-                {
-                    _logger.Error(ex);
-                }
+                Log4NetUtils.ErrorIfEnable(ex.ToString());
             }
             finally
             {
                 CloseSolution(solution);
             }
 
-            if (_logger.IsInfoEnabled)
-            {
-                _logger.InfoFormat("終了({0})", DateTime.Now);
-            }
+            Log4NetUtils.InfoIfEnable("終了");
+        }
+
+        /// <summary>
+        /// プロジェクト整理処理オブジェクトの生成
+        /// </summary>
+        /// <param name="configInfo"></param>
+        /// <param name="reporter"></param>
+        /// <returns></returns>
+        private static ProjectArranger CreateArranger(ConfigInfo configInfo, IOutputReport reporter)
+        {
+            return ArrangeUtils.CreateArranger(configInfo, reporter, false);
         }
 
         /// <summary>
@@ -128,8 +145,12 @@ namespace VSArrangeConsole
                         var line = reader.ReadLine();
                         if (line.StartsWith(VERSION_LINE))
                         {
-                            var val = int.Parse(line.Replace(VERSION_LINE, ""));
-                            return (val - 1).ToString() + ".0";
+                            var formatVersion = float.Parse(line.Replace(VERSION_LINE, "").Trim());
+                            // ファイルフォーマットのバージョン番号はVisualStudio+1なので
+                            // ファイルフォーマットから１引いた値をバージョン番号として扱う
+                            var version = (((int)formatVersion) - 1).ToString() + ".0";
+                            Log4NetUtils.DebugIfEnable(string.Format("VisualStudio version:[{0}]", version));
+                            return version;
                         }
                     }
                 }
@@ -153,17 +174,24 @@ namespace VSArrangeConsole
         /// 処理対象のプロジェクトか判定する
         /// </summary>
         /// <param name="project"></param>
-        /// <param name="targetName"></param>
+        /// <param name="targetNames"></param>
         /// <returns></returns>
-        private static bool IsTargetProject(Project project, string targetName)
+        private static bool IsTargetProject(Project project, string[] targetNames)
         {
-            if (string.IsNullOrEmpty(targetName))
+            if (targetNames == null)
             {
                 // プロジェクト名指定なしの場合は必ず処理対象とする
                 return true;
             }
 
-            return (project.Name == targetName ? true : false);
+            foreach (var targetName in targetNames)
+            {
+                if (targetName == project.Name)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         /// <summary>

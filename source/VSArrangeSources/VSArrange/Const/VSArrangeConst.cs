@@ -28,9 +28,9 @@ namespace VSArrange.Const
         /// </summary>
         public const string ADDIN_NAME = "VSArrange";
 
-        public const string SUPPORTED_EXT_SLN = "sln";
-        public const string SUPPORTED_EXT_CSPROJ = "csproj";
-        public const string SUPPORTED_EXT_VBPROJ = "vbproj";
+        public const string SUPPORTED_EXT_SLN = ".sln";
+        public const string SUPPORTED_EXT_CSPROJ = ".csproj";
+        public const string SUPPORTED_EXT_VBPROJ = ".vbproj";
 
         /// <summary>
         /// サポートしている拡張子一覧
