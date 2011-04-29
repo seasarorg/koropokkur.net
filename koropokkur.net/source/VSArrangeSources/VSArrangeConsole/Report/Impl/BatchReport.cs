@@ -16,9 +16,8 @@
  */
 #endregion
 
-using log4net;
-using VSArrange.Const;
 using VSArrange.Report;
+using VSArrangeConsole.Message;
 
 namespace VSArrangeConsole.Report.Impl
 {
@@ -27,33 +26,25 @@ namespace VSArrangeConsole.Report.Impl
     /// </summary>
     public class BatchReport : IOutputReport
     {
-        /// <summary>
-        /// ログ出力
-        /// </summary>
-        private static readonly ILog _logger = LogManager.GetLogger(VSArrangeConst.ADDIN_NAME);
-
         public void ReportProgress(string message, int current, int total)
         {
-            if (_logger.IsDebugEnabled)
-            {
-                _logger.DebugFormat("{0} [{1} / {2}]", message, current, total);
-            }
+            Log4NetUtils.DebugIfEnable(string.Format(
+                "{0}\t[{1} / {2}]", message, current.ToString("00"), total.ToString("00")));
         }
 
         public void ReportResult(string message)
         {
-            if (_logger.IsInfoEnabled)
-            {
-                _logger.Info(message);
-            }
+            Log4NetUtils.InfoIfEnable(string.Format("\n{0}", message));
+        }
+
+        public void ReportWarning(string message)
+        {
+            Log4NetUtils.WarnIfEnable(message);
         }
 
         public void ReportError(string message)
         {
-            if (_logger.IsErrorEnabled)
-            {
-                _logger.Error(message);
-            }
+            Log4NetUtils.ErrorIfEnable(message);
         }
     }
 }

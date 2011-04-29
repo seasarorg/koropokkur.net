@@ -19,13 +19,14 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using AddInCommon.Exception;
 using AddInCommon.Invoke;
 using AddInCommon.Util;
 using EnvDTE;
-using VSArrange.Report.Appender;
 using VSArrange.Config;
 using VSArrange.Filter;
 using VSArrange.Message;
+using VSArrange.Report.Appender;
 using VSArrange.Util;
 
 namespace VSArrange.Report
@@ -104,7 +105,7 @@ namespace VSArrange.Report
                 var buildActionArranger = new BuildActionArranger(_configInfo, resultManager);
                 var copyToOutputDirectoryArranger = new CopyToOutputDirectoryArranger(_configInfo, resultManager);
 
-                string projectDirPath = Path.GetDirectoryName(project.FullName);
+                var projectDirPath = Path.GetDirectoryName(project.FullName);
                 ProjectItems projectItems = project.ProjectItems;
 
                 _reporter.ReportProgress("プロジェクト要素の整理中", 0, 2);
@@ -129,7 +130,7 @@ namespace VSArrange.Report
                     "[{0}]処理結果の出力に失敗しました。", project.Name));
                 builder.AppendLine(ex.Message);
                 builder.AppendLine(ex.StackTrace);
-                _reporter.ReportError(builder.ToString());
+                throw new KoropokkurException(builder.ToString(), ex);
             }
         }
 
@@ -150,9 +151,9 @@ namespace VSArrange.Report
 
             var basePath = dirPath + Path.DirectorySeparatorChar;
             
-            _reporter.ReportProgress("追加・除外する要素抽出中", 0, PROGRESS_PARTS_COUNT);
+            _reporter.ReportProgress("追加・除外する要素を抽出中", 1, PROGRESS_PARTS_COUNT);
             var totalCount = projectItems.Count;
-            var current = 0;
+            int current = 1;
             //  ファイル、フォルダ、削除対象に振り分ける
             foreach (ProjectItem projectItem in projectItems)
             {
@@ -176,27 +177,26 @@ namespace VSArrange.Report
                 current++;
             }
 
-            _reporter.ReportProgress("プロジェクト要素を追加中（フォルダ）", 1, PROGRESS_PARTS_COUNT);
+            _reporter.ReportProgress("プロジェクト要素追加中(フォルダ)", 2, PROGRESS_PARTS_COUNT);
             //  ディレクトリ追加
             DirectoryAppender directoryAppender = new DirectoryAppender(
                 dirPath, _filter.FilterFolder, projectItems, folderItems, resultManager);
             directoryAppender.Execute();
 
-            _reporter.ReportProgress("プロジェクト要素を追加中（ファイル）", 2, PROGRESS_PARTS_COUNT);
+            _reporter.ReportProgress("プロジェクト要素追加中(ファイル)", 3, PROGRESS_PARTS_COUNT);
             //  ファイル追加
             FileAppender fileAppender = new FileAppender(
                 dirPath, _filter.FilterFile, projectItems, fileItems, resultManager);
             fileAppender.Execute();
 
-            _reporter.ReportProgress("不要なプロジェクト要素を削除中", 3, PROGRESS_PARTS_COUNT);
+            _reporter.ReportProgress("不要なプロジェクト要素を削除中", 4, PROGRESS_PARTS_COUNT);
             //  不要な要素は削除
             ProjectItemRemover projectItemRemover = new ProjectItemRemover(
                 deleteTarget, resultManager);
             projectItemRemover.Execute();
 
-            _reporter.ReportProgress("フォルダ内プロジェクト要素の整理中", 0, PROGRESS_PARTS_COUNT);
             //  残ったフォルダに対して同様の処理を再帰的に実行
-            foreach (string projectDirPath in folderItems.Keys)
+            foreach (var projectDirPath in folderItems.Keys)
             {
                 ArrangeDirectories(projectDirPath, folderItems[projectDirPath].ProjectItems, resultManager);
             }

@@ -39,6 +39,12 @@ namespace VSArrange.Report
         void ReportResult(string message);
 
         /// <summary>
+        /// 警告通知
+        /// </summary>
+        /// <param name="message"></param>
+        void ReportWarning(string message);
+
+        /// <summary>
         /// エラー通知
         /// </summary>
         /// <param name="message"></param>

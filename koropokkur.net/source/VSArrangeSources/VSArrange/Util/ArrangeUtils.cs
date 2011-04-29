@@ -39,8 +39,10 @@ namespace VSArrange.Util
         /// <returns></returns>
         public static bool IsSupportLanguage(string name)
         {
-            if (name.EndsWith(VSArrangeConst.SUPPORTED_EXT_CSPROJ) ||
-                name.EndsWith(VSArrangeConst.SUPPORTED_EXT_VBPROJ))
+            //if (name.EndsWith(VSArrangeConst.SUPPORTED_EXT_CSPROJ) ||
+            //    name.EndsWith(VSArrangeConst.SUPPORTED_EXT_VBPROJ))
+            if (VSArrangeConst.SUPPORTED_EXT_CSPROJ.EndsWith(name) ||
+                VSArrangeConst.SUPPORTED_EXT_VBPROJ.EndsWith(name))
             {
                 return true;
             }

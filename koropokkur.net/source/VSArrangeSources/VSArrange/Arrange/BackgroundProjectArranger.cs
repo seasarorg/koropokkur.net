@@ -22,12 +22,17 @@ using VSArrange.Config;
 
 namespace VSArrange.Report
 {
+    public delegate void DelegateCompleted(Project completedProject);
+
     /// <summary>
     /// プロジェクト整理処理をバックグラウンドで実行するクラス
     /// </summary>
     public class BackgroundProjectArranger : ProjectArranger
     {
         private readonly BackgroundWorker _worker = new BackgroundWorker();
+
+        public event DelegateCompleted CompletedEvent;
+        private Project _currentProject;
 
         /// <summary>
         /// コンストラクタ
@@ -38,6 +43,7 @@ namespace VSArrange.Report
             : base(configInfo, reporter)
         {
             _worker.DoWork += Execute;
+            _worker.RunWorkerCompleted += Completed;
         }
 
         public override void ArrangeProject(EnvDTE.Project project)
@@ -54,7 +60,13 @@ namespace VSArrange.Report
         private void Execute(object sender, DoWorkEventArgs e)
         {
             var project = (Project)e.Argument;
+            _currentProject = project;
             base.ArrangeProject(project);
+        }
+
+        private void Completed(object sender, RunWorkerCompletedEventArgs e)
+        {
+            CompletedEvent(_currentProject);
         }
     }
 }

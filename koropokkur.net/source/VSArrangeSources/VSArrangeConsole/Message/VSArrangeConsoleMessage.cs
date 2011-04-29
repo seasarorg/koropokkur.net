@@ -25,6 +25,15 @@ namespace VSArrangeConsole.Message
     public class VSArrangeConsoleMessage
     {
         /// <summary>
+        /// 引数が指定されずにプログラムが実行されたときのメッセージ
+        /// </summary>
+        /// <returns></returns>
+        public static string GetNoArgumentMessage()
+        {
+            return "引数が指定されていません。USAGE:[0](必須)=処理対象ファイルパス, [1](任意)=設定ファイルパス, [2](任意)処理対象プロジェクト名";
+        }
+
+        /// <summary>
         /// プロジェクトファイルパスが見つからないメッセージ
         /// </summary>
         /// <param name="basePath"></param>

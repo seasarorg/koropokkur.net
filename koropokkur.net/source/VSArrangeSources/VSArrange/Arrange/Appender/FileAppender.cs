@@ -30,7 +30,7 @@ namespace VSArrange.Report.Appender
     {
         private readonly string _dirPath;
         private readonly ItemAttachmentFilter _filter;
-        private readonly ProjectItems _projectItems;
+        private ProjectItems _projectItems;
         private readonly IDictionary<string, ProjectItem> _fileItems;
         private readonly OutputResultManager _outputResultManager;
 
@@ -60,11 +60,13 @@ namespace VSArrange.Report.Appender
                     !_fileItems.ContainsKey(subFilePath))
                 {
                     //  まだ追加していないもののみ追加
-                    _projectItems.AddFromFile(subFilePath);
+                    var newProjectItem = _projectItems.AddFromFile(subFilePath);
 
                     _outputResultManager.RegisterAddedFile(subFilePath);
+                    newProjectItem = null;
                 }
             }
+            _projectItems = null;
         }
     }
 }
