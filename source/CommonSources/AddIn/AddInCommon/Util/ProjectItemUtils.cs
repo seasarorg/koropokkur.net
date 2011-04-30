@@ -20,6 +20,7 @@ using System;
 using System.IO;
 using AddInCommon.Const;
 using AddInCommon.Invoke;
+using AddInCommon.Wrapper;
 using EnvDTE;
 using VSLangProj;
 
@@ -43,9 +44,10 @@ namespace AddInCommon.Util
             if (projectItems == null) throw new ArgumentNullException("projectItems");
             if (accessors == null) throw new ArgumentNullException("accessors");
 
-            foreach (ProjectItem projectItem in projectItems)
+            foreach (ProjectItem projectItemOrg in projectItems)
             {
-                string path = GetFullPath(projectItem);
+                var projectItem = new ProjectItemEx();
+                var path = GetFullPath(projectItem);
                 if(Directory.Exists(path))
                 {
                     foreach (IProjectItemAccessor accessor in accessors)

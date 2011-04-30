@@ -17,6 +17,9 @@
 #endregion
 
 
+using System;
+using VSArrange.Const;
+
 namespace VSArrangeConsole.Message
 {
     /// <summary>
@@ -42,6 +45,27 @@ namespace VSArrangeConsole.Message
         {
             return string.Format("[{0}]下にプロジェクトファイルのパスが見つかりません。",
                 basePath);
+        }
+
+        /// <summary>
+        /// プログラム開始メッセージ
+        /// </summary>
+        /// <param name="args"></param>
+        /// <returns></returns>
+        public static string GetStartMessage(string[] args)
+        {
+            return string.Format("{0}：開始  (ARGS=[{1}])", VSArrangeConst.ADDIN_NAME, string.Join(",", args));
+        }
+
+        /// <summary>
+        /// プログラム終了メッセージ
+        /// </summary>
+        /// <param name="startTime">処理開始時刻</param>
+        /// <param name="endTime">処理終了時刻</param>
+        /// <returns></returns>
+        public static string GetEndMessage(DateTime startTime, DateTime endTime)
+        {
+            return string.Format("{0}：終了 （所要時間：{1})", VSArrangeConst.ADDIN_NAME, endTime - startTime);
         }
     }
 }

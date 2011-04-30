@@ -18,10 +18,10 @@
 
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using AddInCommon.Exception;
 using AddInCommon.Invoke;
 using AddInCommon.Util;
+using AddInCommon.Wrapper;
 using EnvDTE;
 using VSArrange.Config;
 using VSArrange.Filter;
@@ -51,6 +51,8 @@ namespace VSArrange.Report
         /// </summary>
         private readonly ProjectIncludeFilter _filter;
 
+        private readonly ProjectEx _project;
+
         /// <summary>
         /// コンストラクタ
         /// </summary>
@@ -61,6 +63,7 @@ namespace VSArrange.Report
             _reporter = reporter;
             _configInfo = configInfo;
             _filter = new ProjectIncludeFilter(configInfo);
+            _project = new ProjectEx();
         }
 
         #region リフレッシュ処理
@@ -71,7 +74,8 @@ namespace VSArrange.Report
         /// <param name="project"></param>
         public virtual void ArrangeProject(Project project)
         {
-            var projectName = project.FullName;
+            _project.SetProject(project);
+            var projectName = _project.FullName;
             if (string.IsNullOrEmpty(projectName))
             {
                 //  プロジェクト名が入っていない要素は無視
@@ -87,8 +91,8 @@ namespace VSArrange.Report
             }
 
             var resultManager = new OutputResultManager();
-            resultManager.Initialize(project.Name, _configInfo);
-            Execute(project, resultManager);
+            resultManager.Initialize(_project.Name, _configInfo);
+            Execute(_project, resultManager);
             _reporter.ReportResult(resultManager.GetResultMessage());
         }
 
@@ -106,14 +110,14 @@ namespace VSArrange.Report
                 var copyToOutputDirectoryArranger = new CopyToOutputDirectoryArranger(_configInfo, resultManager);
 
                 var projectDirPath = Path.GetDirectoryName(project.FullName);
-                ProjectItems projectItems = project.ProjectItems;
+                var projectItems = project.ProjectItems;
 
-                _reporter.ReportProgress("プロジェクト要素の整理中", 0, 2);
+                _reporter.Report(VSArrangeMessage.GetArrangeNow());
                 ArrangeDirectories(projectDirPath, projectItems, resultManager);
 
                 if (_configInfo.IsSetOption)
                 {
-                    _reporter.ReportProgress("プロジェクト要素の属性を設定中", 1, 2);
+                    _reporter.Report(VSArrangeMessage.GetSetAttributeNow());
                     //  整理し終わったプロジェクト要素に対して属性設定
                     ProjectItemUtils.AccessAllProjectItems(
                         projectItems, new IProjectItemAccessor[]
@@ -121,16 +125,10 @@ namespace VSArrange.Report
                                               buildActionArranger, copyToOutputDirectoryArranger
                                           });
                 }
-                _reporter.ReportProgress("プロジェクト要素の属性を設定中", 2, 2);
             }
             catch (System.Exception ex)
             {
-                var builder = new StringBuilder();
-                builder.AppendLine(string.Format(
-                    "[{0}]処理結果の出力に失敗しました。", project.Name));
-                builder.AppendLine(ex.Message);
-                builder.AppendLine(ex.StackTrace);
-                throw new KoropokkurException(builder.ToString(), ex);
+                throw new KoropokkurException(VSArrangeMessage.GetOutputResultFailure(project.Name), ex);
             }
         }
 
@@ -145,6 +143,10 @@ namespace VSArrange.Report
             //  進捗単位数
             const int PROGRESS_PARTS_COUNT = 4;
 
+            var projectItemsEx = new ProjectItemsEx();
+            projectItemsEx.SetProjectItems(projectItems);
+            _reporter.Report(VSArrangeMessage.GetStartExecute(dirPath));
+
             var fileItems = new Dictionary<string, ProjectItem>();
             var folderItems = new Dictionary<string, ProjectItem>();
             var deleteTarget = new List<ProjectItem>();
@@ -152,26 +154,30 @@ namespace VSArrange.Report
             var basePath = dirPath + Path.DirectorySeparatorChar;
             
             _reporter.ReportProgress("追加・除外する要素を抽出中", 1, PROGRESS_PARTS_COUNT);
-            var totalCount = projectItems.Count;
+            var totalCount = projectItemsEx.Count;
+
             int current = 1;
             //  ファイル、フォルダ、削除対象に振り分ける
-            foreach (ProjectItem projectItem in projectItems)
+            foreach (ProjectItem projectItem in projectItemsEx)
             {
-                _reporter.ReportProgress("プロジェクト要素を振分け中", current, totalCount);
-                string currentPath = basePath + projectItem.Name;
+                var projectItemEx = new ProjectItemEx();
+                projectItemEx.SetProjectItem(projectItem);
+
+                _reporter.ReportSubProgress("プロジェクト要素を振分け中", current, totalCount);
+                string currentPath = basePath + projectItemEx.Name;
                 if (_filter.IsRemove(currentPath))
                 {
-                    deleteTarget.Add(projectItem);
+                    deleteTarget.Add(projectItemEx);
                 }
                 else
                 {
                     if (Path.HasExtension(currentPath))
                     {
-                        fileItems[currentPath] = projectItem;
+                        fileItems[currentPath] = projectItemEx;
                     }
                     else
                     {
-                        folderItems[currentPath] = projectItem;
+                        folderItems[currentPath] = projectItemEx;
                     }
                 }
                 current++;
@@ -180,13 +186,13 @@ namespace VSArrange.Report
             _reporter.ReportProgress("プロジェクト要素追加中(フォルダ)", 2, PROGRESS_PARTS_COUNT);
             //  ディレクトリ追加
             DirectoryAppender directoryAppender = new DirectoryAppender(
-                dirPath, _filter.FilterFolder, projectItems, folderItems, resultManager);
+                dirPath, _filter.FilterFolder, projectItemsEx, folderItems, resultManager);
             directoryAppender.Execute();
 
             _reporter.ReportProgress("プロジェクト要素追加中(ファイル)", 3, PROGRESS_PARTS_COUNT);
             //  ファイル追加
             FileAppender fileAppender = new FileAppender(
-                dirPath, _filter.FilterFile, projectItems, fileItems, resultManager);
+                dirPath, _filter.FilterFile, projectItemsEx, fileItems, resultManager);
             fileAppender.Execute();
 
             _reporter.ReportProgress("不要なプロジェクト要素を削除中", 4, PROGRESS_PARTS_COUNT);

@@ -18,6 +18,7 @@
 
 using System.Collections.Generic;
 using System.IO;
+using AddInCommon.Wrapper;
 using EnvDTE;
 
 namespace VSArrange.Report.Appender
@@ -29,18 +30,27 @@ namespace VSArrange.Report.Appender
     {
         private readonly IList<ProjectItem> _deleteTarget;
         private readonly OutputResultManager _outputResultManager;
+        private readonly PropertiesEx _properties;
+        private readonly ProjectItemEx _projectItem;
+        private readonly PropertyEx _property;
 
         public ProjectItemRemover(IList<ProjectItem> deleteTarget, OutputResultManager outputResultManager)
         {
             _deleteTarget = deleteTarget;
             _outputResultManager = outputResultManager;
+            _properties = new PropertiesEx();
+            _projectItem = new ProjectItemEx();
+            _property = new PropertyEx();
         }
 
         public void Execute()
         {
             foreach(ProjectItem projectItem in _deleteTarget)
             {
-                var path = (string)projectItem.Properties.Item("FullPath").Value;
+                _projectItem.SetProjectItem(projectItem);
+                _properties.SetProperties(_projectItem.Properties);
+                _property.SetProperty(_properties.Item("FullPath"));
+                var path = (string)_property.Value;
 
                 if (Path.HasExtension(path))
                 {

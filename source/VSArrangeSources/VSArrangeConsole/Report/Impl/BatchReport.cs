@@ -29,7 +29,18 @@ namespace VSArrangeConsole.Report.Impl
         public void ReportProgress(string message, int current, int total)
         {
             Log4NetUtils.DebugIfEnable(string.Format(
-                "{0}\t[{1} / {2}]", message, current.ToString("00"), total.ToString("00")));
+                "{0}\t【{1} / {2}】", message, current, total));
+        }
+
+        public void ReportSubProgress(string message, int current, int total)
+        {
+            Log4NetUtils.DebugIfEnable(string.Format(
+                "{0}\t\t<{1} / {2}>", message, current.ToString("00"), total.ToString("00")));
+        }
+
+        public void Report(string message)
+        {
+            Log4NetUtils.DebugIfEnable(message);
         }
 
         public void ReportResult(string message)
@@ -46,5 +57,6 @@ namespace VSArrangeConsole.Report.Impl
         {
             Log4NetUtils.ErrorIfEnable(message);
         }
+
     }
 }

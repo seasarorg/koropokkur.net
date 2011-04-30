@@ -18,12 +18,11 @@
 
 using System.IO;
 using System.Text;
-using AddInCommon.Util;
 using EnvDTE80;
-using VSArrange.Report;
-using VSArrange.Report.Impl;
 using VSArrange.Config;
 using VSArrange.Const;
+using VSArrange.Report;
+using VSArrange.Report.Impl;
 
 namespace VSArrange.Util
 {

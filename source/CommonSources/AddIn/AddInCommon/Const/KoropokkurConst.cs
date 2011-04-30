@@ -33,5 +33,15 @@ namespace AddInCommon.Const
         /// 各種設定メニュー名
         /// </summary>
         public const string CONFIG_MENU_NAME = "Koropokkurの設定";
+
+        /// <summary>
+        /// COMExceptionが発生した場合の待機時間(ms)
+        /// </summary>
+        public const int WAIT_TIME = 1000;
+
+        /// <summary>
+        /// COMExceptionが発生し続けた場合の最大やり直し回数
+        /// </summary>
+        public const int MAX_CONTINUE_TIMES = 50;
     }
 }

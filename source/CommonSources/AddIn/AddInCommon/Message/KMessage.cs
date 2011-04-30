@@ -16,6 +16,7 @@
  */
 #endregion
 
+using System;
 
 namespace AddInCommon.Message
 {
@@ -36,6 +37,17 @@ namespace AddInCommon.Message
             return string.Format(
                 "[{0}]は[{1}]で対応していない形式のファイルです。(使用可能：{2})",
                 fileName, addInName, enables);
+        }
+
+        /// <summary>
+        /// メンバー情報を取得できなかったことを知らせるメッセージの取得
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="memberName"></param>
+        /// <returns></returns>
+        public static string GetNoMember(Type type, string memberName)
+        {
+            return string.Format("{0}には「{1}」は定義されていません。", type.Name, memberName);
         }
     }
 }
