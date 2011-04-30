@@ -20,16 +20,17 @@ using System.Collections.Generic;
 using System.IO;
 using AddInCommon.Exception;
 using AddInCommon.Invoke;
+using AddInCommon.Report;
 using AddInCommon.Util;
 using AddInCommon.Wrapper;
 using EnvDTE;
 using VSArrange.Config;
 using VSArrange.Filter;
 using VSArrange.Message;
-using VSArrange.Report.Appender;
+using VSArrange.Arrange.Appender;
 using VSArrange.Util;
 
-namespace VSArrange.Report
+namespace VSArrange.Arrange
 {
     /// <summary>
     /// プロジェクト要素整理クラス
@@ -121,9 +122,8 @@ namespace VSArrange.Report
                     //  整理し終わったプロジェクト要素に対して属性設定
                     ProjectItemUtils.AccessAllProjectItems(
                         projectItems, new IProjectItemAccessor[]
-                                          {
-                                              buildActionArranger, copyToOutputDirectoryArranger
-                                          });
+                                          { buildActionArranger, copyToOutputDirectoryArranger },
+                                            _reporter);
                 }
             }
             catch (System.Exception ex)
@@ -183,22 +183,22 @@ namespace VSArrange.Report
                 current++;
             }
 
-            _reporter.ReportProgress("プロジェクト要素追加中(フォルダ)", 2, PROGRESS_PARTS_COUNT);
+            _reporter.ReportProgress(VSArrangeMessage.GetAddFolderNow(), 2, PROGRESS_PARTS_COUNT);
             //  ディレクトリ追加
             DirectoryAppender directoryAppender = new DirectoryAppender(
-                dirPath, _filter.FilterFolder, projectItemsEx, folderItems, resultManager);
+                dirPath, _filter.FilterFolder, projectItemsEx, folderItems, resultManager, _reporter);
             directoryAppender.Execute();
 
-            _reporter.ReportProgress("プロジェクト要素追加中(ファイル)", 3, PROGRESS_PARTS_COUNT);
+            _reporter.ReportProgress(VSArrangeMessage.GetAddFileNow(), 3, PROGRESS_PARTS_COUNT);
             //  ファイル追加
             FileAppender fileAppender = new FileAppender(
-                dirPath, _filter.FilterFile, projectItemsEx, fileItems, resultManager);
+                dirPath, _filter.FilterFile, projectItemsEx, fileItems, resultManager, _reporter);
             fileAppender.Execute();
 
-            _reporter.ReportProgress("不要なプロジェクト要素を削除中", 4, PROGRESS_PARTS_COUNT);
+            _reporter.ReportProgress(VSArrangeMessage.GetRemoveNow(), 4, PROGRESS_PARTS_COUNT);
             //  不要な要素は削除
             ProjectItemRemover projectItemRemover = new ProjectItemRemover(
-                deleteTarget, resultManager);
+                deleteTarget, resultManager, _reporter);
             projectItemRemover.Execute();
 
             //  残ったフォルダに対して同様の処理を再帰的に実行

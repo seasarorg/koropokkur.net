@@ -48,8 +48,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Arrange\BackgroundProjectArranger.cs" />
-    <Compile Include="Report\Impl\AddInOutputReport.cs" />
-    <Compile Include="Report\IOutputReport.cs" />
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -175,6 +173,7 @@
     <Compile Include="Core\VSArrangeConnectCore.cs" />
     <Compile Include="Filter\ProjectIncludeFilter.cs" />
     <Compile Include="Message\VSArrangeMessage.cs" />
+    <Compile Include="Report\Impl\AddInOutputReport.cs" />
     <Compile Include="Util\ArrangeUtils.cs" />
   </ItemGroup>
   <ItemGroup>

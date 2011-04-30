@@ -18,10 +18,14 @@
 
 using System.Collections.Generic;
 using System.IO;
+using AddInCommon.Report;
+using AddInCommon.Wrapper;
 using EnvDTE;
+using VSArrange.Arrange;
 using VSArrange.Filter;
+using VSArrange.Message;
 
-namespace VSArrange.Report.Appender
+namespace VSArrange.Arrange.Appender
 {
     /// <summary>
     /// ディレクトリ追加クラス
@@ -33,6 +37,7 @@ namespace VSArrange.Report.Appender
         private readonly ProjectItems _projectItems;
         private readonly IDictionary<string, ProjectItem> _folderItems;
         private readonly OutputResultManager _outputResultManager;
+        private readonly IOutputReport _reporter;
 
         /// <summary>
         /// コンストラクタ
@@ -42,16 +47,19 @@ namespace VSArrange.Report.Appender
         /// <param name="projectItems"></param>
         /// <param name="folderItems">追加済みフォルダ</param>
         /// <param name="outputResultManager"></param>
+        /// <param name="reporter"></param>
         public DirectoryAppender(
             string dirPath, ItemAttachmentFilter filter,
             ProjectItems projectItems, IDictionary<string, ProjectItem> folderItems,
-            OutputResultManager outputResultManager)
+            OutputResultManager outputResultManager,
+            IOutputReport reporter)
         {
             _dirPath = dirPath;
             _filter = filter;
             _projectItems = projectItems;
             _folderItems = folderItems;
             _outputResultManager = outputResultManager;
+            _reporter = reporter;
         }
 
         /// <summary>
@@ -59,20 +67,28 @@ namespace VSArrange.Report.Appender
         /// </summary>
         public void Execute()
         {
-            string[] subDirPaths = Directory.GetDirectories(_dirPath);
+            var subDirPaths = Directory.GetDirectories(_dirPath);
+            var totalCount = subDirPaths.Length;
+            int currentCount = 1;
+
             foreach (string subDirPath in subDirPaths)
             {
+                _reporter.ReportSubProgress(VSArrangeMessage.GetAddFolderNow(), currentCount, totalCount);
+
                 string[] dirPathParts = subDirPath.Split(Path.DirectorySeparatorChar);
                 string dirName = dirPathParts[dirPathParts.Length - 1];
                 if (_filter.IsPassFilter(dirName) &&
                     !_folderItems.ContainsKey(subDirPath))
                 {
                     //  まだ追加していないもののみ追加
-                    ProjectItem newItem = _projectItems.AddFromDirectory(subDirPath);
+                    var newItemOrg = _projectItems.AddFromDirectory(subDirPath);
+                    var newItem = new ProjectItemEx();
+                    newItem.SetProjectItem(newItemOrg);
                     _folderItems.Add(subDirPath, newItem);
 
                     _outputResultManager.RegisterAddedDirectory(subDirPath);
                 }
+                currentCount++;
             }
         }
     }
