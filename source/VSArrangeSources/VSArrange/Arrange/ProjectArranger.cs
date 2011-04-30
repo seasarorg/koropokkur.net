@@ -123,7 +123,7 @@ namespace VSArrange.Arrange
                     ProjectItemUtils.AccessAllProjectItems(
                         projectItems, new IProjectItemAccessor[]
                                           { buildActionArranger, copyToOutputDirectoryArranger },
-                                            _reporter);
+                                            _reporter, VSArrangeMessage.GetSetAttributeNow());
                 }
             }
             catch (System.Exception ex)

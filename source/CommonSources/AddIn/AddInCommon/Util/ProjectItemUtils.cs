@@ -41,26 +41,25 @@ namespace AddInCommon.Util
         /// <param name="projectItems"></param>
         /// <param name="accessors"></param>
         /// <param name="reporter"></param>
+        /// <param name="accessName">処理名</param>
         public static void AccessAllProjectItems(ProjectItems projectItems, IProjectItemAccessor[] accessors,
-            IOutputReport reporter)
+            IOutputReport reporter, string accessName)
         {
             if (projectItems == null) throw new ArgumentNullException("projectItems");
             if (accessors == null) throw new ArgumentNullException("accessors");
-
-            var totalCount = projectItems.Count;
-            var currentCount = 1;
 
             foreach (ProjectItem projectItemOrg in projectItems)
             {
                 var projectItem = new ProjectItemEx();
                 projectItem.SetProjectItem(projectItemOrg);
 
+                reporter.Report(accessName + ":" + projectItem.Name);
+
                 var path = GetFullPath(projectItem);
                 if(Directory.Exists(path))
                 {
                     foreach (IProjectItemAccessor accessor in accessors)
                     {
-                        reporter.ReportSubProgress(accessor.Name, currentCount, totalCount);
                         accessor.AccessFolder(projectItem);   
                     }
                 }
@@ -68,7 +67,6 @@ namespace AddInCommon.Util
                 {
                     foreach (IProjectItemAccessor accessor in accessors)
                     {
-                        reporter.ReportSubProgress(accessor.Name, currentCount, totalCount);
                         accessor.AccessFile(projectItem);   
                     }
                 }
@@ -78,10 +76,8 @@ namespace AddInCommon.Util
                 childItems.SetProjectItems(childItemsOrg);
                 if (childItems != null && childItems.Count > 0)
                 {
-                    AccessAllProjectItems(childItems, accessors, reporter);
+                    AccessAllProjectItems(childItems, accessors, reporter, accessName);
                 }
-
-                currentCount++;
             }
         }
 
@@ -91,10 +87,11 @@ namespace AddInCommon.Util
         /// <param name="projectItems"></param>
         /// <param name="accessor"></param>
         /// <param name="reporter"></param>
+        /// <param name="accessName">処理名</param>
         public static void AccessAllProjectItems(ProjectItems projectItems, IProjectItemAccessor accessor,
-            IOutputReport reporter)
+            IOutputReport reporter, string accessName)
         {
-            AccessAllProjectItems(projectItems, new IProjectItemAccessor[] { accessor }, reporter);
+            AccessAllProjectItems(projectItems, new IProjectItemAccessor[] { accessor }, reporter, accessName);
         }
 
         #endregion

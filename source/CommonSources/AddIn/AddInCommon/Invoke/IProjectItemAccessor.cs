@@ -26,11 +26,6 @@ namespace AddInCommon.Invoke
     public interface IProjectItemAccessor
     {
         /// <summary>
-        /// 処理名
-        /// </summary>
-        string Name { get; }
-
-        /// <summary>
         /// ファイル要素を操作
         /// </summary>
         /// <param name="projectItem"></param>
