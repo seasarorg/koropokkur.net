@@ -18,6 +18,7 @@
 
 using System;
 using System.IO;
+using AddInCommon.Wrapper;
 using EnvDTE;
 using EnvDTE80;
 using VSArrange.Config;
@@ -43,15 +44,16 @@ namespace VSArrangeConsole
         /// <param name="args">[0](必須)=処理対象ファイルパス, [1](任意)=設定ファイルパス, [2](任意)処理対象プロジェクト名</param>
         static void Main(string[] args)
         {
-            Log4NetUtils.InfoIfEnable(string.Format("開始：ARGS=[{0}]", string.Join(",", args)));
+            var startTime = DateTime.Now;
+            Log4NetUtils.InfoIfEnable(VSArrangeConsoleMessage.GetStartMessage(args));
             if (args.Length == 0)
             {
                 Log4NetUtils.WarnIfEnable(VSArrangeConsoleMessage.GetNoArgumentMessage());
                 return;
             }
 
-            string targetPath = args[0];
-            string configPath = DEFAULT_CONFIG_PATH;
+            var targetPath = args[0];
+            var configPath = DEFAULT_CONFIG_PATH;
             if (args.Length > 1)
             {
                 configPath = args[1];
@@ -63,13 +65,15 @@ namespace VSArrangeConsole
                 targetProjectNames = args[2].Split(',');
             }
 
-            Solution solution = null;
+            var solution = new SolutionEx();
             try
             {
                 InvalidPath(targetPath);
                 var version = GetVersion(targetPath);
 
-                solution = LoadSolution(targetPath, version);
+                var solutionOrg = LoadSolution(targetPath, version);
+                solution.SetSolution(solutionOrg);
+
                 Log4NetUtils.DebugIfEnable(string.Format("configPath:[{0}]", configPath));
                 if (!File.Exists(configPath))
                 {
@@ -79,16 +83,18 @@ namespace VSArrangeConsole
                 var configInfo = ConfigFileManager.ReadConfig(configPath);
                 var reporter = CreateReporter();
                 var arranger = ArrangeUtils.CreateArranger(configInfo, reporter);
+                var projectEx = new ProjectEx();
 
                 Log4NetUtils.InfoIfEnable(string.Format("対象プロジェクト数：{0}", solution.Projects.Count));
                 foreach (Project project in solution.Projects)
                 {
-                    if (IsTargetProject(project, targetProjectNames))
+                    projectEx.SetProject(project);
+                    if (IsTargetProject(projectEx, targetProjectNames))
                     {
-                        var projectName = project.Name;
-                        Log4NetUtils.InfoIfEnable(string.Format("処理実行中。。。[{0}]", projectName));
-                        arranger.ArrangeProject(project);
-                        project.Save();
+                        var projectName = projectEx.Name;
+                        Log4NetUtils.InfoIfEnable(string.Format("処理開始[{0}]", projectName));
+                        arranger.ArrangeProject(projectEx);
+                        projectEx.Save();
                         Log4NetUtils.InfoIfEnable(string.Format("処理完了[{0}]", projectName));
                     }
                 }
@@ -102,7 +108,8 @@ namespace VSArrangeConsole
                 CloseSolution(solution);
             }
 
-            Log4NetUtils.InfoIfEnable("終了");
+            var endTime = DateTime.Now;
+            Log4NetUtils.InfoIfEnable(VSArrangeConsoleMessage.GetEndMessage(startTime, endTime));
         }
 
         /// <summary>
@@ -164,9 +171,16 @@ namespace VSArrangeConsole
         /// <param name="solution"></param>
         private static void CloseSolution(Solution solution)
         {
-            if (solution != null && solution.IsOpen)
+            try
             {
-                solution.Close();
+                if (solution != null && solution.IsOpen)
+                {
+                    solution.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                Log4NetUtils.ErrorIfEnable(ex.ToString());
             }
         }
 

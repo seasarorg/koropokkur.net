@@ -70,6 +70,16 @@ namespace VSArrange.Report.Impl
             _applicationObject.StatusBar.Progress(true, message, current, total);
         }
 
+        public void ReportSubProgress(string message, int current, int total)
+        {
+            ReportProgress(message, current, total);
+        }
+
+        public void Report(string message)
+        {
+            _applicationObject.StatusBar.Text = message;
+        }
+
         public void ReportResult(string message)
         {
             if (_configInfo.OutputResultWindow.IsEnable)

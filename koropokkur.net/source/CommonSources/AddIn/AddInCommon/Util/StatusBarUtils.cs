@@ -32,6 +32,7 @@ namespace AddInCommon.Util
         public static void Clear(DTE2 applicationObject)
         {
             applicationObject.StatusBar.Progress(false, "", 0, 0);
+            applicationObject.StatusBar.Text = string.Empty;
             applicationObject.StatusBar.Clear();
         }
     }

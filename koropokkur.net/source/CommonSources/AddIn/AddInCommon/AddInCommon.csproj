@@ -79,6 +79,7 @@
     <Compile Include="Message\KMessage.cs" />
     <Compile Include="Util\BindingFalgsUtils.cs" />
     <Compile Include="Util\AssemblyUtils.cs" />
+    <Compile Include="Util\COMExceptionInvokeUtils.cs" />
     <Compile Include="Util\VSCommandUtils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util\MessageUtils.cs" />
@@ -87,6 +88,12 @@
     <Compile Include="Util\ProjectItemUtils.cs" />
     <Compile Include="Util\ResourceUtils.cs" />
     <Compile Include="Util\StatusBarUtils.cs" />
+    <Compile Include="Wrapper\ProjectEx.cs" />
+    <Compile Include="Wrapper\ProjectItemEx.cs" />
+    <Compile Include="Wrapper\ProjectItemsEx.cs" />
+    <Compile Include="Wrapper\PropertiesEx.cs" />
+    <Compile Include="Wrapper\PropertyEx.cs" />
+    <Compile Include="Wrapper\SolutionEx.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="CommandBar.resx">

@@ -33,6 +33,20 @@ namespace VSArrange.Report
         void ReportProgress(string message, int current, int total);
 
         /// <summary>
+        /// サブ処理の進捗状況を通知
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="current">現在値</param>
+        /// <param name="total">最大値</param>
+        void ReportSubProgress(string message, int current, int total);
+
+        /// <summary>
+        /// その他メッセージを通知
+        /// </summary>
+        /// <param name="message"></param>
+        void Report(string message);
+
+        /// <summary>
         /// 処理結果を通知
         /// </summary>
         /// <param name="message"></param>

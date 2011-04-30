@@ -17,6 +17,7 @@
 #endregion
 
 
+using System;
 using AddInCommon.Message;
 using VSArrange.Const;
 
@@ -36,5 +37,44 @@ namespace VSArrange.Message
         {
             return KMessage.GetNotSupportExtension(VSArrangeConst.ADDIN_NAME, fileName, VSArrangeConst.SUPPORTED_EXT_CSPROJ);
         }
+
+        /// <summary>
+        /// 処理結果出力失敗メッセージの取得
+        /// </summary>
+        /// <param name="projectName"></param>
+        /// <returns></returns>
+        public static string GetOutputResultFailure(string projectName)
+        {
+            return string.Format("[{0}]処理結果の出力に失敗しました。", projectName);
+        }
+
+        /// <summary>
+        /// 整理中通知メッセージの取得
+        /// </summary>
+        /// <returns></returns>
+        public static string GetArrangeNow()
+        {
+            return "プロジェクト要素の整理中";
+        }
+
+        /// <summary>
+        /// 属性設定中通知メッセージの取得
+        /// </summary>
+        /// <returns></returns>
+        public static string GetSetAttributeNow()
+        {
+            return "プロジェクト要素の属性を設定中";
+        }
+
+        /// <summary>
+        /// 処理開始メッセージの取得
+        /// </summary>
+        /// <param name="dirPath">処理対象ディレクトリパス</param>
+        /// <returns></returns>
+        public static string GetStartExecute(string dirPath)
+        {
+            return string.Format("{0}の整理を開始", dirPath);
+        }
+
     }
 }

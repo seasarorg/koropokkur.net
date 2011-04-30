@@ -50,6 +50,5 @@ namespace VSArrange.Const
         /// サポートしているファイルの拡張子
         /// </summary>
         public const string SUPPORTED_EXT = SUPPORTED_EXT_SLN + "," + SUPPORTED_EXT_PROJ;
-        
     }
 }

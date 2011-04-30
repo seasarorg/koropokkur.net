@@ -34,6 +34,14 @@ namespace VSArrange.Report.Appender
         private readonly IDictionary<string, ProjectItem> _folderItems;
         private readonly OutputResultManager _outputResultManager;
 
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
+        /// <param name="dirPath"></param>
+        /// <param name="filter"></param>
+        /// <param name="projectItems"></param>
+        /// <param name="folderItems">追加済みフォルダ</param>
+        /// <param name="outputResultManager"></param>
         public DirectoryAppender(
             string dirPath, ItemAttachmentFilter filter,
             ProjectItems projectItems, IDictionary<string, ProjectItem> folderItems,
@@ -54,7 +62,7 @@ namespace VSArrange.Report.Appender
             string[] subDirPaths = Directory.GetDirectories(_dirPath);
             foreach (string subDirPath in subDirPaths)
             {
-                string[] dirPathParts = subDirPath.Split('\\');
+                string[] dirPathParts = subDirPath.Split(Path.DirectorySeparatorChar);
                 string dirName = dirPathParts[dirPathParts.Length - 1];
                 if (_filter.IsPassFilter(dirName) &&
                     !_folderItems.ContainsKey(subDirPath))
