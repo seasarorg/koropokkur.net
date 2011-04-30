@@ -19,7 +19,6 @@
 using AddInCommon.Const;
 using AddInCommon.Invoke;
 using AddInCommon.Util;
-using VSArrange.Arrange;
 using VSArrange.Config;
 using VSArrange.Filter;
 
@@ -32,7 +31,6 @@ namespace VSArrange.Arrange
     {
         private readonly OutputResultManager _outputResultManager;
         private readonly CopyToOutputDirectoryFilter _filter;
-        private readonly string _name;
 
         /// <summary>
         /// コンストラクタ
@@ -46,11 +44,6 @@ namespace VSArrange.Arrange
         }
 
         #region IProjectItemAccessor メンバ
-
-        public string Name
-        {
-            get { return "「出力先にコピー」属性設定"; }
-        }
 
         public void AccessFile(EnvDTE.ProjectItem projectItem)
         {
