@@ -16,7 +16,7 @@
  */
 #endregion
 
-using VSArrange.Report;
+using AddInCommon.Report;
 using VSArrangeConsole.Message;
 
 namespace VSArrangeConsole.Report.Impl

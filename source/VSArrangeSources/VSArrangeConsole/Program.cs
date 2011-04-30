@@ -18,13 +18,14 @@
 
 using System;
 using System.IO;
+using AddInCommon.Report;
 using AddInCommon.Wrapper;
 using EnvDTE;
 using EnvDTE80;
+using VSArrange.Arrange;
 using VSArrange.Config;
 using VSArrange.Const;
 using VSArrange.Message;
-using VSArrange.Report;
 using VSArrange.Util;
 using VSArrangeConsole.Message;
 using VSArrangeConsole.Report.Impl;

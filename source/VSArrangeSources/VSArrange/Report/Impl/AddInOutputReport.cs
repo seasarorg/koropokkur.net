@@ -17,6 +17,7 @@
 #endregion
 
 using System.IO;
+using AddInCommon.Report;
 using AddInCommon.Util;
 using EnvDTE80;
 using VSArrange.Config;

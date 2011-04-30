@@ -18,10 +18,13 @@
 
 using System.Collections.Generic;
 using System.IO;
+using AddInCommon.Report;
 using AddInCommon.Wrapper;
 using EnvDTE;
+using VSArrange.Arrange;
+using VSArrange.Message;
 
-namespace VSArrange.Report.Appender
+namespace VSArrange.Arrange.Appender
 {
     /// <summary>
     /// プロジェクト要素削除クラス
@@ -33,20 +36,35 @@ namespace VSArrange.Report.Appender
         private readonly PropertiesEx _properties;
         private readonly ProjectItemEx _projectItem;
         private readonly PropertyEx _property;
+        private readonly IOutputReport _reporter;
 
-        public ProjectItemRemover(IList<ProjectItem> deleteTarget, OutputResultManager outputResultManager)
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
+        /// <param name="deleteTarget"></param>
+        /// <param name="outputResultManager"></param>
+        /// <param name="reporter"></param>
+        public ProjectItemRemover(IList<ProjectItem> deleteTarget,
+            OutputResultManager outputResultManager,
+            IOutputReport reporter)
         {
             _deleteTarget = deleteTarget;
             _outputResultManager = outputResultManager;
             _properties = new PropertiesEx();
             _projectItem = new ProjectItemEx();
             _property = new PropertyEx();
+            _reporter = reporter;
         }
 
         public void Execute()
         {
-            foreach(ProjectItem projectItem in _deleteTarget)
+            var totalCount = _deleteTarget.Count;
+            int currentCount = 1;
+
+            foreach(var projectItem in _deleteTarget)
             {
+                _reporter.ReportSubProgress(VSArrangeMessage.GetRemoveNow(), currentCount, totalCount);
+
                 _projectItem.SetProjectItem(projectItem);
                 _properties.SetProperties(_projectItem.Properties);
                 _property.SetProperty(_properties.Item("FullPath"));
@@ -61,7 +79,8 @@ namespace VSArrange.Report.Appender
                     _outputResultManager.RegisterRemovedDirectory(path);
                 }
 
-                projectItem.Remove();
+                _projectItem.Remove();
+                currentCount++;
             }
         }
     }

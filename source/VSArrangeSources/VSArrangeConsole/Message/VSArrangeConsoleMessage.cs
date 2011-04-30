@@ -65,7 +65,8 @@ namespace VSArrangeConsole.Message
         /// <returns></returns>
         public static string GetEndMessage(DateTime startTime, DateTime endTime)
         {
-            return string.Format("{0}：終了 （所要時間：{1})", VSArrangeConst.ADDIN_NAME, endTime - startTime);
+            return string.Format("{0}：終了 （所要時間：{1})", VSArrangeConst.ADDIN_NAME, 
+                (endTime - startTime).ToString().Substring(0, 11));
         }
     }
 }

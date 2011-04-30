@@ -39,6 +39,33 @@ namespace VSArrange.Message
         }
 
         /// <summary>
+        /// フォルダ追加中メッセージの取得
+        /// </summary>
+        /// <returns></returns>
+        public static string GetAddFolderNow()
+        {
+            return "プロジェクト要素追加中(フォルダ)";
+        }
+
+        /// <summary>
+        /// ファイル追加中メッセージの取得
+        /// </summary>
+        /// <returns></returns>
+        public static string GetAddFileNow()
+        {
+            return "プロジェクト要素追加中(ファイル)";
+        }
+
+        /// <summary>
+        /// 削除中メッセージの取得
+        /// </summary>
+        /// <returns></returns>
+        public static string GetRemoveNow()
+        {
+            return "不要なプロジェクト要素を削除中";
+        }
+
+        /// <summary>
         /// 処理結果出力失敗メッセージの取得
         /// </summary>
         /// <param name="projectName"></param>

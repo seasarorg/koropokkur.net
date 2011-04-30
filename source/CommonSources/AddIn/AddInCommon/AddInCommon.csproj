@@ -77,6 +77,7 @@
     <Compile Include="Exception\NotSupportedFileException.cs" />
     <Compile Include="Invoke\IProjectItemAccessor.cs" />
     <Compile Include="Message\KMessage.cs" />
+    <Compile Include="Report\IOutputReport.cs" />
     <Compile Include="Util\BindingFalgsUtils.cs" />
     <Compile Include="Util\AssemblyUtils.cs" />
     <Compile Include="Util\COMExceptionInvokeUtils.cs" />

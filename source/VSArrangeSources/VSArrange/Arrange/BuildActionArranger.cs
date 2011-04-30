@@ -20,11 +20,12 @@ using System.Collections.Generic;
 using AddInCommon.Const;
 using AddInCommon.Invoke;
 using AddInCommon.Util;
+using VSArrange.Arrange;
 using VSArrange.Config;
 using VSArrange.Filter;
 using VSLangProj;
 
-namespace VSArrange.Report
+namespace VSArrange.Arrange
 {
     /// <summary>
     /// 「ビルドアクション」設定クラス
@@ -59,6 +60,11 @@ namespace VSArrange.Report
         }
 
         #region IProjectItemAccessor メンバ
+
+        public string Name
+        {
+            get { return "「ビルドアクション」属性設定"; }
+        }
 
         public void AccessFile(EnvDTE.ProjectItem projectItem)
         {

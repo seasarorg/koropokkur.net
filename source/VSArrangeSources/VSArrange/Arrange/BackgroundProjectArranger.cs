@@ -17,10 +17,12 @@
 #endregion
 
 using System.ComponentModel;
+using AddInCommon.Report;
 using EnvDTE;
+using VSArrange.Arrange;
 using VSArrange.Config;
 
-namespace VSArrange.Report
+namespace VSArrange.Arrange
 {
     public delegate void DelegateCompleted(Project completedProject);
 

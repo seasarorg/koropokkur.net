@@ -23,7 +23,7 @@ using AddInCommon.Util;
 using VSArrange.Config;
 using VSLangProj;
 
-namespace VSArrange.Report
+namespace VSArrange.Arrange
 {
     /// <summary>
     /// 処理結果出力管理クラス

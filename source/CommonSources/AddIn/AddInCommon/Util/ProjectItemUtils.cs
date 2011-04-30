@@ -20,6 +20,7 @@ using System;
 using System.IO;
 using AddInCommon.Const;
 using AddInCommon.Invoke;
+using AddInCommon.Report;
 using AddInCommon.Wrapper;
 using EnvDTE;
 using VSLangProj;
@@ -39,19 +40,27 @@ namespace AddInCommon.Util
         /// </summary>
         /// <param name="projectItems"></param>
         /// <param name="accessors"></param>
-        public static void AccessAllProjectItems(ProjectItems projectItems, IProjectItemAccessor[] accessors)
+        /// <param name="reporter"></param>
+        public static void AccessAllProjectItems(ProjectItems projectItems, IProjectItemAccessor[] accessors,
+            IOutputReport reporter)
         {
             if (projectItems == null) throw new ArgumentNullException("projectItems");
             if (accessors == null) throw new ArgumentNullException("accessors");
 
+            var totalCount = projectItems.Count;
+            var currentCount = 1;
+
             foreach (ProjectItem projectItemOrg in projectItems)
             {
                 var projectItem = new ProjectItemEx();
+                projectItem.SetProjectItem(projectItemOrg);
+
                 var path = GetFullPath(projectItem);
                 if(Directory.Exists(path))
                 {
                     foreach (IProjectItemAccessor accessor in accessors)
                     {
+                        reporter.ReportSubProgress(accessor.Name, currentCount, totalCount);
                         accessor.AccessFolder(projectItem);   
                     }
                 }
@@ -59,16 +68,20 @@ namespace AddInCommon.Util
                 {
                     foreach (IProjectItemAccessor accessor in accessors)
                     {
+                        reporter.ReportSubProgress(accessor.Name, currentCount, totalCount);
                         accessor.AccessFile(projectItem);   
                     }
                 }
 
-
-                ProjectItems childItems = projectItem.ProjectItems;
+                var childItemsOrg = projectItem.ProjectItems;
+                var childItems = new ProjectItemsEx();
+                childItems.SetProjectItems(childItemsOrg);
                 if (childItems != null && childItems.Count > 0)
                 {
-                    AccessAllProjectItems(childItems, accessors);
+                    AccessAllProjectItems(childItems, accessors, reporter);
                 }
+
+                currentCount++;
             }
         }
 
@@ -77,9 +90,11 @@ namespace AddInCommon.Util
         /// </summary>
         /// <param name="projectItems"></param>
         /// <param name="accessor"></param>
-        public static void AccessAllProjectItems(ProjectItems projectItems, IProjectItemAccessor accessor)
+        /// <param name="reporter"></param>
+        public static void AccessAllProjectItems(ProjectItems projectItems, IProjectItemAccessor accessor,
+            IOutputReport reporter)
         {
-            AccessAllProjectItems(projectItems, new IProjectItemAccessor[] { accessor });
+            AccessAllProjectItems(projectItems, new IProjectItemAccessor[] { accessor }, reporter);
         }
 
         #endregion

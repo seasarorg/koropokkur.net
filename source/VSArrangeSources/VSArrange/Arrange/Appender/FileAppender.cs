@@ -18,10 +18,14 @@
 
 using System.Collections.Generic;
 using System.IO;
+using AddInCommon.Report;
+using AddInCommon.Wrapper;
 using EnvDTE;
+using VSArrange.Arrange;
 using VSArrange.Filter;
+using VSArrange.Message;
 
-namespace VSArrange.Report.Appender
+namespace VSArrange.Arrange.Appender
 {
     /// <summary>
     /// ファイル追加クラス
@@ -33,17 +37,20 @@ namespace VSArrange.Report.Appender
         private ProjectItems _projectItems;
         private readonly IDictionary<string, ProjectItem> _fileItems;
         private readonly OutputResultManager _outputResultManager;
+        private readonly IOutputReport _reporter;
 
         public FileAppender(
             string dirPath, ItemAttachmentFilter filter,
             ProjectItems projectItems, IDictionary<string, ProjectItem> fileItems,
-            OutputResultManager outputResultManager)
+            OutputResultManager outputResultManager,
+            IOutputReport reporter)
         {
             _dirPath = dirPath;
             _filter = filter;
             _projectItems = projectItems;
             _fileItems = fileItems;
             _outputResultManager = outputResultManager;
+            _reporter = reporter;
         }
 
         /// <summary>
@@ -51,22 +58,29 @@ namespace VSArrange.Report.Appender
         /// </summary>
         public void Execute()
         {
-            string[] subFilePaths = Directory.GetFiles(_dirPath);
-            foreach (string subFilePath in subFilePaths)
+            var subFilePaths = Directory.GetFiles(_dirPath);
+            var totalCount = subFilePaths.Length;
+            int currentCount = 1;
+
+            foreach (var subFilePath in subFilePaths)
             {
+                _reporter.ReportSubProgress(VSArrangeMessage.GetAddFileNow(), currentCount, totalCount);
+
                 string[] filePathParts = subFilePath.Split('\\');
                 string fileName = filePathParts[filePathParts.Length - 1];
                 if (_filter.IsPassFilter(fileName) &&
                     !_fileItems.ContainsKey(subFilePath))
                 {
                     //  まだ追加していないもののみ追加
-                    var newProjectItem = _projectItems.AddFromFile(subFilePath);
+                    var newItemOrg = _projectItems.AddFromFile(subFilePath);
+                    var newItem = new ProjectItemEx();
+                    newItem.SetProjectItem(newItemOrg);
+                    _fileItems.Add(subFilePath, newItem);
 
                     _outputResultManager.RegisterAddedFile(subFilePath);
-                    newProjectItem = null;
                 }
+                currentCount++;
             }
-            _projectItems = null;
         }
     }
 }
