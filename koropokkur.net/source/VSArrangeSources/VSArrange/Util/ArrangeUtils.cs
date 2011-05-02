@@ -23,7 +23,6 @@ using EnvDTE80;
 using VSArrange.Arrange;
 using VSArrange.Config;
 using VSArrange.Const;
-using VSArrange.Report;
 using VSArrange.Report.Impl;
 
 namespace VSArrange.Util
@@ -40,8 +39,8 @@ namespace VSArrange.Util
         /// <returns></returns>
         public static bool IsSupportLanguage(string name)
         {
-            if (VSArrangeConst.SUPPORTED_EXT_CSPROJ.EndsWith(name) ||
-                VSArrangeConst.SUPPORTED_EXT_VBPROJ.EndsWith(name))
+            if (name.EndsWith(VSArrangeConst.SUPPORTED_EXT_CSPROJ) ||
+                name.EndsWith(VSArrangeConst.SUPPORTED_EXT_VBPROJ))
             {
                 return true;
             }
