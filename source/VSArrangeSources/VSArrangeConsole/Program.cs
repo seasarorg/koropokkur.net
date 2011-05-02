@@ -40,6 +40,11 @@ namespace VSArrangeConsole
         private const string DEFAULT_CONFIG_PATH = @"./VSArrange.config";
 
         /// <summary>
+        /// 全プロジェクト指定
+        /// </summary>
+        private const string DEFAULT_ALL_PROJ = "ALL";
+
+        /// <summary>
         /// プログラムの起点
         /// </summary>
         /// <param name="args">[0](必須)=処理対象ファイルパス, [1](任意)処理対象プロジェクト名, [2](任意)=設定ファイルパス</param>
@@ -56,7 +61,7 @@ namespace VSArrangeConsole
             var targetPath = args[0];
 
             string[] targetProjectNames = null;
-            if (args.Length > 1)
+            if (args.Length > 1 && args[1] != DEFAULT_ALL_PROJ)
             {
                 targetProjectNames = args[1].Split(',');
             }
@@ -91,7 +96,7 @@ namespace VSArrangeConsole
                 var arranger = ArrangeUtils.CreateArranger(configInfo, reporter);
                 var project = new ProjectEx();
 
-                Log4NetUtils.InfoIfEnable(string.Format("対象プロジェクト数：{0}", solution.Projects.Count));
+                Log4NetUtils.InfoIfEnable(string.Format("プロジェクト数：{0}", solution.Projects.Count));
                 foreach (Project projectOrg in solution.Projects)
                 {
                     project.SetProject(projectOrg);

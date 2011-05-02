@@ -52,7 +52,7 @@ namespace VSArrangeConsole.Message
         /// <returns></returns>
         public static string GetTargetAllProject()
         {
-            return string.Format("ソリューション内の全てのプロジェクトに対して処理を行います。");
+            return string.Format("全てのプロジェクトに対して処理を行います。");
         }
 
         /// <summary>
