@@ -254,7 +254,12 @@ namespace AddInCommon.Util
         {
             if (projectItem == null) throw new ArgumentNullException("projectItem");
             if (propertyName == null) throw new ArgumentNullException("propertyName");
-            return projectItem.Properties.Item(propertyName).Value;
+
+            var properties = new PropertiesEx();
+            properties.SetProperties(projectItem.Properties);
+            var property = new PropertyEx();
+            property.SetProperty(properties.Item(propertyName));
+            return property.Value;
         }
 
         /// <summary>
@@ -267,7 +272,12 @@ namespace AddInCommon.Util
         {
             if (projectItem == null) throw new ArgumentNullException("projectItem");
             if (propertyName == null) throw new ArgumentNullException("propertyName");
-            projectItem.Properties.Item(propertyName).Value = value;
+
+            var properties = new PropertiesEx();
+            properties.SetProperties(projectItem.Properties);
+            var property = new PropertyEx();
+            property.SetProperty(properties.Item(propertyName));
+            property.Value = value;
         }
 
         #endregion
