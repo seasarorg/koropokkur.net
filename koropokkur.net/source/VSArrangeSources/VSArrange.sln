@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VSArrangeConfig", "VSArrang
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VSArrangeConsole", "VSArrangeConsole\VSArrangeConsole.csproj", "{C188AF49-86B2-41AF-AC0A-B0F5B96967F9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Z_DummyProject4VSArrangeTest", "DummyProject4VSArrangeTest\Z_DummyProject4VSArrangeTest.csproj", "{4BF5065B-6835-4430-99EE-992DD1C0ADDD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -71,6 +73,16 @@ Global
 		{C188AF49-86B2-41AF-AC0A-B0F5B96967F9}.Release|Mixed Platforms.Build.0 = Release|x86
 		{C188AF49-86B2-41AF-AC0A-B0F5B96967F9}.Release|x86.ActiveCfg = Release|x86
 		{C188AF49-86B2-41AF-AC0A-B0F5B96967F9}.Release|x86.Build.0 = Release|x86
+		{4BF5065B-6835-4430-99EE-992DD1C0ADDD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4BF5065B-6835-4430-99EE-992DD1C0ADDD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4BF5065B-6835-4430-99EE-992DD1C0ADDD}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{4BF5065B-6835-4430-99EE-992DD1C0ADDD}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{4BF5065B-6835-4430-99EE-992DD1C0ADDD}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4BF5065B-6835-4430-99EE-992DD1C0ADDD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4BF5065B-6835-4430-99EE-992DD1C0ADDD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4BF5065B-6835-4430-99EE-992DD1C0ADDD}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{4BF5065B-6835-4430-99EE-992DD1C0ADDD}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{4BF5065B-6835-4430-99EE-992DD1C0ADDD}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
