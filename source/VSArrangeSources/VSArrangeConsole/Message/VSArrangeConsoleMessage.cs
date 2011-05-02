@@ -32,7 +32,7 @@ namespace VSArrangeConsole.Message
         /// <returns></returns>
         public static string GetNoArgumentMessage()
         {
-            return "引数が指定されていません。USAGE:[0](必須)=処理対象ファイルパス, [1](任意)=設定ファイルパス, [2](任意)処理対象プロジェクト名";
+            return "引数が指定されていません。USAGE:[0](必須)=処理対象ファイルパス, [1](任意)処理対象プロジェクト名, [2](任意)=設定ファイルパス";
         }
 
         /// <summary>
@@ -44,6 +44,25 @@ namespace VSArrangeConsole.Message
         {
             return string.Format("[{0}]下にプロジェクトファイルのパスが見つかりません。",
                 basePath);
+        }
+
+        /// <summary>
+        /// ソリューション内全プロジェクト対象メッセージ
+        /// </summary>
+        /// <returns></returns>
+        public static string GetTargetAllProject()
+        {
+            return string.Format("ソリューション内の全てのプロジェクトに対して処理を行います。");
+        }
+
+        /// <summary>
+        /// プロジェクト対象外メッセージ
+        /// </summary>
+        /// <param name="projectName"></param>
+        /// <returns></returns>
+        public static string GetOutOfTarget(string projectName)
+        {
+            return string.Format("[{0}]は処理対象外です。", projectName);
         }
 
         /// <summary>
