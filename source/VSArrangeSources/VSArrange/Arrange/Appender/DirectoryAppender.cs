@@ -21,7 +21,6 @@ using System.IO;
 using AddInCommon.Report;
 using AddInCommon.Wrapper;
 using EnvDTE;
-using VSArrange.Arrange;
 using VSArrange.Filter;
 using VSArrange.Message;
 
@@ -67,8 +66,8 @@ namespace VSArrange.Arrange.Appender
         /// </summary>
         public void Execute()
         {
-            var subDirPaths = Directory.GetDirectories(_dirPath);
-            var totalCount = subDirPaths.Length;
+            string[] subDirPaths = Directory.GetDirectories(_dirPath);
+            int totalCount = subDirPaths.Length;
             int currentCount = 1;
 
             foreach (string subDirPath in subDirPaths)
