@@ -85,7 +85,7 @@ namespace VSArrange.Arrange
             
             //  C#.NET,VB.NET以外はプロジェクトの構造が違うため
             //  現バージョンでは処理の対象外
-            if(ArrangeUtils.IsSupportLanguage(projectName))
+            if(!ArrangeUtils.IsSupportLanguage(projectName))
             {
                 _reporter.ReportError(VSArrangeMessage.GetNotSupported(projectName));
                 return;
