@@ -255,6 +255,7 @@ namespace VSArrangeConsole
             }
             else
             {
+                // プロジェクトファイルが指定された時はダミーのソリューションを作成する
                 vs.Solution.Create(Path.GetDirectoryName(targetPath), Path.GetFileNameWithoutExtension(targetPath));
                 vs.Solution.AddFromFile(targetPath);
             }
