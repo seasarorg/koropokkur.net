@@ -55,6 +55,8 @@
 	<li><a href="#Register">アドイン登録方法</a></li>
 	<li><a href="#Usage">使い方</a></li>
 	<li><a href="#Config">設定方法</a></li>
+	<li><a href="#Console">コンソールからの実行</a></li>
+	<li><a href="#ConfigWindow">設定ファイル編集エディタ</a></li>
 </ul> 
 
 </div><!-- contents_left -->
@@ -77,8 +79,9 @@ VisualStudioプロジェクトフォルダ下にある要素を整理します�
 	<li>プロジェクト未登録のファイル、フォルダをプロジェクトに追加</li>
 	<li>（ただし、追加したくないものは除外）</li>
 	<li>プロジェクトに登録されているが、削除されるなどして存在していないファイル、フォルダを<br>プロジェクトからアンロード</li>
-	<li><b>「ビルドアクション」「出力ディレクトリにコピー」の設定（ver 0.2.3～)</b></li>
-	<li><b>処理内容をウインドウ、ファイルに出力（ver 0.2.3～)</b></li>
+	<li>「ビルドアクション」「出力ディレクトリにコピー」の設定（ver 0.2.3～)</li>
+	<li>処理内容をウインドウ、ファイルに出力（ver 0.2.3～)</li>
+	<li><b>上記処理をコンソール上から実行（ver 0.2.5～)</b></li>
 </ul>
 </p>
 
@@ -87,9 +90,9 @@ VisualStudioプロジェクトフォルダ下にある要素を整理します�
 <!--                                                                       ========= -->
 <h3><a name="News">お知らせ</a></h3>
 <ul>
-	<li>2011/03/21 Koropokkur.NET 0.2.4をリリースしました。<a href="index.html#Download">ダウンロード</a></li>
+	<li>2011/05/02 Koropokkur.NET 0.2.5をリリースしました。<a href="index.html#Download">ダウンロード</a></li>
+	<li>2011/03/21 Koropokkur.NET 0.2.4をリリースしました。</li>
 	<li>2010/04/18 Koropokkur.NET 0.2.3をリリースしました。</li>
-	<li>2009/09/06 Koropokkur.NET 0.2.2をリリースしました（0.1.2とVSArrangeの内容は同じです）。</li>
 	<p>(Koropokkur.NETはこのアドインが含まれるアドイン集です）</p>
 </ul>
 
@@ -111,8 +114,8 @@ VisualStudioプロジェクトフォルダ下にある要素を整理します�
 <img src="images/VSArrange/project_tree_after.JPG"/><br>
 
 <!-- =============================================================================== -->
-<!--                                                                           設定  -->
-<!--                                                                        ======== -->
+<!--                                                 プロジェクト除外条件の設定方法  -->
+<!--                                                ================================ -->
 <h3><a name="Config">プロジェクト除外条件の設定方法</a></h3>(Koropokkur.NET 0.2.3以降)
 <p><b>１．VisualStudioの「ツール」メニューから「Koropokkurの設定」→「VSArrange」を選択します。</b></p>
 <img src="images/VSArrange/koropokkur_config.JPG"/><br><br>
@@ -137,6 +140,75 @@ VisualStudioプロジェクトフォルダ下にある要素を整理します�
 <img src="images/VSArrange/config_save.JPG"/><br><br>
 <p><b>５．「<a href="#Usage">使い方</a>」に記載した手順で「（全）プロジェクト要素の整理」を選ぶと<br>
 設定した除外条件に従ってプロジェクト要素の整理が行われます。</b></p>
+
+<!-- =============================================================================== -->
+<!--                                                           コンソールからの実行  -->
+<!--                                                          ====================== -->
+<h3><a name="Console">コンソールからの実行</a></h3>(Koropokkur.NET 0.2.5以降)
+<p>ダウンロードしたKoropokkur.NET下の「build」フォルダ内にある「<b>VSArrangeConsole.exe</b>」を使用します。<br>
+設定ファイルの設定方法はアドイン上から設定する場合と同様です(「<a href="#ConfigWindow">設定ファイル編集エディタ</a>」参照)。<p>
+<i>引数</i>&nbsp;&nbsp;(VSArrangeConsole.exe (引数1) [引数2] [引数3])
+<ul>
+	<li>1:処理対象のソリューションorプロジェクトのフルパス（<font color="red">必須</font>）</li>
+	<li>2:処理対象のプロジェクト名（無指定の場合は全プロジェクトを対象とする）（任意）<br/>
+		&nbsp;&nbsp;&nbsp;（「,」区切りで複数プロジェクト指定可能）</li>
+	<li>3:設定ファイルのフルパス（無指定の場合はVSArrangeConsole.exeと同じフォルダ内にあるものを使用）（任意）</li>
+</ul>
+<p><b>処理内容の出力設定</b>は「<a href="http://logging.apache.org/log4net/index.html">log4net</a>」を使用します。<br>
+同じく「build」フォルダ下にある「<b>VSArrangeConsole.exe.config</b>」に設定を記述して下さい。<br>
+（詳細な設定方法は<a href="http://logging.apache.org/log4net/release/manual/configuration.html">コチラ</a>等をご覧下さい）
+<pre>
+&lt;?xml version="1.0" encoding="utf-8" ?&gt;
+&lt;configuration&gt;
+  &lt;configSections&gt;
+    &lt;section name="log4net" type=" log4net.Config.Log4NetConfigurationSectionHandler,log4net" /&gt;
+  &lt;/configSections&gt;
+
+  &lt;log4net&gt;
+    &lt;!-- ログ出力先の定義 --&gt;
+    &lt;!-- ファイル出力 --&gt;
+    &lt;appender name="LogFileAppender" type="log4net.Appender.FileAppender" &gt;
+
+      &lt;!-- 作成するログファイル --&gt;
+      &lt;param name="File" value="C:\vsarrange.log" /&gt;
+
+      &lt;!-- true:追加書込, false:上書き --&gt;
+      &lt;param name="AppendToFile" value="true" /&gt;
+
+      &lt;!-- ログの書式 --&gt;
+      &lt;layout type="log4net.Layout.PatternLayout"&gt;
+        &lt;param name="ConversionPattern" value="%d [%t] %-5p %c - %m%n" /&gt;
+      &lt;/layout&gt;
+    &lt;/appender&gt;
+    
+    &lt;!-- コンソール出力 --&gt;
+    &lt;appender name="ConsoleAppender" type="log4net.Appender.ConsoleAppender"&gt;
+      &lt;layout type="log4net.Layout.PatternLayout"&gt;
+        &lt;param name="ConversionPattern" value="%d [%t] %-5p %c - %m%n" /&gt;
+      &lt;/layout&gt;
+    &lt;/appender&gt;
+
+    &lt;root&gt;
+      &lt;!-- ログのレベルを指定 --&gt;
+      &lt;!-- すべてのログレベルを出力 --&gt;
+      &lt;level value="ALL" /&gt;
+
+      &lt;!-- どのログ出力先を使用するか --&gt;
+      &lt;appender-ref ref="LogFileAppender" /&gt;
+      &lt;appender-ref ref="ConsoleAppender" /&gt;
+    &lt;/root&gt;
+  &lt;/log4net&gt;
+&lt;/configuration&gt;
+</pre>
+
+<!-- =============================================================================== -->
+<!--                                                       設定ファイル編集エディタ  -->
+<!--                                                      ========================== -->
+<h3><a name="ConfigWindow">設定ファイル編集エディタ</a></h3>(Koropokkur.NET 0.2.5以降)
+<p>ダウンロードしたKoropokkur.NET下の「build」フォルダ内にある「<b>VSArrangeConfig.exe</b>」を起動すると<br>
+同フォルダにある設定ファイル（VSArrange.config）を読み取り、設定画面が表示されます。<br>
+設定ファイルがない場合は新規作成します。<br>
+使用方法はアドイン上から設定する場合と同様です(「<a href="#Config">設定ファイル編集エディタ</a>」参照)。<p>
 
 </div><!-- section -->
 
