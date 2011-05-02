@@ -67,24 +67,7 @@
       <Name>VSArrange</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="VSArrangePractice\VSArrangePractice\ExistsDir\SubExistDir\Sub2DeletedDir\" />
-    <Folder Include="VSArrangePractice\VSArrangePractice\ExistsDir\SubExistDir\Sub2ExistDir\" />
-    <Folder Include="VSArrangePractice\VSArrangePractice\ExistsDir\SubExistDir\Sub2UnloadedDir\" />
-    <Folder Include="VSArrangePractice\VSArrangePractice\ExistsDir\SubUnloadedDir\Sub2DeletedDir\" />
-    <Folder Include="VSArrangePractice\VSArrangePractice\ExistsDir\SubUnloadedDir\Sub2ExistDir\" />
-    <Folder Include="VSArrangePractice\VSArrangePractice\ExistsDir\SubUnloadedDir\Sub2UnloadedDir\" />
-    <Folder Include="VSArrangePractice\VSArrangePractice\Properties\" />
-    <Folder Include="VSArrangePractice\VSArrangePractice\UnloadedDir\SubDeletedDir\Sub2DeletedDir\" />
-    <Folder Include="VSArrangePractice\VSArrangePractice\UnloadedDir\SubDeletedDir\Sub2ExistDir\" />
-    <Folder Include="VSArrangePractice\VSArrangePractice\UnloadedDir\SubDeletedDir\Sub2UnloadedDir\" />
-    <Folder Include="VSArrangePractice\VSArrangePractice\UnloadedDir\SubExistDir\Sub2DeletedDir\" />
-    <Folder Include="VSArrangePractice\VSArrangePractice\UnloadedDir\SubExistDir\Sub2ExistDir\" />
-    <Folder Include="VSArrangePractice\VSArrangePractice\UnloadedDir\SubExistDir\Sub2UnloadedDir\" />
-    <Folder Include="VSArrangePractice\VSArrangePractice\UnloadedDir\SubUnloadedDir\Sub2DeletedDir\" />
-    <Folder Include="VSArrangePractice\VSArrangePractice\UnloadedDir\SubUnloadedDir\Sub2ExistDir\" />
-    <Folder Include="VSArrangePractice\VSArrangePractice\UnloadedDir\SubUnloadedDir\Sub2UnloadedDir\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

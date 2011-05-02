@@ -42,7 +42,7 @@ namespace VSArrangeConsole
         /// <summary>
         /// プログラムの起点
         /// </summary>
-        /// <param name="args">[0](必須)=処理対象ファイルパス, [1](任意)=設定ファイルパス, [2](任意)処理対象プロジェクト名</param>
+        /// <param name="args">[0](必須)=処理対象ファイルパス, [1](任意)処理対象プロジェクト名, [2](任意)=設定ファイルパス</param>
         static void Main(string[] args)
         {
             var startTime = DateTime.Now;
@@ -54,16 +54,21 @@ namespace VSArrangeConsole
             }
 
             var targetPath = args[0];
-            var configPath = DEFAULT_CONFIG_PATH;
-            if (args.Length > 1)
-            {
-                configPath = args[1];
-            }
 
             string[] targetProjectNames = null;
+            if (args.Length > 1)
+            {
+                targetProjectNames = args[1].Split(',');
+            }
+            else
+            {
+                Log4NetUtils.InfoIfEnable(VSArrangeConsoleMessage.GetTargetAllProject());
+            }
+
+            var configPath = DEFAULT_CONFIG_PATH;
             if (args.Length > 2)
             {
-                targetProjectNames = args[2].Split(',');
+                configPath = args[2];
             }
 
             var solution = new SolutionEx();
@@ -84,18 +89,18 @@ namespace VSArrangeConsole
                 var configInfo = ConfigFileManager.ReadConfig(configPath);
                 var reporter = CreateReporter();
                 var arranger = ArrangeUtils.CreateArranger(configInfo, reporter);
-                var projectEx = new ProjectEx();
+                var project = new ProjectEx();
 
                 Log4NetUtils.InfoIfEnable(string.Format("対象プロジェクト数：{0}", solution.Projects.Count));
-                foreach (Project project in solution.Projects)
+                foreach (Project projectOrg in solution.Projects)
                 {
-                    projectEx.SetProject(project);
-                    if (IsTargetProject(projectEx, targetProjectNames))
+                    project.SetProject(projectOrg);
+                    if (IsTargetProject(project, targetProjectNames))
                     {
-                        var projectName = projectEx.Name;
+                        var projectName = project.Name;
                         Log4NetUtils.InfoIfEnable(string.Format("処理開始[{0}]", projectName));
-                        arranger.ArrangeProject(projectEx);
-                        projectEx.Save();
+                        arranger.ArrangeProject(project);
+                        project.Save();
                         Log4NetUtils.InfoIfEnable(string.Format("処理完了[{0}]", projectName));
                     }
                 }
@@ -206,6 +211,7 @@ namespace VSArrangeConsole
                     return true;
                 }
             }
+            Log4NetUtils.InfoIfEnable(VSArrangeConsoleMessage.GetOutOfTarget(project.Name));
             return false;
         }
 
