@@ -47,6 +47,7 @@
   <ItemGroup>
     <Content Include="Attribute\ContentsToResource.sql" />
     <Content Include="Remove\remove.dll" />
+    <Content Include="テスト手順.txt" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Attribute\Resouece.csx" />
