@@ -252,13 +252,7 @@ namespace AddInCommon.Util
         /// <returns></returns>
         private static object GetValue(ProjectItem projectItem, string propertyName)
         {
-            if (projectItem == null) throw new ArgumentNullException("projectItem");
-            if (propertyName == null) throw new ArgumentNullException("propertyName");
-
-            var properties = new PropertiesEx();
-            properties.SetProperties(projectItem.Properties);
-            var property = new PropertyEx();
-            property.SetProperty(properties.Item(propertyName));
+            var property = GetProperty(projectItem, propertyName);
             return property.Value;
         }
 
@@ -270,6 +264,18 @@ namespace AddInCommon.Util
         /// <param name="value"></param>
         private static void SetValue(ProjectItem projectItem, string propertyName, object value)
         {
+            var property = GetProperty(projectItem, propertyName);
+            property.Value = value;
+        }
+
+        /// <summary>
+        /// プロパティオブジェクトの取得
+        /// </summary>
+        /// <param name="projectItem"></param>
+        /// <param name="propertyName"></param>
+        /// <returns></returns>
+        private static Property GetProperty(ProjectItem projectItem, string propertyName)
+        {
             if (projectItem == null) throw new ArgumentNullException("projectItem");
             if (propertyName == null) throw new ArgumentNullException("propertyName");
 
@@ -277,7 +283,7 @@ namespace AddInCommon.Util
             properties.SetProperties(projectItem.Properties);
             var property = new PropertyEx();
             property.SetProperty(properties.Item(propertyName));
-            property.Value = value;
+            return property;
         }
 
         #endregion
