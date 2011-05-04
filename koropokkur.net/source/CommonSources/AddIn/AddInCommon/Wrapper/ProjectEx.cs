@@ -139,7 +139,7 @@ namespace AddInCommon.Wrapper
             get { return InvokeGetValue<Properties>("Properties"); }
         }
 
-        public void Save(string FileName = "")
+        public void Save(string FileName)
         {
             COMExceptionInvokeUtils.InvokeNoRetMethod<Project>(_project, "Save", new object[] { FileName });
         }

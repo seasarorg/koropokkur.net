@@ -123,7 +123,7 @@ namespace AddInCommon.Wrapper
             get { return InvokeGetValue<object>("Object"); }
         }
 
-        public Window Open(string ViewKind = "{00000000-0000-0000-0000-000000000000}")
+        public Window Open(string ViewKind)
         {
             return COMExceptionInvokeUtils.InvokeMethod<ProjectItem, Window>(_projectItem, "Open", new object[] { ViewKind });
         }
@@ -143,7 +143,7 @@ namespace AddInCommon.Wrapper
             COMExceptionInvokeUtils.InvokeNoRetMethod<ProjectItem>(_projectItem, "Remove", null);
         }
 
-        public void Save(string FileName = "")
+        public void Save(string FileName)
         {
             COMExceptionInvokeUtils.InvokeNoRetMethod<ProjectItem>(_projectItem, "Remove", new object[] { FileName });
         }
@@ -174,7 +174,7 @@ namespace AddInCommon.Wrapper
             return COMExceptionInvokeUtils.InvokeMethod<ProjectItem, string>(_projectItem, "get_FileNames", new object[] { index });
         }
 
-        public bool get_IsOpen(string ViewKind = "{FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF}")
+        public bool get_IsOpen(string ViewKind)
         {
             return COMExceptionInvokeUtils.InvokeMethod<ProjectItem, bool>(_projectItem, "get_IsOpen", new object[] { ViewKind });
         }

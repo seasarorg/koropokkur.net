@@ -111,7 +111,7 @@ namespace AddInCommon.Core
                         {
                             if (control.Caption == KoropokkurConst.CONFIG_MENU_NAME)
                             {
-                                control.Delete();
+                                control.Delete(null);
                                 break;
                             }
                         }

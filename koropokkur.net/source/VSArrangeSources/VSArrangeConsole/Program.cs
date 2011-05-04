@@ -44,6 +44,7 @@ namespace VSArrangeConsole
         /// </summary>
         private const string DEFAULT_ALL_PROJ = "ALL";
 
+        
         /// <summary>
         /// プログラムの起点
         /// </summary>
@@ -52,29 +53,16 @@ namespace VSArrangeConsole
         {
             var startTime = DateTime.Now;
             Log4NetUtils.InfoIfEnable(VSArrangeConsoleMessage.GetStartMessage(args));
+            // 引数チェック
             if (args.Length == 0)
             {
                 Log4NetUtils.WarnIfEnable(VSArrangeConsoleMessage.GetNoArgumentMessage());
                 return;
             }
 
-            var targetPath = args[0];
-
-            string[] targetProjectNames = null;
-            if (args.Length > 1 && args[1] != DEFAULT_ALL_PROJ)
-            {
-                targetProjectNames = args[1].Split(',');
-            }
-            else
-            {
-                Log4NetUtils.InfoIfEnable(VSArrangeConsoleMessage.GetTargetAllProject());
-            }
-
-            var configPath = DEFAULT_CONFIG_PATH;
-            if (args.Length > 2)
-            {
-                configPath = args[2];
-            }
+            var targetPath = GetTargetPath(args);
+            var targetProjectNames = GetTargetProjectNames(args); // 処理対象プロジェクト名指定
+            var configPath = GetConfigPath(args);  // 設定ファイルパス指定
 
             var solution = new SolutionEx();
             try
@@ -82,6 +70,7 @@ namespace VSArrangeConsole
                 InvalidPath(targetPath);
                 var version = GetVersion(targetPath);
 
+                Log4NetUtils.DebugIfEnable(string.Format("targetPath:[{0}]", targetPath));
                 var solutionOrg = LoadSolution(targetPath, version);
                 solution.SetSolution(solutionOrg);
 
@@ -93,7 +82,7 @@ namespace VSArrangeConsole
 
                 var configInfo = ConfigFileManager.ReadConfig(configPath);
                 var reporter = CreateReporter();
-                var arranger = ArrangeUtils.CreateArranger(configInfo, reporter);
+                var arranger = ArrangeUtils.CreateArranger(configInfo, reporter, false);
                 var project = new ProjectEx();
 
                 Log4NetUtils.InfoIfEnable(string.Format("プロジェクト数：{0}", solution.Projects.Count));
@@ -105,7 +94,7 @@ namespace VSArrangeConsole
                         var projectName = project.Name;
                         Log4NetUtils.InfoIfEnable(string.Format("処理開始[{0}]", projectName));
                         arranger.ArrangeProject(project);
-                        project.Save();
+                        project.Save(project.FileName);
                         Log4NetUtils.InfoIfEnable(string.Format("処理完了[{0}]", projectName));
                     }
                 }
@@ -132,6 +121,56 @@ namespace VSArrangeConsole
         private static ProjectArranger CreateArranger(ConfigInfo configInfo, IOutputReport reporter)
         {
             return ArrangeUtils.CreateArranger(configInfo, reporter, false);
+        }
+
+        /// <summary>
+        /// 処理対象ファイルパス（フルパス）を取得する
+        /// </summary>
+        /// <param name="args"></param>
+        /// <returns></returns>
+        private static string GetTargetPath(string[] args)
+        {
+            var inputPath = args[0];
+            if (inputPath.Contains(Path.DirectorySeparatorChar.ToString()))
+            {
+                // 入力パスがフォルダを含んでいる
+                return Path.GetFullPath(inputPath);
+            }
+
+            return string.Format("{0}{1}{2}", Directory.GetCurrentDirectory(),
+                Path.DirectorySeparatorChar, inputPath);
+        }
+
+        /// <summary>
+        /// 処理対象プロジェクト名を取得する
+        /// </summary>
+        /// <param name="args"></param>
+        /// <returns></returns>
+        private static string[] GetTargetProjectNames(string[] args)
+        {
+            if (args.Length > 1 && args[1] != DEFAULT_ALL_PROJ)
+            {
+                return args[1].Split(',');
+            }
+            else
+            {
+                Log4NetUtils.InfoIfEnable(VSArrangeConsoleMessage.GetTargetAllProject());
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// 設定ファイルパスを取得する
+        /// </summary>
+        /// <param name="args"></param>
+        /// <returns></returns>
+        private static string GetConfigPath(string[] args)
+        {
+            if (args.Length > 2)
+            {
+                return args[2];
+            }
+            return DEFAULT_CONFIG_PATH;
         }
 
         /// <summary>
@@ -186,7 +225,7 @@ namespace VSArrangeConsole
             {
                 if (solution != null && solution.IsOpen)
                 {
-                    solution.Close();
+                    solution.Close(false);
                 }
             }
             catch (Exception ex)
@@ -262,7 +301,7 @@ namespace VSArrangeConsole
             {
                 // プロジェクトファイルが指定された時はダミーのソリューションを作成する
                 vs.Solution.Create(Path.GetDirectoryName(targetPath), Path.GetFileNameWithoutExtension(targetPath));
-                vs.Solution.AddFromFile(targetPath);
+                vs.Solution.AddFromFile(targetPath, false);
             }
             return vs.Solution;
         }

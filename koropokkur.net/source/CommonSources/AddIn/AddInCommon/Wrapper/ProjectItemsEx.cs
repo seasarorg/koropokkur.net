@@ -38,7 +38,7 @@ namespace AddInCommon.Wrapper
         }
 
         #region ProjectItems Methods
-        public ProjectItem AddFolder(string Name, string Kind = "{6BB5F8EF-4483-11D3-8BCF-00C04F8EC28C}")
+        public ProjectItem AddFolder(string Name, string Kind)
         {
             return COMExceptionInvokeUtils.InvokeMethod<ProjectItems, ProjectItem>(_projectItems, "AddFolder", new object[] { Name, Kind });
         }

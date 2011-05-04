@@ -54,7 +54,7 @@ namespace VSArrange.Util
         /// <param name="reporter"></param>
         /// <param name="isBackground"></param>
         public static ProjectArranger CreateArranger(ConfigInfo configInfo, IOutputReport reporter,
-            bool isBackground = false)
+            bool isBackground)
         {
             if (isBackground)
             {

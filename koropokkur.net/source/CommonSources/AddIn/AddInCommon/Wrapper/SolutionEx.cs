@@ -58,13 +58,13 @@ namespace AddInCommon.Wrapper
 
         #region Solution Methods
 
-        public Project AddFromFile(string FileName, bool Exclusive = false)
+        public Project AddFromFile(string FileName, bool Exclusive)
         {
             return COMExceptionInvokeUtils.InvokeMethod<_Solution, Project>(_solution, "AddFromFile", 
                 new object[] { FileName, Exclusive });
         }
 
-        public Project AddFromTemplate(string FileName, string Destination, string ProjectName, bool Exclusive = false)
+        public Project AddFromTemplate(string FileName, string Destination, string ProjectName, bool Exclusive)
         {
             return COMExceptionInvokeUtils.InvokeMethod<_Solution, Project>(_solution, "AddFromTemplate",
                 new object[] { FileName, Destination, ProjectName,  Exclusive });
@@ -75,7 +75,7 @@ namespace AddInCommon.Wrapper
             get { return InvokeGetValue<AddIns>("AddIns"); }
         }
 
-        public void Close(bool SaveFirst = false)
+        public void Close(bool SaveFirst)
         {
             if (_solution != null)
             {
