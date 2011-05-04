@@ -145,6 +145,8 @@ VisualStudioプロジェクトフォルダ下にある要素を整理します�
 <!--                                                           コンソールからの実行  -->
 <!--                                                          ====================== -->
 <h3><a name="Console">コンソールからの実行</a></h3>(Koropokkur.NET 0.2.5以降)
+<p><font color="red">コンソールアプリですが、VisualStudioのアドインが使用できるエディションが<br>
+インストールされている必要があります。</font></p>
 <p>ダウンロードしたKoropokkur.NET下の「build」フォルダ内にある「<b>VSArrangeConsole.exe</b>」を使用します。<br>
 設定ファイルの設定方法はアドイン上から設定する場合と同様です(「<a href="#ConfigWindow">設定ファイル編集エディタ</a>」参照)。<p>
 <i>引数</i>&nbsp;&nbsp;(VSArrangeConsole.exe (引数1) [引数2] [引数3])
@@ -155,7 +157,8 @@ VisualStudioプロジェクトフォルダ下にある要素を整理します�
 	<li>3:設定ファイルのフルパス（無指定の場合はVSArrangeConsole.exeと同じフォルダ内にあるものを使用）（任意）</li>
 </ul>
 <p><b>処理内容の出力設定</b>は「<a href="http://logging.apache.org/log4net/index.html">log4net</a>」を使用します。<br>
-同じく「build」フォルダ下にある「<b>VSArrangeConsole.exe.config</b>」に設定を記述して下さい。<br>
+同じく「build」フォルダ下にある「<b>VSArrangeConsole.exe.config</b>」に設定を記述して<br>
+「lib」フォルダ下にあるlog4net.dllと一緒にVSArrangeConsole.exeと同じフォルダに置いて下さい。<br>
 （詳細な設定方法は<a href="http://logging.apache.org/log4net/release/manual/configuration.html">コチラ</a>等をご覧下さい）<br>
 詳細なログ出力を必要としない場合はログレベルを「INFO」に設定して下さい。
 <pre>
