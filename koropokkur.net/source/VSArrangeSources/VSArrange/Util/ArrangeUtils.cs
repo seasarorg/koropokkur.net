@@ -24,6 +24,7 @@ using VSArrange.Arrange;
 using VSArrange.Config;
 using VSArrange.Const;
 using VSArrange.Report.Impl;
+using EnvDTE;
 
 namespace VSArrange.Util
 {
@@ -48,30 +49,41 @@ namespace VSArrange.Util
         }
 
         /// <summary>
-        /// プロジェクト整理オブジェクトの取得
+        /// プロジェクト整理オブジェクトの取得(非同期)
         /// </summary>
         /// <param name="configInfo"></param>
         /// <param name="reporter"></param>
         /// <param name="isBackground"></param>
-        public static ProjectArranger CreateArranger(ConfigInfo configInfo, IOutputReport reporter,
-            bool isBackground)
+        public static ProjectArranger CreateArrangerAsync(ConfigInfo configInfo, AddInOutputReport reporter)
         {
-            if (isBackground)
-            {
-                return new BackgroundProjectArranger(configInfo, reporter);
-            }
+            var arranger = new BackgroundProjectArranger(configInfo, reporter);
+            arranger.CompletedEvent += reporter.Clear;
+            return arranger;
+        }
+
+        /// <summary>
+        /// プロジェクト整理オブジェクトの取得（同期）
+        /// </summary>
+        /// <param name="configInfo"></param>
+        /// <param name="reporter"></param>
+        /// <param name="isBackground"></param>
+        public static ProjectArranger CreateArranger(ConfigInfo configInfo, IOutputReport reporter)
+        {
             return new ProjectArranger(configInfo, reporter);
         }
 
         /// <summary>
         /// 処理状況出力オブジェクトの生成
         /// </summary>
+        /// <param name="project"></param>
         /// <param name="configInfo"></param>
         /// <param name="applicationObject"></param>
         /// <returns></returns>
-        public static IOutputReport CreateAddInReporter(ConfigInfo configInfo, DTE2 applicationObject)
+        public static AddInOutputReport CreateAddInReporter(Project project, ConfigInfo configInfo, DTE2 applicationObject)
         {
-            return new AddInOutputReport(configInfo, applicationObject);
+            var reporter = new AddInOutputReport(configInfo, applicationObject);
+            reporter.ProjectName = project.Name;
+            return reporter;
         }
 
         /// <summary>

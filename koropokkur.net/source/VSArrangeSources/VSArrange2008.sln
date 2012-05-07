@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AddInCommon", "..\CommonSources\AddIn\AddInCommon\AddInCommon.csproj", "{4E1C075D-9803-4DA8-884E-3033D9AB9B58}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VSArrange", "VSArrange\VSArrange.csproj", "{23022F2A-F97F-4570-8000-D2D9CB8EEFED}"
@@ -12,8 +12,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VSArrangeConsole", "VSArrangeConsole\VSArrangeConsole.csproj", "{C188AF49-86B2-41AF-AC0A-B0F5B96967F9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Z_DummyProject4VSArrangeTest", "DummyProject4VSArrangeTest\Z_DummyProject4VSArrangeTest.csproj", "{4BF5065B-6835-4430-99EE-992DD1C0ADDD}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfApplication1", "WpfApplication1\WpfApplication1.csproj", "{493415BB-1DAF-4D43-B69D-9B51015A86DB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -85,16 +83,6 @@ Global
 		{4BF5065B-6835-4430-99EE-992DD1C0ADDD}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{4BF5065B-6835-4430-99EE-992DD1C0ADDD}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{4BF5065B-6835-4430-99EE-992DD1C0ADDD}.Release|x86.ActiveCfg = Release|Any CPU
-		{493415BB-1DAF-4D43-B69D-9B51015A86DB}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{493415BB-1DAF-4D43-B69D-9B51015A86DB}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{493415BB-1DAF-4D43-B69D-9B51015A86DB}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{493415BB-1DAF-4D43-B69D-9B51015A86DB}.Debug|x86.ActiveCfg = Debug|x86
-		{493415BB-1DAF-4D43-B69D-9B51015A86DB}.Debug|x86.Build.0 = Debug|x86
-		{493415BB-1DAF-4D43-B69D-9B51015A86DB}.Release|Any CPU.ActiveCfg = Release|x86
-		{493415BB-1DAF-4D43-B69D-9B51015A86DB}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{493415BB-1DAF-4D43-B69D-9B51015A86DB}.Release|Mixed Platforms.Build.0 = Release|x86
-		{493415BB-1DAF-4D43-B69D-9B51015A86DB}.Release|x86.ActiveCfg = Release|x86
-		{493415BB-1DAF-4D43-B69D-9B51015A86DB}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

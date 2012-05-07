@@ -77,8 +77,8 @@ namespace VSArrange.Command
                         //  更新済のプロジェクトは無視
                         continue;
                     }
-                    var reporter = ArrangeUtils.CreateAddInReporter(configInfo, applicationObject);
-                    var arranger = ArrangeUtils.CreateArranger(configInfo, reporter, true);
+                    var reporter = ArrangeUtils.CreateAddInReporter(currentProject, configInfo, applicationObject);
+                    var arranger = ArrangeUtils.CreateArrangerAsync(configInfo, reporter);
                     arranger.ArrangeProject(currentProject);
                     refreshedProjects[currentProject.FullName] = currentProject;
                 }

@@ -59,10 +59,10 @@ namespace VSArrange.Command
             try
             {
                 var configInfo = ConfigFileManager.ReadConfig(PathUtils.GetConfigPath());
-                var reporter = ArrangeUtils.CreateAddInReporter(configInfo, applicationObject);
-                var arranger = ArrangeUtils.CreateArranger(configInfo, reporter, true);
                 foreach (Project project in solution.Projects)
                 {
+                    var reporter = ArrangeUtils.CreateAddInReporter(project, configInfo, applicationObject);
+                    var arranger = ArrangeUtils.CreateArrangerAsync(configInfo, reporter);
                     //  プロジェクト追加フィルタの更新
                     arranger.ArrangeProject(project);
                 }

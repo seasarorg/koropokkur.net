@@ -21,6 +21,7 @@ using AddInCommon.Report;
 using EnvDTE;
 using VSArrange.Arrange;
 using VSArrange.Config;
+using System;
 
 namespace VSArrange.Arrange
 {
@@ -33,7 +34,7 @@ namespace VSArrange.Arrange
     {
         private readonly BackgroundWorker _worker = new BackgroundWorker();
 
-        public event DelegateCompleted CompletedEvent;
+        public event Action CompletedEvent;
         private Project _currentProject;
 
         /// <summary>
@@ -68,7 +69,7 @@ namespace VSArrange.Arrange
 
         private void Completed(object sender, RunWorkerCompletedEventArgs e)
         {
-            CompletedEvent(_currentProject);
+            CompletedEvent();
         }
     }
 }

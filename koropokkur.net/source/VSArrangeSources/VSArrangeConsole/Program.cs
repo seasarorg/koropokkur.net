@@ -82,7 +82,7 @@ namespace VSArrangeConsole
 
                 var configInfo = ConfigFileManager.ReadConfig(configPath);
                 var reporter = CreateReporter();
-                var arranger = ArrangeUtils.CreateArranger(configInfo, reporter, false);
+                var arranger = ArrangeUtils.CreateArranger(configInfo, reporter);
                 var project = new ProjectEx();
 
                 Log4NetUtils.InfoIfEnable(string.Format("プロジェクト数：{0}", solution.Projects.Count));
@@ -120,7 +120,7 @@ namespace VSArrangeConsole
         /// <returns></returns>
         private static ProjectArranger CreateArranger(ConfigInfo configInfo, IOutputReport reporter)
         {
-            return ArrangeUtils.CreateArranger(configInfo, reporter, false);
+            return ArrangeUtils.CreateArranger(configInfo, reporter);
         }
 
         /// <summary>
